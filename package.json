@@ -1,0 +1,12 @@
+{
+  "name": "segaso-app",
+  "version": "1.0.0",
+  "description": "Plataforma de comercio electrónico y gestión administrativa para Segaso Chorizos (Envigado)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^13.0.2"
+  }
+}

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Segaso Chorizos · Panel Gerencial Privado</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #A61828;
+      --primary-dark: #7A0F1B;
+      --cream: #F3ECDA;
+      --cream-muted: #D3CAB6;
+      --bg-dark: #0F0A0C;
+      --bg-card: #181013;
+      --bg-surface: #221519;
+      --border-subtle: rgba(243, 236, 218, 0.12);
+      --border-strong: rgba(166, 24, 40, 0.4);
+      --gold: #D9A05B;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-dark);
+      color: var(--cream);
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      min-height: 100vh;
+    }
+
+    /* Vista de Login */
+    .login-container {
+      display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px;
+      background: radial-gradient(circle at center, #231217 0%, #0D0709 100%);
+    }
+    .login-box {
+      background: var(--bg-card); border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg); padding: 40px; max-width: 440px; width: 100%;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8); text-align: center;
+    }
+    .login-brand { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 24px; }
+    .login-brand img { height: 48px; border-radius: 50%; border: 2px solid var(--gold); }
+    .login-brand h1 { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--gold); letter-spacing: 1px; }
+    .login-subtitle { font-size: 13.5px; color: var(--cream-muted); margin-bottom: 28px; line-height: 1.5; }
+
+    .form-group { text-align: left; margin-bottom: 18px; }
+    .form-label { display: block; font-size: 12px; font-weight: 700; color: var(--cream-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .form-input {
+      width: 100%; background: #100A0D; border: 1px solid var(--border-subtle); color: #fff;
+      padding: 12px 16px; border-radius: var(--radius-sm); font-size: 14px; outline: none; transition: border 0.2s;
+    }
+    .form-input:focus { border-color: var(--primary); }
+
+    .btn-submit {
+      width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #fff; border: none; padding: 13px; border-radius: var(--radius-sm);
+      font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(166, 24, 40, 0.4); margin-top: 8px;
+    }
+    .btn-submit:hover { filter: brightness(1.15); transform: translateY(-1px); }
+
+    .divider-text {
+      display: flex; align-items: center; text-align: center; margin: 20px 0; color: #665; font-size: 11px; text-transform: uppercase;
+    }
+    .divider-text::before, .divider-text::after { content: ''; flex: 1; border-bottom: 1px solid var(--border-subtle); }
+    .divider-text:not(:empty)::before { margin-right: .8em; }
+    .divider-text:not(:empty)::after { margin-left: .8em; }
+
+    .btn-google {
+      width: 100%; background: #1C1518; border: 1px solid var(--border-subtle); color: var(--cream);
+      padding: 11px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 10px; transition: background 0.2s;
+    }
+    .btn-google:hover { background: #261D22; border-color: var(--gold); }
+
+    .error-msg {
+      background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); color: #FCA5A5;
+      padding: 10px 14px; border-radius: var(--radius-sm); font-size: 12.5px; margin-bottom: 16px; display: none;
+    }
+
+    /* Vista de Panel de Control (Autenticado) */
+    .dashboard-wrap { display: none; max-width: 1240px; margin: 0 auto; padding: 28px 20px 60px; }
+    .admin-header {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+      background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);
+      padding: 20px 24px; margin-bottom: 24px;
+    }
+    .admin-title h2 { font-size: 22px; font-weight: 800; color: #fff; }
+    .admin-title p { font-size: 12px; color: var(--gold); }
+    .admin-user-badge {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .user-pill {
+      background: rgba(16, 185, 129, 0.15); border: 1px solid var(--success); color: #6EE7B7;
+      padding: 6px 14px; border-radius: 20px; font-size: 11.5px; font-weight: 700;
+    }
+    .btn-logout {
+      background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); color: #FCA5A5;
+      padding: 7px 14px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 700; cursor: pointer;
+    }
+    .btn-logout:hover { background: var(--danger); color: #fff; }
+
+    /* KPIs */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 28px; }
+    .kpi-card {
+      background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);
+      padding: 20px; display: flex; flex-direction: column; gap: 6px;
+    }
+    .kpi-label { font-size: 11px; color: var(--cream-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
+    .kpi-value { font-size: 26px; font-weight: 800; color: #fff; }
+    .kpi-sub { font-size: 11.5px; color: var(--gold); }
+
+    /* Pestañas */
+    .admin-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 12px; }
+    .tab-btn {
+      background: transparent; border: none; color: var(--cream-muted); font-size: 13.5px; font-weight: 700;
+      padding: 8px 16px; cursor: pointer; border-radius: 6px;
+    }
+    .tab-btn.active { background: var(--bg-surface); color: var(--cream); border: 1px solid var(--border-subtle); }
+
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* Tablas */
+    .table-box {
+      background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); overflow-x: auto;
+    }
+    .data-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+    .data-table th {
+      background: rgba(0,0,0,0.3); padding: 12px 16px; color: var(--cream-muted); font-weight: 700; font-size: 11px; text-transform: uppercase;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .data-table td { padding: 14px 16px; border-bottom: 1px solid var(--border-subtle); color: var(--cream); vertical-align: middle; }
+    .data-table tr:hover { background: rgba(255,255,255,0.02); }
+
+    .status-badge {
+      display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; text-transform: uppercase;
+    }
+    .status-pendiente { background: rgba(245, 158, 11, 0.15); color: #FCD34D; border: 1px solid #F59E0B; }
+    .status-preparando { background: rgba(59, 130, 246, 0.15); color: #93C5FD; border: 1px solid #3B82F6; }
+    .status-camino { background: rgba(168, 85, 247, 0.15); color: #D8B4FE; border: 1px solid #A855F7; }
+    .status-entregado { background: rgba(16, 185, 129, 0.15); color: #6EE7B7; border: 1px solid #10B981; }
+
+    .status-select {
+      background: #120B0E; border: 1px solid var(--border-subtle); color: var(--cream);
+      padding: 6px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; outline: none;
+    }
+
+    /* Inventario Cards */
+    .inv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .inv-card {
+      background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);
+      padding: 16px; display: flex; flex-direction: column; gap: 10px;
+    }
+    .inv-card-header { display: flex; justify-content: space-between; align-items: center; }
+    .inv-title { font-weight: 700; font-size: 14px; color: #fff; }
+    .inv-controls { display: flex; align-items: center; justify-content: space-between; }
+    .inv-btn-group { display: flex; align-items: center; gap: 8px; }
+    .inv-btn {
+      width: 32px; height: 32px; border-radius: 6px; border: 1px solid var(--border-subtle);
+      background: var(--bg-surface); color: #fff; font-weight: 700; cursor: pointer;
+    }
+    .inv-btn:hover { background: var(--primary); }
+    .inv-stock { font-size: 18px; font-weight: 800; min-width: 36px; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================
+       VISTA 1: INICIO DE SESIÓN SEGURO (JWT)
+       ========================================================== -->
+  <div id="loginView" class="login-container">
+    <div class="login-box">
+      <div class="login-brand">
+        <img src="logo_segaso_web.png" alt="Logo Segaso" onerror="this.style.display='none'">
+        <h1>SEGASO CHORIZOS</h1>
+      </div>
+      <p class="login-subtitle">
+        Acceso exclusivo de administración y control operativo para Harold García.
+      </p>
+
+      <div id="loginError" class="error-msg"></div>
+
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label class="form-label">Correo Electrónico</label>
+          <input type="email" id="loginEmail" class="form-input" value="harold@segasochorizos.com" required placeholder="harold@segasochorizos.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Contraseña</label>
+          <input type="password" id="loginPassword" class="form-input" value="segaso2026" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn-submit" id="loginBtn">
+          🔐 Iniciar Sesión con JWT
+        </button>
+      </form>
+
+      <div class="divider-text">O autenticación en la nube</div>
+
+      <button type="button" class="btn-google" onclick="handleGoogleOAuthSimulation()">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+        Continuar con Google (OAuth 2.0)
+      </button>
+
+      <p style="font-size: 11px; color: #554; margin-top: 20px;">
+        🔒 Conexión cifrada con Token JWT firmado criptográficamente.
+      </p>
+    </div>
+  </div>
+
+  <!-- ==========================================================
+       VISTA 2: DASHBOARD BACK OFFICE (PROTEGIDO)
+       ========================================================== -->
+  <div id="dashboardView" class="dashboard-wrap">
+    
+    <div class="admin-header">
+      <div class="admin-title">
+        <h2>Panel de Control Gerencial · Harold García</h2>
+        <p>Segaso Chorizos S.A.S. · Envigado, Antioquia</p>
+      </div>
+      <div class="admin-user-badge">
+        <span class="user-pill" id="userPill">JWT Activo: harold@segasochorizos.com</span>
+        <button class="btn-logout" onclick="handleLogout()">🚪 Cerrar Sesión</button>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Ventas Entregadas</div>
+        <div class="kpi-value" id="kpiSales">0k COP</div>
+        <div class="kpi-sub" id="kpiSalesCount">0 pedidos cerrados</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Pedidos en Curso</div>
+        <div class="kpi-value" id="kpiActive" style="color: var(--gold);">0</div>
+        <div class="kpi-sub">Pendiente + Cocina + Camino</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Ticket Promedio</div>
+        <div class="kpi-value" id="kpiAvgTicket">0k COP</div>
+        <div class="kpi-sub">Por orden despachada</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Alertas de Stock</div>
+        <div class="kpi-value" id="kpiAlerts" style="color: var(--danger);">0</div>
+        <div class="kpi-sub">Referencias en mínimo</div>
+      </div>
+    </div>
+
+    <!-- Pestañas de Gestión -->
+    <div class="admin-tabs">
+      <button class="tab-btn active" onclick="switchTab('orders', this)">📦 Pedidos (<span id="ordersBadge">0</span>)</button>
+      <button class="tab-btn" onclick="switchTab('inventory', this)">🥩 Inventario en Tiempo Real</button>
+      <button class="tab-btn" onclick="switchTab('leads', this)">📋 Interesados Cursos & Asados</button>
+    </div>
+
+    <!-- Pestaña 1: Pedidos -->
+    <div id="pane-orders" class="tab-pane active">
+      <div class="table-box">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Cliente</th>
+              <th>Teléfono</th>
+              <th>Dirección / Barrio</th>
+              <th>Detalle del Pedido</th>
+              <th>Total</th>
+              <th>Estado Actual</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTableBody">
+            <tr><td colspan="8" style="text-align:center; padding: 20px;">Cargando pedidos...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Pestaña 2: Inventario -->
+    <div id="pane-inventory" class="tab-pane">
+      <div class="inv-grid" id="inventoryGrid">
+        <div style="grid-column: 1/-1; text-align: center; padding: 20px;">Cargando inventario...</div>
+      </div>
+    </div>
+
+    <!-- Pestaña 3: Leads -->
+    <div id="pane-leads" class="tab-pane">
+      <div class="table-box">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre Completo</th>
+              <th>Celular (WhatsApp)</th>
+              <th>Tipo de Interés</th>
+              <th>Fecha Registro</th>
+            </tr>
+          </thead>
+          <tbody id="leadsTableBody">
+            <tr><td colspan="5" style="text-align:center; padding: 20px;">Cargando leads...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const API_BASE = '/api';
+    let jwtToken = sessionStorage.getItem('segaso_jwt_token') || null;
+
+    // Verificar si ya tiene sesión JWT válida al cargar
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (jwtToken) {
+        await verifyAndLoadDashboard();
+      } else {
+        showLogin();
+      }
+    });
+
+    function showLogin() {
+      document.getElementById('loginView').style.display = 'flex';
+      document.getElementById('dashboardView').style.display = 'none';
+    }
+
+    function showDashboard() {
+      document.getElementById('loginView').style.display = 'none';
+      document.getElementById('dashboardView').style.display = 'block';
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      const errBox = document.getElementById('loginError');
+      errBox.style.display = 'none';
+
+      try {
+        const res = await fetch(`${API_BASE}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          errBox.textContent = data.error || 'Credenciales inválidas';
+          errBox.style.display = 'block';
+          return;
+        }
+
+        jwtToken = data.token;
+        sessionStorage.setItem('segaso_jwt_token', jwtToken);
+        document.getElementById('userPill').textContent = `JWT Activo: ${data.user.email}`;
+        await loadDashboardData();
+        showDashboard();
+      } catch (err) {
+        errBox.textContent = 'Error conectando con el servidor. Verifica que esté activo.';
+        errBox.style.display = 'block';
+      }
+    }
+
+    async function handleGoogleOAuthSimulation() {
+      // Demostración didáctica para Angelina y Harold: inicio con cuenta autorizada
+      document.getElementById('loginEmail').value = 'harold@segasochorizos.com';
+      document.getElementById('loginPassword').value = 'segaso2026';
+      document.getElementById('loginBtn').click();
+    }
+
+    function handleLogout() {
+      sessionStorage.removeItem('segaso_jwt_token');
+      jwtToken = null;
+      showLogin();
+    }
+
+    async function verifyAndLoadDashboard() {
+      try {
+        const res = await fetch(`${API_BASE}/auth/me`, {
+          headers: { 'Authorization': `Bearer ${jwtToken}` }
+        });
+        if (!res.ok) {
+          handleLogout();
+          return;
+        }
+        await loadDashboardData();
+        showDashboard();
+      } catch {
+        handleLogout();
+      }
+    }
+
+    async function loadDashboardData() {
+      await Promise.all([loadKPIs(), loadOrders(), loadInventory(), loadLeads()]);
+    }
+
+    async function loadKPIs() {
+      try {
+        const res = await fetch(`${API_BASE}/admin/kpis`, {
+          headers: { 'Authorization': `Bearer ${jwtToken}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          const k = data.kpis;
+          document.getElementById('kpiSales').textContent = `${(k.salesDelivered / 1000).toFixed(1)}k COP`;
+          document.getElementById('kpiSalesCount').textContent = `${k.salesCount} pedidos cerrados`;
+          document.getElementById('kpiActive').textContent = k.activeOrders;
+          document.getElementById('kpiAvgTicket').textContent = `${(k.avgTicket / 1000).toFixed(1)}k COP`;
+          document.getElementById('kpiAlerts').textContent = k.lowStockAlerts;
+        }
+      } catch (err) {
+        console.error('Error cargando KPIs:', err);
+      }
+    }
+
+    async function loadOrders() {
+      try {
+        const res = await fetch(`${API_BASE}/admin/orders`, {
+          headers: { 'Authorization': `Bearer ${jwtToken}` }
+        });
+        const data = await res.json();
+        const tbody = document.getElementById('ordersTableBody');
+        if (data.success && data.orders) {
+          document.getElementById('ordersBadge').textContent = data.orders.length;
+          tbody.innerHTML = data.orders.map(o => {
+            const items = JSON.parse(o.items_json || '[]');
+            const itemsText = items.map(i => `${i.qty}x ${i.name}`).join(', ');
+            return `
+              <tr>
+                <td><strong>${o.code}</strong></td>
+                <td>${o.customer_name}</td>
+                <td><a href="https://wa.me/57${o.customer_phone}" target="_blank" style="color:var(--gold); text-decoration:none;">📱 ${o.customer_phone}</a></td>
+                <td>${o.address}<br><small style="color:var(--cream-muted)">${o.neighborhood}</small></td>
+                <td><small>${itemsText}</small></td>
+                <td><strong>${(o.total_cop / 1000).toFixed(1)}k COP</strong></td>
+                <td><span class="status-badge status-${o.status}">${o.status}</span></td>
+                <td>
+                  <select class="status-select" onchange="updateOrderStatus(${o.id}, this.value)">
+                    <option value="pendiente" ${o.status==='pendiente'?'selected':''}>Pendiente</option>
+                    <option value="preparando" ${o.status==='preparando'?'selected':''}>Preparando</option>
+                    <option value="camino" ${o.status==='camino'?'selected':''}>En Camino</option>
+                    <option value="entregado" ${o.status==='entregado'?'selected':''}>Entregado</option>
+                    <option value="cancelado" ${o.status==='cancelado'?'selected':''}>Cancelado</option>
+                  </select>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+      } catch (err) {
+        console.error('Error cargando pedidos:', err);
+      }
+    }
+
+    async function updateOrderStatus(id, newStatus) {
+      try {
+        await fetch(`${API_BASE}/admin/orders/${id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${jwtToken}`
+          },
+          body: JSON.stringify({ status: newStatus })
+        });
+        await loadKPIs();
+        await loadOrders();
+      } catch (err) {
+        alert('Error actualizando pedido: ' + err.message);
+      }
+    }
+
+    async function loadInventory() {
+      try {
+        const res = await fetch(`${API_BASE}/admin/inventory`, {
+          headers: { 'Authorization': `Bearer ${jwtToken}` }
+        });
+        const data = await res.json();
+        const grid = document.getElementById('inventoryGrid');
+        if (data.success && data.inventory) {
+          grid.innerHTML = data.inventory.map(p => `
+            <div class="inv-card">
+              <div class="inv-card-header">
+                <span class="inv-title">${p.name}</span>
+                <small style="color:var(--gold);">${(p.price_cop/1000).toFixed(1)}k COP</small>
+              </div>
+              <div class="inv-controls">
+                <small style="color:var(--cream-muted);">Mínimo: ${p.min_stock} paqs</small>
+                <div class="inv-btn-group">
+                  <button class="inv-btn" onclick="changeStock('${p.code}', ${p.stock - 1})">-</button>
+                  <span class="inv-stock" style="color: ${p.stock <= p.min_stock ? 'var(--danger)' : '#fff'}">${p.stock}</span>
+                  <button class="inv-btn" onclick="changeStock('${p.code}', ${p.stock + 1})">+</button>
+                </div>
+              </div>
+            </div>
+          `).join('');
+        }
+      } catch (err) {
+        console.error('Error cargando inventario:', err);
+      }
+    }
+
+    async function changeStock(code, newStock) {
+      if (newStock < 0) return;
+      try {
+        await fetch(`${API_BASE}/admin/inventory/${code}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${jwtToken}`
+          },
+          body: JSON.stringify({ stock: newStock })
+        });
+        await loadKPIs();
+        await loadInventory();
+      } catch (err) {
+        alert('Error actualizando stock: ' + err.message);
+      }
+    }
+
+    async function loadLeads() {
+      try {
+        const res = await fetch(`${API_BASE}/admin/leads`, {
+          headers: { 'Authorization': `Bearer ${jwtToken}` }
+        });
+        const data = await res.json();
+        const tbody = document.getElementById('leadsTableBody');
+        if (data.success && data.leads) {
+          if (data.leads.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 20px;">No hay interesados registrados aún.</td></tr>';
+            return;
+          }
+          tbody.innerHTML = data.leads.map(l => `
+            <tr>
+              <td>#${l.id}</td>
+              <td><strong>${l.name}</strong></td>
+              <td><a href="https://wa.me/57${l.phone}" target="_blank" style="color:var(--gold); text-decoration:none;">📱 ${l.phone}</a></td>
+              <td><span class="status-badge" style="background:rgba(217,160,91,0.2); color:var(--gold); border:1px solid var(--gold);">${l.type}</span></td>
+              <td><small>${l.created_at}</small></td>
+            </tr>
+          `).join('');
+        }
+      } catch (err) {
+        console.error('Error cargando leads:', err);
+      }
+    }
+
+    function switchTab(tabName, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(`pane-${tabName}`).classList.add('active');
+    }
+  </script>
+</body>
+</html>

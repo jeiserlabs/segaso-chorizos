@@ -47,7 +47,7 @@ npm start
 La plataforma estará disponible en:
 - **Tienda Pública:** `http://localhost:3000`
 - **Panel Administrativo:** `http://localhost:3000/chorizos-segaso/admin`
-  - *Credenciales por defecto:* `harold@segasochorizos.com` / `Segaso2026*`
+  - *Credenciales:* definidas en `.env` (`ADMIN_SEED_PASSWORD`). Ver `.env.example`.
 
 ---
 

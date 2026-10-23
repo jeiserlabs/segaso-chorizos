@@ -1,7 +1,10 @@
 // auth.js — Módulo determinista de Autenticación y JWT para Segaso Chorizos (RFC 7519, $0 dependencias)
 const crypto = require('node:crypto');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'segaso-chorizos-secret-2026-cesde-envigado';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  throw new Error('[auth] JWT_SECRET no definido. Agrega JWT_SECRET=<secret> en projects/segaso-app/.env');
+}
 
 /**
  * Genera hash seguro para contraseñas usando scrypt (Nativo de Node.js)

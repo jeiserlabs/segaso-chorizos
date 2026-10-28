@@ -13,6 +13,7 @@ Proyecto CESDE — plataforma web de chorizos artesanales para Harold García (E
 **R4 — SQLite WAL:** BD es `segaso.db` local. Sin dependencias cloud. Cero infraestructura externa.
 **R5 — $0 dependencias externas:** Stdlib Node.js únicamente (`node:crypto`, `node:http`, `node:fs`, `better-sqlite3`). No agregar npm packages sin justificación.
 **R6 — Repo público:** Todo lo que se commitea es visible. Revisar antes de push. Nunca commitear `.env`.
+**R7 — Metodología ODD:** Rige One-Document-Driven Development (.odd/tasks/<feature>.odd.md). Burocracia SDD multi-archivo abolida.
 
 ---
 

@@ -191,23 +191,16 @@
       <form id="loginForm" onsubmit="handleLogin(event)">
         <div class="form-group">
           <label class="form-label">Correo Electrónico</label>
-          <input type="email" id="loginEmail" class="form-input" value="harold@segasochorizos.com" required placeholder="harold@segasochorizos.com">
+          <input type="email" id="loginEmail" class="form-input" required placeholder="harold@segasochorizos.com" autocomplete="username">
         </div>
         <div class="form-group">
           <label class="form-label">Contraseña</label>
-          <input type="password" id="loginPassword" class="form-input" value="segaso2026" required placeholder="••••••••">
+          <input type="password" id="loginPassword" class="form-input" required placeholder="••••••••" autocomplete="current-password">
         </div>
         <button type="submit" class="btn-submit" id="loginBtn">
-          🔐 Iniciar Sesión con JWT
+          🔐 Iniciar Sesión
         </button>
       </form>
-
-      <div class="divider-text">O autenticación en la nube</div>
-
-      <button type="button" class="btn-google" onclick="handleGoogleOAuthSimulation()">
-        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
-        Continuar con Google (OAuth 2.0)
-      </button>
 
       <p style="font-size: 11px; color: #554; margin-top: 20px;">
         🔒 Conexión cifrada con Token JWT firmado criptográficamente.
@@ -234,26 +227,38 @@
     <!-- KPIs -->
     <div class="kpi-grid">
       <div class="kpi-card">
-        <div class="kpi-label">Ventas Entregadas</div>
-        <div class="kpi-value" id="kpiSales">0k COP</div>
-        <div class="kpi-sub" id="kpiSalesCount">0 pedidos cerrados</div>
+        <div class="kpi-card" style="border-color: var(--success);">
+          <div class="kpi-label" style="color: var(--success);">🟢 Ventas de Hoy</div>
+          <div class="kpi-value" id="kpiToday" style="color: var(--success);">0k COP</div>
+          <div class="kpi-sub" id="kpiTodayCount">0 pedidos entregados hoy</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">📅 Ventas del Mes</div>
+          <div class="kpi-value" id="kpiMonth">0k COP</div>
+          <div class="kpi-sub" id="kpiMonthCount">0 pedidos este mes</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Ventas Totales (Histórico)</div>
+          <div class="kpi-value" id="kpiSales">0k COP</div>
+          <div class="kpi-sub" id="kpiSalesCount">0 pedidos cerrados</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Pedidos en Curso</div>
+          <div class="kpi-value" id="kpiActive" style="color: var(--gold);">0</div>
+          <div class="kpi-sub">Pendiente + Cocina + Camino</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Ticket Promedio</div>
+          <div class="kpi-value" id="kpiAvgTicket">0k COP</div>
+          <div class="kpi-sub">Por orden despachada</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Alertas de Stock</div>
+          <div class="kpi-value" id="kpiAlerts" style="color: var(--danger);">0</div>
+          <div class="kpi-sub">Referencias en mínimo</div>
+        </div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Pedidos en Curso</div>
-        <div class="kpi-value" id="kpiActive" style="color: var(--gold);">0</div>
-        <div class="kpi-sub">Pendiente + Cocina + Camino</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Ticket Promedio</div>
-        <div class="kpi-value" id="kpiAvgTicket">0k COP</div>
-        <div class="kpi-sub">Por orden despachada</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Alertas de Stock</div>
-        <div class="kpi-value" id="kpiAlerts" style="color: var(--danger);">0</div>
-        <div class="kpi-sub">Referencias en mínimo</div>
-      </div>
-    </div>
+
 
     <!-- Pestañas de Gestión -->
     <div class="admin-tabs">
@@ -351,6 +356,11 @@
           body: JSON.stringify({ email, password })
         });
         const data = await res.json();
+        if (res.status === 429) {
+          errBox.textContent = '⚠️ Demasiados intentos fallidos. Espera 5 minutos antes de intentar de nuevo.';
+          errBox.style.display = 'block';
+          return;
+        }
         if (!res.ok || !data.success) {
           errBox.textContent = data.error || 'Credenciales inválidas';
           errBox.style.display = 'block';
@@ -366,13 +376,6 @@
         errBox.textContent = 'Error conectando con el servidor. Verifica que esté activo.';
         errBox.style.display = 'block';
       }
-    }
-
-    async function handleGoogleOAuthSimulation() {
-      // Demostración didáctica para Angelina y Harold: inicio con cuenta autorizada
-      document.getElementById('loginEmail').value = 'harold@segasochorizos.com';
-      document.getElementById('loginPassword').value = 'segaso2026';
-      document.getElementById('loginBtn').click();
     }
 
     function handleLogout() {
@@ -409,10 +412,20 @@
         const data = await res.json();
         if (data.success) {
           const k = data.kpis;
-          document.getElementById('kpiSales').textContent = `${(k.salesDelivered / 1000).toFixed(1)}k COP`;
+          const fmt = (n) => `${(n / 1000).toFixed(1)}k COP`;
+
+          // Hoy
+          document.getElementById('kpiToday').textContent = fmt(k.todaySales || 0);
+          document.getElementById('kpiTodayCount').textContent = `${k.todayCount || 0} pedidos entregados hoy`;
+          // Mes
+          document.getElementById('kpiMonth').textContent = fmt(k.monthSales || 0);
+          document.getElementById('kpiMonthCount').textContent = `${k.monthCount || 0} pedidos este mes`;
+          // Histórico
+          document.getElementById('kpiSales').textContent = fmt(k.salesDelivered);
           document.getElementById('kpiSalesCount').textContent = `${k.salesCount} pedidos cerrados`;
+          // Activos / Ticket / Alertas
           document.getElementById('kpiActive').textContent = k.activeOrders;
-          document.getElementById('kpiAvgTicket').textContent = `${(k.avgTicket / 1000).toFixed(1)}k COP`;
+          document.getElementById('kpiAvgTicket').textContent = fmt(k.avgTicket);
           document.getElementById('kpiAlerts').textContent = k.lowStockAlerts;
         }
       } catch (err) {
@@ -430,17 +443,22 @@
         if (data.success && data.orders) {
           document.getElementById('ordersBadge').textContent = data.orders.length;
           tbody.innerHTML = data.orders.map(o => {
+            // Compatible con ambos formatos de items_json
             const items = JSON.parse(o.items_json || '[]');
-            const itemsText = items.map(i => `${i.qty}x ${i.name}`).join(', ');
+            const itemsText = items.map(i => `${i.qty}x ${i.name || i.id}`).join(', ');
+            const pago = o.payment_method || '—';
+            const updatedAt = o.updated_at
+              ? new Date(o.updated_at).toLocaleString('es-CO', { timeZone: 'America/Bogota', dateStyle: 'short', timeStyle: 'short' })
+              : '—';
             return `
               <tr>
-                <td><strong>${o.code}</strong></td>
+                <td><strong>${o.code}</strong><br><small style="color:var(--cream-muted)">${new Date(o.created_at).toLocaleDateString('es-CO')}</small></td>
                 <td>${o.customer_name}</td>
                 <td><a href="https://wa.me/57${o.customer_phone}" target="_blank" style="color:var(--gold); text-decoration:none;">📱 ${o.customer_phone}</a></td>
                 <td>${o.address}<br><small style="color:var(--cream-muted)">${o.neighborhood}</small></td>
-                <td><small>${itemsText}</small></td>
+                <td><small>${itemsText}</small><br><small style="color:var(--cream-muted)">💳 ${pago}</small></td>
                 <td><strong>${(o.total_cop / 1000).toFixed(1)}k COP</strong></td>
-                <td><span class="status-badge status-${o.status}">${o.status}</span></td>
+                <td><span class="status-badge status-${o.status}">${o.status}</span><br><small style="color:var(--cream-muted)">${updatedAt}</small></td>
                 <td>
                   <select class="status-select" onchange="updateOrderStatus(${o.id}, this.value)">
                     <option value="pendiente" ${o.status==='pendiente'?'selected':''}>Pendiente</option>

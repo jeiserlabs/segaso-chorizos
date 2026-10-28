@@ -36,11 +36,24 @@ Plataforma integral de comercio electrónico, gestión de pedidos y marketing di
 
 ## 🚀 Inicio Rápido Local
 
+**Requisitos:** Node.js 24+ (usa type stripping nativo para `src/domain/*.ts`) y npm.
+
 ```bash
-# 1. Instalar dependencias
+# 1. Configurar variables de entorno
+cp .env.example .env
+# Genera un JWT_SECRET real:
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+
+# 2. Instalar dependencias
 npm install
 
-# 2. Iniciar el servidor
+# 3. Verificar (typecheck + unit + E2E)
+npx playwright install chromium
+npm run typecheck
+npm test
+npm run test:e2e
+
+# 4. Iniciar el servidor
 npm start
 ```
 

@@ -178,16 +178,25 @@
     .product-card.out-of-stock { opacity: 0.6; filter: grayscale(0.8); }
 
     .prod-visual {
-      height: 120px; background: linear-gradient(135deg, rgba(166,24,40,0.35), rgba(35,23,27,0.9));
+      height: 170px; background: linear-gradient(135deg, rgba(166,24,40,0.35), rgba(35,23,27,0.9));
       position: relative; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--border-subtle);
-      overflow: hidden;
+      overflow: hidden; cursor: pointer;
     }
     .prod-real-img {
-      width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;
+      width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .product-card:hover .prod-real-img { transform: scale(1.05); }
+    .product-card:hover .prod-real-img { transform: scale(1.08); }
     .prod-placeholder-icon { font-size: 46px; }
-    .prod-badge-pos { position: absolute; top: 12px; right: 12px; }
+    .prod-badge-pos { position: absolute; top: 12px; right: 12px; z-index: 2; }
+    .prod-zoom-hint {
+      position: absolute; bottom: 8px; right: 8px; background: rgba(14, 8, 10, 0.85);
+      backdrop-filter: blur(8px); border: 1px solid rgba(229,169,60,0.35); border-radius: 6px;
+      padding: 3px 8px; font-size: 11px; font-weight: 600; color: var(--gold);
+      opacity: 0; transform: translateY(4px); transition: all 0.25s ease; pointer-events: none; z-index: 2;
+    }
+    .product-card:hover .prod-zoom-hint {
+      opacity: 1; transform: translateY(0);
+    }
 
     .prod-body { padding: 18px 20px 14px; flex: 1; }
     .prod-name { font-size: 18px; font-weight: 700; color: var(--text-white); margin-bottom: 4px; }
@@ -225,7 +234,7 @@
     }
     .barril-hero-box {
       background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: var(--radius-lg);
-      padding: 40px; margin-bottom: 32px; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 36px;
+      padding: 36px; margin-bottom: 32px; display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 32px;
       align-items: center; box-shadow: 0 16px 40px rgba(0,0,0,0.5);
     }
     .barril-info h3 { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 12px; }
@@ -234,16 +243,73 @@
     .barril-feat-item { display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: var(--cream); font-weight: 600; }
     .barril-feat-item span { color: var(--gold); }
 
+    /* Bento Gallery para Asados al Barril */
+    .barril-bento-gallery {
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .barril-bento-main {
+      height: 200px; border-radius: var(--radius-md); overflow: hidden; position: relative;
+      border: 1px solid var(--border-strong); cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    }
+    .barril-bento-main img, .barril-bento-subcard img {
+      width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;
+    }
+    .barril-bento-main:hover img, .barril-bento-subcard:hover img {
+      transform: scale(1.06);
+    }
+    .barril-bento-sub {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    }
+    .barril-bento-subcard {
+      height: 110px; border-radius: var(--radius-md); overflow: hidden; position: relative;
+      border: 1px solid var(--border-subtle); cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+    }
+    .bento-overlay {
+      position: absolute; inset: 0; background: linear-gradient(to top, rgba(14,8,10,0.92) 0%, rgba(14,8,10,0.2) 60%, transparent 100%);
+      display: flex; flex-direction: column; justify-content: flex-end; padding: 10px 12px;
+    }
+    .bento-overlay h4 { font-size: 14px; font-weight: 700; color: #fff; margin-top: 3px; }
+    .bento-overlay p { font-size: 11.5px; font-weight: 600; color: var(--cream); margin-top: 2px; }
+
+    /* Planes de Catering */
     .barril-cards-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;
     }
     .barril-plan-card {
       background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);
-      padding: 24px; display: flex; flex-direction: column; justify-content: space-between;
+      overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .barril-plan-title { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 6px; }
-    .barril-plan-tag { font-size: 12px; color: var(--gold); font-weight: 600; text-transform: uppercase; margin-bottom: 14px; }
-    .barril-plan-desc { font-size: 13px; color: var(--cream-muted); line-height: 1.5; margin-bottom: 20px; }
+    .barril-plan-card:hover {
+      transform: translateY(-6px); border-color: var(--gold); box-shadow: 0 16px 36px rgba(0,0,0,0.6);
+    }
+    .barril-plan-img-wrap {
+      height: 140px; position: relative; overflow: hidden; border-bottom: 1px solid var(--border-subtle);
+    }
+    .barril-plan-img {
+      width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;
+    }
+    .barril-plan-card:hover .barril-plan-img {
+      transform: scale(1.06);
+    }
+    .barril-plan-body {
+      padding: 20px 22px 14px; flex: 1;
+    }
+    .barril-plan-card .btn-outline, .barril-plan-card .btn-primary {
+      margin: 0 22px 20px 22px;
+    }
+    .barril-plan-title { font-size: 17px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .barril-plan-tag { font-size: 11.5px; color: var(--gold); font-weight: 700; text-transform: uppercase; margin-bottom: 10px; }
+    .barril-plan-desc { font-size: 13px; color: var(--cream-muted); line-height: 1.5; margin-bottom: 16px; }
+
+    /* Lightbox Modal Animation */
+    @keyframes zoomInModal {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .lightbox-box {
+      animation: zoomInModal 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
     /* ==========================================================
        NUEVA SECCIÓN: TIKTOK (@segaso.chorizos)
@@ -470,11 +536,74 @@
     }
     @keyframes toastUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
+    /* ============================================================
+       HAMBURGER MENU MOBILE
+       ============================================================ */
+    .hamburger-btn {
+      display: none; background: var(--bg-surface); border: 1px solid var(--border-subtle);
+      color: var(--cream); padding: 8px 12px; border-radius: var(--radius-sm); font-size: 18px;
+      cursor: pointer; transition: all 0.2s; line-height: 1;
+    }
+    .hamburger-btn:hover { border-color: var(--primary); }
+
+    .mobile-nav {
+      display: none; position: fixed; top: 76px; left: 0; right: 0; z-index: 99;
+      background: rgba(18, 12, 14, 0.98); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 16px 20px 20px; flex-direction: column; gap: 4px;
+      animation: slideDown 0.2s ease-out;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      color: var(--cream-muted); text-decoration: none; font-size: 15px; font-weight: 600;
+      padding: 11px 14px; border-radius: var(--radius-sm); transition: all 0.15s;
+      border: 1px solid transparent;
+    }
+    .mobile-nav a:hover { color: var(--cream); background: var(--bg-surface); border-color: var(--border-subtle); }
+
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ============================================================
+       SKELETON LOADERS (para stocks que llegan de API)
+       ============================================================ */
+    .skeleton {
+      background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-card-hover) 50%, var(--bg-card) 75%);
+      background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 4px;
+    }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    /* ============================================================
+       TIKTOK: usar <img> con lazy loading
+       ============================================================ */
+    .tiktok-cover img.tiktok-thumb {
+      width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;
+      transition: transform 0.3s; filter: brightness(0.75);
+    }
+    .tiktok-card:hover .tiktok-thumb { transform: scale(1.04); filter: brightness(0.85); }
+    .tiktok-cover { position: relative; overflow: hidden; }
+
+    /* ============================================================
+       MEJORAS RESPONSIVE
+       ============================================================ */
     @media (max-width: 860px) {
       .barril-hero-box, .course-card { grid-template-columns: 1fr; }
       .nav-links { display: none; }
+      .hamburger-btn { display: flex; align-items: center; justify-content: center; }
       .hero-title { font-size: 32px; }
       .hero-metrics { grid-template-columns: 1fr 1fr; }
+      .tiktok-grid { grid-template-columns: 1fr 1fr; }
+      .product-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 520px) {
+      .hero-title { font-size: 26px; }
+      .hero-ctas { flex-direction: column; align-items: stretch; }
+      .hero-ctas a, .hero-ctas button { justify-content: center; }
+      .tiktok-grid { grid-template-columns: 1fr; }
+      .hero-metrics { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .tiktok-stats-strip { gap: 16px; }
+      .filter-tabs { gap: 6px; }
+      .filter-btn { font-size: 12px; padding: 7px 12px; }
     }
   </style>
 </head>
@@ -505,9 +634,21 @@
         <button class="cart-btn" id="clientCartBtn" onclick="openCart()">
           🛒 Pedido <span class="cart-count" id="cartCount">0</span>
         </button>
+        <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMobileNav()" aria-label="Menú">☰</button>
       </div>
     </div>
   </header>
+
+  <!-- Menú Mobile -->
+  <nav class="mobile-nav" id="mobileNav">
+    <a href="#catalogo" onclick="closeMobileNav()">🥩 Catálogo</a>
+    <a href="#asados" onclick="closeMobileNav()">🔥 Asados al Barril</a>
+    <a href="#tiktok" onclick="closeMobileNav()">🎬 TikTok & Recetas</a>
+    <a href="#cursos" onclick="closeMobileNav()">👨‍🍳 Cursos</a>
+    <a href="#calidad" onclick="closeMobileNav()">⭐ Calidad</a>
+    <a href="#faq" onclick="closeMobileNav()">❓ Preguntas</a>
+    <a href="#contacto" onclick="closeMobileNav()">📍 Contacto</a>
+  </nav>
 
   <!-- ==========================================================
        VISTA 1: TIENDA PÚBLICA (CLIENTE)
@@ -634,39 +775,76 @@
             </a>
           </div>
 
-          <div style="background: rgba(0,0,0,0.5); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 24px; text-align: center;">
-            <div style="font-size: 50px; margin-bottom: 12px;">🍖</div>
-            <h4 style="font-size: 18px; color: #fff; margin-bottom: 8px;">¿Tienes un evento en mente?</h4>
-            <p style="font-size: 13px; color: var(--cream-muted); margin-bottom: 18px;">
-              Planes a tu medida para cumpleaños, grados, asados de fin de semana o eventos corporativos en Envigado, Sabaneta, Medellín y oriente antioqueño.
-            </p>
-            <div class="badge badge-primary">Atención Personalizada por Harold</div>
+          <!-- BENTO GALLERY VISUAL DE ASADOS AL BARRIL -->
+          <div class="barril-bento-gallery">
+            <div class="barril-bento-main" onclick="openLightbox('img/barril_1.jpg', 'Asador al Barril en Acero Inoxidable', 'Ahumado lento con carbón seleccionado y leña aromática para eventos en todo el Valle de Aburrá.')" title="Clic para ampliar fotografía">
+              <img src="img/barril_1.jpg" alt="Ahumador al barril en acción con costillas y chorizos" loading="lazy">
+              <div class="bento-overlay">
+                <span class="badge badge-gold" style="width: fit-content;">🔥 Ahumador en Acción</span>
+                <h4>Asado al Barril Artesanal</h4>
+                <p>Ahumado lento con carbón seleccionado · Sabaneta & Envigado</p>
+              </div>
+            </div>
+            <div class="barril-bento-sub">
+              <div class="barril-bento-subcard" onclick="openLightbox('img/barril_2.jpg', 'Maestro Parrillero en Finca', 'Picado y servicio gourmet en vivo de chicharrón crocante y chorizos artesanales.')" title="Clic para ampliar fotografía">
+                <img src="img/barril_2.jpg" alt="Maestro parrillero rebanando chicharrón crocante" loading="lazy">
+                <div class="bento-overlay">
+                  <span class="badge badge-primary" style="width: fit-content;">👨‍🍳 En Finca</span>
+                  <h4>Maestro Parrillero</h4>
+                </div>
+              </div>
+              <div class="barril-bento-subcard" onclick="openLightbox('img/barril_3.jpg', 'Banquete & Degustación Parrillera', 'Arepitas de maíz blanco con queso, papas criollas doradas y carnes al barril.')" title="Clic para ampliar fotografía">
+                <img src="img/barril_3.jpg" alt="Banquete de asado al barril servido" loading="lazy">
+                <div class="bento-overlay">
+                  <span class="badge badge-primary" style="width: fit-content;">🍽️ Mesa Servida</span>
+                  <h4>Banquete Gourmet</h4>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="barril-cards-grid">
           <div class="barril-plan-card">
-            <div>
-              <div class="barril-plan-tag">Plan Pequeño</div>
-              <div class="barril-plan-title">Reunión Familiar (5 a 10 Personas)</div>
-              <p class="barril-plan-desc">Ideal para almuerzos de domingo o reuniones íntimas. Degustación de 4 variedades de chorizos artesanales, arepas con queso y chimichurri.</p>
+            <div class="barril-plan-img-wrap" onclick="openLightbox('img/barril_1.jpg', 'Plan Familiar (5 a 10 Personas)', 'Degustación de 4 variedades de chorizos artesanales, arepas con queso y chimichurri.')" style="cursor: pointer;">
+              <img src="img/barril_1.jpg" alt="Plan Familiar" class="barril-plan-img" loading="lazy">
+              <div style="position: absolute; top: 10px; left: 10px;">
+                <span class="badge badge-primary">Plan Pequeño</span>
+              </div>
+            </div>
+            <div class="barril-plan-body">
+              <div class="barril-plan-tag">5 a 10 Personas</div>
+              <div class="barril-plan-title">Reunión Familiar</div>
+              <p class="barril-plan-desc">Ideal para almuerzos de domingo o reuniones íntimas. Degustación de 4 variedades de chorizos artesanales, arepas con queso y chimichurri casero.</p>
             </div>
             <button class="btn-outline" onclick="contactBarrilPlan('Familiar (5-10 personas)')">Consultar Disponibilidad</button>
           </div>
 
           <div class="barril-plan-card" style="border-color: var(--primary);">
-            <div>
-              <div class="barril-plan-tag" style="color: #FF8595;">⭐ El Más Popular</div>
-              <div class="barril-plan-title">Parrillada Amigos (10 a 25 Personas)</div>
-              <p class="barril-plan-desc">Chorizos mixtos al barril + cortes de bondiola o costilla ahumada, morcilla tradicional, arepas doradas, chimichurri y acompañamientos.</p>
+            <div class="barril-plan-img-wrap" onclick="openLightbox('img/barril_2.jpg', 'Parrillada Amigos (10 a 25 Personas)', 'Chorizos mixtos al barril + bondiola o costilla ahumada, morcilla y acompañamientos.')" style="cursor: pointer;">
+              <img src="img/barril_2.jpg" alt="Parrillada Amigos" class="barril-plan-img" loading="lazy">
+              <div style="position: absolute; top: 10px; left: 10px;">
+                <span class="badge badge-gold">⭐ El Más Popular</span>
+              </div>
+            </div>
+            <div class="barril-plan-body">
+              <div class="barril-plan-tag" style="color: #FF8595;">10 a 25 Personas</div>
+              <div class="barril-plan-title">Parrillada Amigos</div>
+              <p class="barril-plan-desc">Chorizos mixtos al barril + cortes de bondiola o costilla ahumada, morcilla tradicional, arepas doradas, chimichurri y ensalada fresca.</p>
             </div>
             <button class="btn-primary" onclick="contactBarrilPlan('Amigos (10-25 personas)')">Cotizar este Plan</button>
           </div>
 
           <div class="barril-plan-card">
-            <div>
-              <div class="barril-plan-tag">Eventos Grandes</div>
-              <div class="barril-plan-title">Eventos & Fincas (25+ Personas)</div>
+            <div class="barril-plan-img-wrap" onclick="openLightbox('img/barril_3.jpg', 'Eventos Grandes & Fincas (25+ Personas)', 'Múltiples barriles ahumadores, equipo parrillero completo y servicio continuo.')" style="cursor: pointer;">
+              <img src="img/barril_3.jpg" alt="Eventos Grandes" class="barril-plan-img" loading="lazy">
+              <div style="position: absolute; top: 10px; left: 10px;">
+                <span class="badge badge-primary">Eventos Grandes</span>
+              </div>
+            </div>
+            <div class="barril-plan-body">
+              <div class="barril-plan-tag">25+ Personas</div>
+              <div class="barril-plan-title">Eventos & Fincas</div>
               <p class="barril-plan-desc">Múltiples barriles ahumadores, equipo parrillero completo, servicio continuo de choripanes gourmet y cortes al barril para tu celebración.</p>
             </div>
             <button class="btn-outline" onclick="contactBarrilPlan('Eventos Grandes (25+ personas)')">Solicitar Propuesta</button>
@@ -706,8 +884,10 @@
         <div class="tiktok-grid">
           <!-- Video Card 1 -->
           <div class="tiktok-card" onclick="playTikTokVideo('7690072472544283924', 'Cevichito de chicharrón en asados al barril')">
-            <div class="tiktok-cover" style="background-image: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.15) 60%, rgba(0,0,0,0.3) 100%), url('videos/thumb_1.jpg');">
-              <div class="tiktok-play-btn">▶</div>
+            <div class="tiktok-cover" style="height: 280px;">
+              <img class="tiktok-thumb" src="videos/thumb_1.jpg" loading="lazy" alt="Cevichito de chicharrón en asados al barril" onerror="this.style.display='none'">
+              <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 60%);"></div>
+              <div class="tiktok-play-btn" style="position: absolute;">▶</div>
               <div class="tiktok-views">🔥 Asados al Barril</div>
             </div>
             <div class="tiktok-card-body">
@@ -721,8 +901,10 @@
 
           <!-- Video Card 2 -->
           <div class="tiktok-card" onclick="playTikTokVideo('7678100505100356884', 'Información para restaurantes y negocios')">
-            <div class="tiktok-cover" style="background-image: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.15) 60%, rgba(0,0,0,0.3) 100%), url('videos/thumb_2.jpg');">
-              <div class="tiktok-play-btn">▶</div>
+            <div class="tiktok-cover" style="height: 280px;">
+              <img class="tiktok-thumb" src="videos/thumb_2.jpg" loading="lazy" alt="Información para restaurantes y negocios" onerror="this.style.display='none'">
+              <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 60%);"></div>
+              <div class="tiktok-play-btn" style="position: absolute;">▶</div>
               <div class="tiktok-views">🤝 Aliados B2B</div>
             </div>
             <div class="tiktok-card-body">
@@ -736,8 +918,10 @@
 
           <!-- Video Card 3 -->
           <div class="tiktok-card" onclick="playTikTokVideo('7674733063032540437', 'Receta de domingo con chorizos Segaso')">
-            <div class="tiktok-cover" style="background-image: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.15) 60%, rgba(0,0,0,0.3) 100%), url('videos/thumb_3.jpg');">
-              <div class="tiktok-play-btn">▶</div>
+            <div class="tiktok-cover" style="height: 280px;">
+              <img class="tiktok-thumb" src="videos/thumb_3.jpg" loading="lazy" alt="Receta de domingo con chorizos Segaso" onerror="this.style.display='none'">
+              <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 60%);"></div>
+              <div class="tiktok-play-btn" style="position: absolute;">▶</div>
               <div class="tiktok-views">🥩 Receta Casera</div>
             </div>
             <div class="tiktok-card-body">
@@ -751,8 +935,10 @@
 
           <!-- Video Card 4 -->
           <div class="tiktok-card" onclick="playTikTokVideo('7671306377410678036', 'Harold y Giseth: Historia de Segaso Chorizos')">
-            <div class="tiktok-cover" style="background-image: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.15) 60%, rgba(0,0,0,0.3) 100%), url('videos/thumb_4.jpg');">
-              <div class="tiktok-play-btn">▶</div>
+            <div class="tiktok-cover" style="height: 280px;">
+              <img class="tiktok-thumb" src="videos/thumb_4.jpg" loading="lazy" alt="Harold y Giseth: Historia de Segaso Chorizos" onerror="this.style.display='none'">
+              <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 60%);"></div>
+              <div class="tiktok-play-btn" style="position: absolute;">▶</div>
               <div class="tiktok-views">❤️ Nuestra Historia</div>
             </div>
             <div class="tiktok-card-body">
@@ -885,7 +1071,6 @@
           <a href="https://www.tiktok.com/@segaso.chorizos?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener">TikTok</a>
           <a href="#cursos">Cursos</a>
           <a href="#contacto">Contacto</a>
-          <a href="/chorizos-segaso/admin" target="_blank" rel="noopener" style="color: #665; font-size: 11px;">🔒 Acceso Gerencial</a>
         </div>
         <div class="footer-copy">
           &copy; 2026 Segaso Chorizos de Tradición. Proyecto Académico CESDE · Angelina Rojas.
@@ -912,6 +1097,39 @@
     </div>
   </div>
 
+  <!-- MODAL DE VISUALIZACIÓN RÁPIDA / LIGHTBOX GOURMET -->
+  <div class="modal-center" id="imageLightboxModal" onclick="if(event.target===this) closeLightbox()">
+    <div class="lightbox-box" style="background: rgba(20, 14, 16, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(229,169,60,0.3); border-radius: var(--radius-lg); max-width: 680px; width: 100%; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.9);">
+      <div style="position: relative; height: 340px; background: #0E080A;">
+        <img id="lightboxImg" src="" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+        <button onclick="closeLightbox()" style="position: absolute; top: 14px; right: 14px; width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.background='var(--primary)'" onmouseout="this.style.background='rgba(0,0,0,0.7)'">✕</button>
+        <div id="lightboxBadgeWrap" style="position: absolute; bottom: 14px; left: 14px;"></div>
+      </div>
+      <div style="padding: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 8px;">
+          <div>
+            <h3 id="lightboxTitle" style="font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 4px;"></h3>
+            <div id="lightboxSubtitle" style="font-size: 13px; color: var(--gold); font-weight: 600;"></div>
+          </div>
+          <div id="lightboxPrice" style="font-size: 22px; font-weight: 800; color: var(--cream); white-space: nowrap;"></div>
+        </div>
+        <p id="lightboxDesc" style="font-size: 14px; color: var(--cream-muted); line-height: 1.5; margin-bottom: 20px;"></p>
+        
+        <div id="lightboxTags" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+          <span style="font-size: 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 4px 10px; color: var(--cream);">🌾 Sin Harina ni Gluten</span>
+          <span style="font-size: 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 4px 10px; color: var(--cream);">🥩 Cerdo Magro Seleccionado</span>
+          <span style="font-size: 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 4px 10px; color: var(--cream);">🌀 Tripa 100% Natural</span>
+          <span style="font-size: 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 4px 10px; color: var(--cream);">❄️ Sellado al Vacío</span>
+        </div>
+
+        <div id="lightboxActionRow" style="display: flex; gap: 12px; justify-content: flex-end;">
+          <button class="btn-outline" onclick="closeLightbox()">Cerrar</button>
+          <div id="lightboxBtnContainer"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- DRAWER DE CARRITO & CHECKOUT -->
   <div class="drawer-overlay" id="cartDrawer" onclick="if(event.target===this) closeCart()">
     <div class="drawer-content">
@@ -926,6 +1144,19 @@
         <div class="cart-total-row">
           <span>Total a Pagar:</span>
           <span id="cartTotalAmount" style="color: var(--gold);">0k COP</span>
+        </div>
+
+        <!-- Táctica 3 / Sprint 3 Edison Galván: Descuento Automático WhatsApp -->
+        <div style="background: rgba(229, 169, 60, 0.08); border: 1px dashed var(--gold); border-radius: 8px; padding: 10px 12px; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <span style="font-size: 11px; font-weight: 700; color: var(--gold); text-transform: uppercase;">🎁 Descuento WhatsApp (Sprint 3)</span>
+            <span class="badge badge-gold" style="font-size: 10px;">SEGASO10 (-10%)</span>
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <input type="text" id="promoCodeInput" class="form-input" placeholder="SEGASO10" value="SEGASO10" style="padding: 6px 10px; font-size: 12px; text-transform: uppercase;">
+            <button type="button" class="btn-primary" style="padding: 6px 12px; font-size: 11px; white-space: nowrap;" onclick="applyPromoCode()">Aplicar</button>
+          </div>
+          <div id="promoFeedback" style="font-size: 11px; color: var(--success); margin-top: 4px; font-weight: 600;">✓ 10% de descuento automático de bienvenida activo</div>
         </div>
 
         <div id="checkoutFormSection">
@@ -1022,6 +1253,7 @@
     let currentMode = 'client';
     let currentCategoryFilter = 'all';
     let cart = {};
+    let appliedDiscountPct = 10; // Táctica 3 / Sprint 3 Edison Galván: Mensaje automático con 10% de descuento
     let inventory = {};
     let orders = [];
     let waitlistLeads = [];
@@ -1030,11 +1262,6 @@
       initData();
       checkAdminRoute();
       renderProducts('all');
-      renderInventory();
-      renderOrders();
-      renderCrm();
-      renderLeads();
-      updateKpis();
     });
 
     // DETECCIÓN DE RUTA DE ADMINISTRACIÓN OCULTA
@@ -1065,15 +1292,10 @@
     }
 
     function verifyAdminPin() {
-      const pin = document.getElementById('adminPinInput').value.trim();
-      if (pin === '1234') {
-        sessionStorage.setItem('segaso_admin_auth', 'true');
-        closeAdminPinModal();
-        switchMode('admin');
-        showToast('Acceso Gerencial Autorizado (Harold)');
-      } else {
-        alert('PIN incorrecto. Intenta con 1234.');
-      }
+      // Redirigir siempre al panel real con JWT en admin.html
+      // No se usa PIN client-side: el acceso está protegido por JWT en server.js
+      closeAdminPinModal();
+      window.location.href = '/chorizos-segaso/admin';
     }
 
     function exitAdminMode() {
@@ -1187,16 +1409,8 @@
       const clientCartBtn = document.getElementById('clientCartBtn');
 
       if (mode === 'admin') {
-        clientView.classList.remove('active');
-        adminView.classList.add('active');
-        if (clientNavLinks) clientNavLinks.style.display = 'none';
-        if (clientCartBtn) clientCartBtn.style.display = 'none';
-        renderOrders();
-        renderInventory();
-        renderCrm();
-        renderLeads();
-        updateKpis();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.location.href = '/chorizos-segaso/admin';
+        return;
       } else {
         adminView.classList.remove('active');
         clientView.classList.add('active');
@@ -1237,11 +1451,14 @@
         const card = document.createElement('div');
         card.className = 'product-card ' + (isOutOfStock ? 'out-of-stock' : '');
         card.innerHTML = `
-          <div class="prod-visual">
+          <div class="prod-visual" onclick="openProductDetail('${p.id}')" title="Clic para ver fotografía en alta definición y detalles">
             <img src="img/${p.id}.jpg" class="prod-real-img" alt="${p.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
             <div class="prod-placeholder-icon" style="display: none;">${p.icon}</div>
             <div class="prod-badge-pos">
               <span class="badge ${p.id === 'caserito' ? 'badge-gold' : 'badge-primary'}">${p.tag}</span>
+            </div>
+            <div class="prod-zoom-hint">
+              <span>🔍 Ver detalle</span>
             </div>
           </div>
           <div class="prod-body">
@@ -1303,6 +1520,7 @@
     function updateCartBadge() {
       const totalUnits = Object.values(cart).reduce((a, b) => a + b, 0);
       document.getElementById('cartCount').textContent = totalUnits;
+      if (typeof saveCart === 'function') saveCart();
     }
 
     function openCart() {
@@ -1350,8 +1568,47 @@
         body.appendChild(row);
       });
 
-      document.getElementById('cartTotalAmount').textContent = total.toFixed(1) + 'k COP';
+      const discount = total * (appliedDiscountPct / 100);
+      const finalTotal = total - discount;
+      if (appliedDiscountPct > 0) {
+        document.getElementById('cartTotalAmount').innerHTML = `
+          <span style="text-decoration: line-through; color: var(--text-muted); font-size: 13px; margin-right: 6px;">${total.toFixed(1)}k</span>
+          <span style="color: var(--gold);">${finalTotal.toFixed(1)}k COP</span>
+          <span style="color: var(--success); font-size: 11px; display: block; font-weight: 600;">(-${discount.toFixed(1)}k COP de descuento aplicado)</span>
+        `;
+      } else {
+        document.getElementById('cartTotalAmount').textContent = total.toFixed(1) + 'k COP';
+      }
       drawer.classList.add('open');
+    }
+
+    function applyPromoCode() {
+      const codeInput = document.getElementById('promoCodeInput');
+      const code = (codeInput ? codeInput.value : '').trim().toUpperCase();
+      const fb = document.getElementById('promoFeedback');
+      if (code === 'SEGASO10') {
+        appliedDiscountPct = 10;
+        if (fb) {
+          fb.style.color = 'var(--success)';
+          fb.textContent = '✓ 10% de descuento automático de bienvenida activo';
+        }
+        showToast('¡Cupón SEGASO10 aplicado! 10% de descuento');
+      } else if (!code) {
+        appliedDiscountPct = 0;
+        if (fb) {
+          fb.style.color = 'var(--cream-muted)';
+          fb.textContent = 'Sin código promocional aplicado';
+        }
+        showToast('Descuento removido');
+      } else {
+        appliedDiscountPct = 0;
+        if (fb) {
+          fb.style.color = 'var(--danger)';
+          fb.textContent = '✕ Código no válido. Usa SEGASO10 para 10% OFF';
+        }
+        showToast('Código no válido');
+      }
+      openCart();
     }
 
     function closeCart() { document.getElementById('cartDrawer').classList.remove('open'); }
@@ -1398,6 +1655,9 @@
       }
       saveInventory();
 
+      const discount = total * (appliedDiscountPct / 100);
+      const finalTotal = total - discount;
+
       const now = new Date();
       const orderId = 'SEG-' + (now.getFullYear() % 100) + Math.floor(1000 + Math.random() * 9000);
       const newOrder = {
@@ -1409,7 +1669,8 @@
         city: city,
         payment: payment,
         items: orderItems,
-        total: parseFloat(total.toFixed(1)),
+        total: parseFloat(finalTotal.toFixed(1)),
+        discount: parseFloat(discount.toFixed(1)),
         status: 'Pendiente'
       };
 
@@ -1432,7 +1693,14 @@
         const prod = PRODUCTS.find(p=>p.id===it.id);
         msg += '• ' + it.qty + 'x ' + prod.name + ' = ' + (it.price * it.qty).toFixed(1) + 'k COP\n';
       });
-      msg += '\n*TOTAL A PAGAR:* ' + total.toFixed(1) + 'k COP\n\n';
+
+      if (appliedDiscountPct > 0) {
+        msg += '\n*Subtotal:* ' + total.toFixed(1) + 'k COP\n';
+        msg += '🏷️ *Descuento Especial (' + appliedDiscountPct + '% OFF):* -' + discount.toFixed(1) + 'k COP (Promoción Web/WhatsApp)\n';
+        msg += '*TOTAL A PAGAR CON DESCUENTO:* ' + finalTotal.toFixed(1) + 'k COP\n\n';
+      } else {
+        msg += '\n*TOTAL A PAGAR:* ' + total.toFixed(1) + 'k COP\n\n';
+      }
       msg += 'Por favor me confirmas el despacho. ¡Muchas gracias!';
 
       const waUrl = 'https://wa.me/573002367180?text=' + encodeURIComponent(msg);
@@ -1442,19 +1710,20 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          customer_name: name,
+          customer_name:  name,
           customer_phone: phone,
-          address: address,
-          neighborhood: city,
-          items: orderItems,
-          total_cop: Math.round(total * 1000)
+          address:        address,
+          neighborhood:   city,
+          payment_method: payment,
+          items:          orderItems,
+          total_cop:      Math.round(finalTotal * 1000)
         })
       }).catch(() => console.log('Modo offline: orden guardada en almacenamiento local'));
 
       showToast('¡Pedido ' + orderId + ' creado con éxito!');
       
       setTimeout(() => {
-        if (confirm('¡Pedido ' + orderId + ' registrado!\n\nTotal: ' + total.toFixed(1) + 'k COP\n\n¿Deseas abrir WhatsApp para enviar la confirmación inmediata a Harold?')) {
+        if (confirm('¡Pedido ' + orderId + ' registrado!\n\nTotal: ' + finalTotal.toFixed(1) + 'k COP\n\n¿Deseas abrir WhatsApp para enviar la confirmación inmediata a Harold?')) {
           window.open(waUrl, '_blank');
         }
       }, 300);
@@ -1537,6 +1806,74 @@
       container.innerHTML = '<div style="color: var(--cream-muted); font-size: 13px;">Cargando video de TikTok...</div>';
     }
 
+    // LIGHTBOX GOURMET & QUICK VIEW ($0 Tokens / Vanilla JS)
+    function openProductDetail(productId) {
+      const p = PRODUCTS.find(x => x.id === productId);
+      if (!p) return;
+      
+      const modal = document.getElementById('imageLightboxModal');
+      const img = document.getElementById('lightboxImg');
+      const title = document.getElementById('lightboxTitle');
+      const subtitle = document.getElementById('lightboxSubtitle');
+      const price = document.getElementById('lightboxPrice');
+      const desc = document.getElementById('lightboxDesc');
+      const badgeWrap = document.getElementById('lightboxBadgeWrap');
+      const btnContainer = document.getElementById('lightboxBtnContainer');
+
+      img.src = `img/${p.id}.jpg`;
+      img.alt = p.name;
+      title.textContent = p.name;
+      subtitle.textContent = p.id === 'chimichurri' ? 'Frasco de vidrio hermético x 250g' : 'Paquete sellado al vacío x 5 unidades (~500g)';
+      price.innerHTML = `${p.price.toFixed(1)}k <small style="font-size: 12px; color: var(--text-muted);">COP</small>`;
+      desc.textContent = p.desc;
+
+      badgeWrap.innerHTML = `<span class="badge ${p.id === 'caserito' ? 'badge-gold' : 'badge-primary'}">${p.tag}</span>`;
+
+      const stock = inventory[p.id] !== undefined ? inventory[p.id] : 0;
+      if (stock <= 0) {
+        btnContainer.innerHTML = `<button class="btn-primary" disabled style="opacity: 0.5; cursor: not-allowed;">Agotado</button>`;
+      } else {
+        btnContainer.innerHTML = `<button class="btn-primary" onclick="updateCartItemQty('${p.id}', 1); closeLightbox(); showToast('¡${p.name} agregado al carrito!');">🛒 Agregar al Carrito</button>`;
+      }
+
+      modal.classList.add('open');
+    }
+
+    function openLightbox(imgSrc, titleText, descText) {
+      const modal = document.getElementById('imageLightboxModal');
+      const img = document.getElementById('lightboxImg');
+      const title = document.getElementById('lightboxTitle');
+      const subtitle = document.getElementById('lightboxSubtitle');
+      const price = document.getElementById('lightboxPrice');
+      const desc = document.getElementById('lightboxDesc');
+      const badgeWrap = document.getElementById('lightboxBadgeWrap');
+      const btnContainer = document.getElementById('lightboxBtnContainer');
+
+      img.src = imgSrc;
+      img.alt = titleText;
+      title.textContent = titleText;
+      subtitle.textContent = 'Servicio de Catering Parrillero Segaso · Envigado';
+      price.innerHTML = '';
+      desc.textContent = descText;
+      badgeWrap.innerHTML = `<span class="badge badge-gold">🔥 Asados al Barril</span>`;
+      btnContainer.innerHTML = `<a href="https://wa.me/573002367180?text=Hola%20Harold,%20estoy%20interesado%20en%20el%20servicio%20de%20asado%20al%20barril." target="_blank" class="btn-gold" style="text-decoration: none;">📲 Cotizar por WhatsApp</a>`;
+
+      modal.classList.add('open');
+    }
+
+    function closeLightbox() {
+      const modal = document.getElementById('imageLightboxModal');
+      if (modal) modal.classList.remove('open');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeLightbox();
+        closeTikTokModal();
+        closeCart();
+      }
+    });
+
     // ASESOR VIRTUAL ($0 Tokens / Determinista)
     function openBotModal() { document.getElementById('botModal').classList.add('open'); }
     function closeBotModal() { document.getElementById('botModal').classList.remove('open'); }
@@ -1591,6 +1928,98 @@
         setTimeout(() => toast.remove(), 300);
       }, 2600);
     }
+
+    // ============================================================
+    // HAMBURGER MENU MOBILE
+    // ============================================================
+    function toggleMobileNav() {
+      const nav = document.getElementById('mobileNav');
+      const btn = document.getElementById('hamburgerBtn');
+      const isOpen = nav.classList.toggle('open');
+      btn.textContent = isOpen ? '✕' : '☰';
+      btn.setAttribute('aria-expanded', isOpen);
+    }
+
+    function closeMobileNav() {
+      const nav = document.getElementById('mobileNav');
+      const btn = document.getElementById('hamburgerBtn');
+      nav.classList.remove('open');
+      btn.textContent = '☰';
+      btn.setAttribute('aria-expanded', false);
+    }
+
+    // Cerrar el menú mobile al hacer clic fuera
+    document.addEventListener('click', (e) => {
+      const nav = document.getElementById('mobileNav');
+      const btn = document.getElementById('hamburgerBtn');
+      if (nav.classList.contains('open') && !nav.contains(e.target) && e.target !== btn) {
+        closeMobileNav();
+      }
+    });
+
+    // ============================================================
+    // CARRITO PERSISTENTE (localStorage)
+    // ============================================================
+    function saveCart() {
+      try { localStorage.setItem('segaso_cart', JSON.stringify(cart)); } catch (_) {}
+    }
+
+    function loadCart() {
+      try {
+        const saved = localStorage.getItem('segaso_cart');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          // Validar que las claves del carrito guardado existan en PRODUCTS
+          const validIds = new Set(PRODUCTS.map(p => p.id));
+          Object.keys(parsed).forEach(id => {
+            if (validIds.has(id) && parsed[id] > 0) cart[id] = parsed[id];
+          });
+        }
+      } catch (_) {}
+    }
+
+    // Cargar carrito guardado en DOMContentLoaded (antes de renderProducts)
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCart();
+      updateCartBadge();
+    }, { once: true });
+
+    // ============================================================
+    // SYNC STOCK DESDE API AL CARGAR (stock real de SQLite de Harold)
+    // ============================================================
+    async function syncInventoryFromServer() {
+      try {
+        const res = await fetch('/api/inventory');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!data.success || !Array.isArray(data.inventory)) return;
+
+        // Aplicar stock real de SQLite al inventario local
+        let updated = false;
+        data.inventory.forEach(({ code, stock }) => {
+          if (inventory[code] !== undefined && inventory[code] !== stock) {
+            inventory[code] = stock;
+            updated = true;
+          } else if (inventory[code] === undefined) {
+            inventory[code] = stock;
+            updated = true;
+          }
+        });
+
+        if (updated) {
+          saveInventory();
+          renderProducts(currentCategoryFilter);
+        }
+      } catch (_) {
+        // Offline o servidor no iniciado — localStorage sigue como fuente
+      }
+    }
+
+    // Ejecutar sync al cargar la página (sin bloquear el render inicial)
+    window.addEventListener('DOMContentLoaded', () => {
+      syncInventoryFromServer();
+    }, { once: true });
+
   </script>
 </body>
 </html>

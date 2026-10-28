@@ -4,9 +4,22 @@
   "description": "Plataforma de comercio electrónico y gestión administrativa para Segaso Chorizos (Envigado)",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "typecheck": "tsc --noEmit",
+    "test": "node --no-warnings --test tests/segaso_domain.test.ts",
+    "test:e2e": "node --env-file=.env tests/e2e_segaso_playwright.js",
+    "start": "node --env-file=.env server.js",
+    "dev": "node --env-file=.env --watch server.js"
   },
   "dependencies": {
-    "better-sqlite3": "^13.0.2"
+    "better-sqlite3": "^13.0.2",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "playwright": "^1.62.1",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=24"
   }
 }

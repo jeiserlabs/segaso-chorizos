@@ -81,7 +81,10 @@ db.exec(`
 // el primer login desde el panel de administración.
 // Usuario: harold@segasochorizos.com | Password inicial: ver .env (ADMIN_SEED_PASSWORD)
 // ------------------------------------------------------------------
-const seedPassword = process.env.ADMIN_SEED_PASSWORD || 'segaso-cambiar-en-primer-login';
+const seedPassword = process.env.ADMIN_SEED_PASSWORD;
+if (!seedPassword) {
+  throw new Error('[db] ADMIN_SEED_PASSWORD no está definido en .env. El seed del admin es obligatorio.');
+}
 if (db.prepare('SELECT COUNT(*) as n FROM admin_users').get().n === 0) {
   db.prepare(
     "INSERT INTO admin_users (email, password_hash, role) VALUES (?, ?, 'admin')"

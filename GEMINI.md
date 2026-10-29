@@ -1,51 +1,66 @@
-# GEMINI.md — Segaso Chorizos (Antigravity / Gemini Flash)
+# GEMINI.md — Segaso Chorizos
 
-Repo público: `jeiserlabs/segaso-chorizos` | Local: `projects/segaso-app/`
-Proyecto CESDE — plataforma web de chorizos artesanales para Harold García (Envigado).
-
----
-
-## ⚡ REGLAS DE HIERRO
-
-**R1 — Aislamiento:** Este repo es SOLO Segaso. Cero mezcla con LifeOS o ProGanado.
-**R2 — Fail-Closed JWT:** `auth.js` lanza Error si `JWT_SECRET` no está en env. NUNCA agregar fallback hardcodeado.
-**R3 — Cero credenciales en código:** Passwords y secrets van SOLO en `.env`. El `.env.example` es el contrato público.
-**R4 — SQLite WAL:** BD es `segaso.db` local. Sin dependencias cloud. Cero infraestructura externa.
-**R5 — $0 dependencias externas:** Stdlib Node.js únicamente (`node:crypto`, `node:http`, `node:fs`, `better-sqlite3`). No agregar npm packages sin justificación.
-**R6 — Repo público:** Todo lo que se commitea es visible. Revisar antes de push. Nunca commitear `.env`.
-**R7 — Metodología ODD:** Rige One-Document-Driven Development (.odd/tasks/<feature>.odd.md). Burocracia SDD multi-archivo abolida.
+Repositorio: `jeiserlabs/segaso-chorizos`
+Copia local: `projects/segaso-app/`
+Proyecto CESDE 2026: plataforma web y back office para Segaso Chorizos de Tradición (Envigado).
 
 ---
 
-## Protocolo de Carga al Iniciar Sesión
+## Reglas de hierro
 
-1. `README.md` → propuesta de valor, catálogo, quick start
-2. `PROYECTO_SEGASO_CHORIZOS_ENTREGABLE.md` → entregable CESDE completo
-3. `auth.js` → módulo JWT + scrypt (sin dependencias npm)
-4. `db.js` → schema SQLite + seed + todas las queries
-5. `server.js` → router HTTP, endpoints API, servidor de archivos estáticos
-6. `.env.example` → variables de entorno requeridas
+**R1 — Aislamiento:** este repositorio es solo Segaso. Cero mezcla con LifeOS, DIAN, tránsito o ProGanado.
+
+**R2 — JWT fail-closed:** `auth.js` lanza error si falta `JWT_SECRET`. Prohibido agregar un fallback hardcodeado.
+
+**R3 — Cero credenciales en Git:** contraseñas y secretos viven solo en `.env`. El contrato público es `.env.example`.
+
+**R4 — SQLite WAL:** la base es `segaso.db` local, con `better-sqlite3`. Sin infraestructura cloud.
+
+**R5 — Dependencias mínimas:** stdlib de Node.js + `better-sqlite3` + `zod`. No agregar frameworks de backend ni auth sin justificación.
+
+**R6 — Repo público:** todo lo que se commitea es visible. Revisar el diff antes de push. Nunca commitear `.env`.
+
+**R7 — ODD:** todo requerimiento sustancial vive en un único documento en `.odd/tasks/<feature>.odd.md`.
+
+**R8 — Medios fuera de Git:** fotos, videos, capturas, PDF y ZIP viven en `videos/`, `media/` o en el paquete local/Drive. GitHub solo recibe texto, código y SVG.
+
+**R9 — Contenido social:** usar solo cuentas oficiales de Segaso. No usar primeros planos de menores sin autorización. No afirmar 500 g, “100% carne magra” ni “bot 24/7”.
 
 ---
 
-## Stack actual (FASE 1 — COMPLETADA ✅)
+## Protocolo de carga
 
-- **Runtime:** Node.js stdlib + `better-sqlite3`
-- **Auth:** JWT HS256 manual + scrypt (RFC 7519, cero npm de auth)
-- **BD:** SQLite WAL (`segaso.db`)
-- **Frontend:** HTML5 + CSS3 + JS vanilla (sin frameworks)
+1. `README.md` — propuesta de valor, inicio rápido, API y estado.
+2. `docs/README.md` — índice de documentación.
+3. `docs/ARCHITECTURE.md` — stack, datos, seguridad y FSM.
+4. `docs/API.md` — endpoints y ejemplos.
+5. `docs/social/REDES_SEGASO.md` — cuentas y contenido real.
+6. `docs/promo/README_PROMO.md` — kit del video promocional.
+7. `PROYECTO_SEGASO_CHORIZOS_ENTREGABLE.md` — entregable CESDE.
+8. `.env.example` — variables requeridas.
+
+---
+
+## Stack
+
+- Runtime: Node.js 24+ con type stripping.
+- HTTP: `node:http`.
+- Datos: SQLite WAL + `better-sqlite3`.
+- Auth: scrypt + JWT HS256 con `node:crypto`.
+- Contratos: Zod v4 + TypeScript.
+- Frontend: HTML5 + CSS3 + JavaScript vanilla.
+- Pruebas: `node:test` + Playwright.
 
 ---
 
 ## Variables de entorno
 
 | Variable | Requerida | Descripción |
-|----------|-----------|-------------|
-| `JWT_SECRET` | **SÍ** | Firma JWT ≥32 bytes hex. Sin esto el server no arranca. |
-| `ADMIN_SEED_PASSWORD` | No | Password inicial admin en seed. Cambiar en primer login. |
-| `PORT` | No | Puerto HTTP. Default: `3000`. |
+|---|---|---|
+| `JWT_SECRET` | Sí | Firma JWT HS256; el servidor falla si falta. |
+| `ADMIN_SEED_PASSWORD` | Sí | Contraseña inicial del admin; el seed falla si falta. |
+| `PORT` | No | Puerto HTTP; por defecto 3000. |
 
-Generar JWT_SECRET:
 ```bash
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
@@ -54,100 +69,113 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 
 ## Estructura
 
-```
-segaso-app/
-├── auth.js          ← JWT HS256 + scrypt (fail-closed si no hay JWT_SECRET)
-├── db.js            ← Schema + seed + queries (SSOT de BD)
-├── server.js        ← HTTP server, rutas API, archivos estáticos
-├── index.html       ← Tienda pública (carrito, catálogo, bot FAQ, catering)
-├── admin.html       ← Back office Harold (pedidos + inventario + KPIs)
-├── brochure_segaso.html  ← Brochure comercial/técnico
-├── logo_segaso.svg  ← Identidad visual corporativa
-├── .env.example     ← Variables requeridas (JWT_SECRET, ADMIN_SEED_PASSWORD, PORT)
-└── GEMINI.md        ← Este archivo
+```text
+.
+├── index.html
+├── admin.html
+├── server.js
+├── db.js
+├── auth.js
+├── src/domain, src/schemas, src/types
+├── tests/
+├── scripts/
+│   ├── fetch_tiktok_assets.js
+│   └── social_manifest.js
+├── docs/
+│   ├── ARCHITECTURE.md
+│   ├── API.md
+│   ├── social/
+│   ├── promo/
+│   └── SUSTENTACION_2026/
+├── .odd/tasks/
+├── logo_segaso.svg
+├── README.md
+├── AGENTS.md
+└── GEMINI.md
 ```
 
 ---
 
-## Endpoints API
+## API
 
-| Método | Ruta | Auth | Descripción |
-|--------|------|------|-------------|
-| `POST` | `/api/auth/login` | No | Login → JWT (email + password) |
-| `GET` | `/api/auth/me` | JWT | Verificar sesión activa |
-| `POST` | `/api/orders` | No | Crear pedido desde carrito público |
-| `POST` | `/api/leads` | No | Capturar interesado (academia/catering) |
-| `GET` | `/api/admin/kpis` | JWT | KPIs Harold: ventas, pedidos activos, stock bajo |
-| `GET` | `/api/admin/orders` | JWT | Listado pedidos |
-| `PATCH` | `/api/admin/orders/:id` | JWT | Cambiar estado pedido |
-| `GET` | `/api/admin/inventory` | JWT | Inventario con alertas stock |
-| `PATCH` | `/api/admin/inventory/:code` | JWT | Actualizar stock |
-| `GET` | `/api/admin/leads` | JWT | Leads de academia y catering |
+La tabla completa está en `docs/API.md`. Resumen:
+
+| Método | Ruta | Auth |
+|---|---|---|
+| `POST` | `/api/auth/login` | No |
+| `GET` | `/api/auth/me` | JWT |
+| `POST` | `/api/orders` | No |
+| `POST` | `/api/leads` | No |
+| `GET` | `/api/inventory` | No |
+| `GET` | `/api/admin/kpis` | JWT |
+| `GET` | `/api/admin/orders` | JWT |
+| `PATCH` | `/api/admin/orders/:id` | JWT + FSM |
+| `GET` | `/api/admin/inventory` | JWT |
+| `PATCH` | `/api/admin/inventory/:code` | JWT |
+| `GET` | `/api/admin/leads` | JWT |
 
 ---
 
-## Catálogo oficial (SSOT de precios — no inventar)
+## Catálogo oficial
+
+9 referencias, paquetes x5, **450 g netos**, 60 días congelado, sin harinas ni extensores. Los precios son el SSOT de `db.js` y no se inventan.
 
 | id | Producto | Precio |
-|----|----------|--------|
-| `caserito` | Chorizo Caserito Paisa (x5) | 19.9k COP |
-| `antioqueno` | Chorizo Antioqueño Tradicional (x5) | 23.6k COP |
-| `santarrosano` | Chorizo Santarrosano (x5) | 23.8k COP |
-| `tocineta` | Chorizo Tocineta Ahumada (x5) | 23.8k COP |
-| `parrillero` | Chorizo Parrillero Especial (x5) | 23.8k COP |
-| `picante` | Chorizo Picante Artesanal (x5) | 24.2k COP |
-| `argentino` | Chorizo Argentino con Vino Blanco (x5) | 24.6k COP |
-| `morcilla` | Morcilla Paisa Artesanal (x5) | 15.0k COP |
-| `chimichurri` | Chimichurri Artesanal de la Casa (250ml) | 14.5k COP |
+|---|---|---:|
+| `caserito` | Chorizo Caserito Paisa | 19.9k COP |
+| `antioqueno` | Chorizo Antioqueño Tradicional | 23.6k COP |
+| `santarrosano` | Chorizo Santarrosano | 23.8k COP |
+| `tocineta` | Chorizo Tocineta Ahumada | 23.8k COP |
+| `parrillero` | Chorizo Parrillero Especial | 23.8k COP |
+| `picante` | Chorizo Picante Artesanal | 24.2k COP |
+| `argentino` | Chorizo Argentino con Vino Blanco | 24.6k COP |
+| `morcilla` | Morcilla Paisa Artesanal | 15.0k COP |
+| `chimichurri` | Chimichurri Artesanal de la Casa (250 ml) | 14.5k COP |
+
+---
+
+## Verificación
+
+```bash
+npm run typecheck
+npm test
+npm run test:e2e
+```
+
+Estado: typecheck limpio, 13/13 pruebas de dominio, E2E de 4 fases y FSM inválida con HTTP 400.
 
 ---
 
 ## Roadmap
 
-### FASE 1 — COMPLETADA ✅
-- [x] Landing + catálogo responsive (paleta: Borgoña #7C101C, Dorado #E5A93C)
-- [x] Carrito 1-click → checkout WhatsApp Harold (`300 236 7180`)
-- [x] Auth JWT HS256 + scrypt (cero dependencias npm de auth)
-- [x] Back office Harold: pedidos Kanban + inventario + KPIs + leads
-- [x] SQLite WAL persistente (`segaso.db`)
-- [x] Bot FAQ HTML5 determinista (gluten, conservación, tiempos de cocción)
-- [x] Sección Asados al Barril (catering)
-- [x] Brochure comercial/técnico
+### Fase 1 — completada
+- Vitrina responsive y catálogo de 9 referencias.
+- Carrito y cupón SEGASO10.
+- Pedido a WhatsApp + SQLite.
+- Back office JWT + scrypt con KPIs, pedidos, inventario y leads.
+- FSM con validación en el endpoint.
+- Pruebas de dominio y E2E.
 
-### FASE 2 — Post-CESDE (Harold decide)
-- [ ] Notificaciones Telegram cuando entra pedido nuevo
-- [ ] Pasarela de pago: Wompi / Nequi QR (link de cobro)
-- [ ] Deploy gratuito: Railway / Render con `JWT_SECRET` en dashboard de env vars
-- [ ] Reportes: ventas por semana, producto más vendido, ticket promedio
-- [ ] Alerta stock mínimo automática a Harold
+### Fase 2 — decisión de Harold
+- Notificaciones Telegram al entrar un pedido.
+- Pasarela de pago (Wompi/Nequi QR).
+- Deploy con HTTPS y respaldos.
+- Reportes semanales y alertas de stock.
 
-### FASE 3 — SaaS (si escala)
-- [ ] Multi-negocio (otras chorizeras / tiendas de Envigado)
-- [ ] PWA offline-first con sync
+### Fase 3 — si escala
+- Multi-negocio.
+- PWA offline-first.
 
 ---
 
-## Inicio rápido
+## Contacto y redes
 
-```bash
-# 1. Copiar y configurar variables de entorno
-cp .env.example .env
-# Editar .env: poner JWT_SECRET real (mínimo 32 bytes hex)
+- Empresa: Segaso Chorizos de Tradición, Envigado, Antioquia. NIT 1037619618-5.
+- TikTok: `@segaso.chorizos`.
+- Instagram principal: `@chorizos.segaso`.
+- Instagram alterna: `@segaso.chorizos`.
+- Facebook: `Segaso Chorizos`.
+- Línea del empaque y redes: 312 210 7979.
+- Línea configurada en la página: 300 236 7180.
 
-# 2. Instalar dependencias
-npm install
-
-# 3. Arrancar servidor
-npm start
-# Tienda: http://localhost:3000
-# Admin:  http://localhost:3000/chorizos-segaso/admin
-#   (credenciales iniciales en .env → ADMIN_SEED_PASSWORD)
-```
-
----
-
-## Contacto empresa
-- Harold Cortés (Gerente): WhatsApp `300 236 7180`
-- Ubicación: Calle 46 Sur # 46A-16, Barrio Primavera, Envigado
-- TikTok: `@segaso.chorizos` (29.2K seguidores)
-- NIT: `1037619618-5`
+Unificar la línea de contacto antes de una campaña pública.

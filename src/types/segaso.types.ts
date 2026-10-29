@@ -38,7 +38,7 @@ export interface Producto {
   readonly price_cop: number;
   readonly stock: number;
   readonly min_stock: number;
-  readonly presentation: string; // Ej: 'Paquete x 5 unidades (~500g)' o 'Frasco 250ml'
+  readonly presentation: string; // Ej: 'Paquete x 5 unidades (450 g)' o 'Frasco 250ml'
 }
 
 export interface ItemPedido {

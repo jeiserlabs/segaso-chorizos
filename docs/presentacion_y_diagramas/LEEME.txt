@@ -1,0 +1,38 @@
+========================================================================
+SEGASO CHORIZOS S.A.S. • CARPETA PRINCIPAL FOOD-TECH & BACK OFFICE
+========================================================================
+
+Esta carpeta contiene todos los archivos del proyecto Segaso Chorizos listos
+para abrir con doble clic en Google Chrome o Microsoft Edge:
+
+1. 1_PRESENTACION_PITCH.html
+   - Keynote comercial interactiva (10 diapositivas).
+   - Estilo visual de alta gama inspirado en Aceternity UI y Magic UI (resplandor de brasa).
+   - Controles: Flecha derecha (→) o Espacio para avanzar; Flecha izquierda (←) para retroceder; Tecla 'F' para Pantalla Completa.
+   - Simuladores integrados:
+     * Slide 4: Simulador de la Máquina de Estados Finitos (FSM) de pedidos.
+     * Slide 5: Catálogo oficial de las 9 referencias empacadas al vacío (450 g x 5u).
+     * Slide 6: Calculadora de Catering y Asados al Barril (350g proteína/persona).
+     * Slide 7: Segmentación de clientes y cálculo de Customer Lifetime Value (LTV).
+
+2. 2_STUDIO_DIAGRAMAS.html
+   - Studio de Diagramación Multi-Herramienta:
+     * Pestaña 1: React Flow (Lienzo interactivo del flujo omnicanal: WhatsApp ➔ Zod 4 ➔ FSM ➔ Cocina ➔ Domicilios con inspector lateral).
+     * Pestaña 2: Máquina de Estados FSM interactiva (con botones para disparar transiciones de estado en vivo).
+     * Pestaña 3: drawDB (Esquema relacional de clientes, pedidos, items y productos).
+
+3. 3_DASHBOARD_COMERCIAL.html
+   - Dashboard comercial estilo Tremor UI.
+   - KPIs con deltas porcentuales (Ventas del día en k COP, pedidos activos en cocina, ticket promedio, clientes VIP).
+   - Curva SVG de velocidad horaria de despachos.
+   - Tabla de cola de pedidos en vivo conectada a la FSM.
+
+4. 4_ARQUITECTURA_INTERACTIVA.html
+   - Visor clásico de flujo comercial, cocina y analítica de fidelización LTV.
+
+5. SLIDES_HD/
+   - Carpeta con las 10 diapositivas en formato PNG de alta resolución (1440x900 px) para compartir o presentar.
+
+6. DIAGRAMAS_D2/
+   - Archivo de especificación declarativa D2 (segaso_architecture.d2).
+========================================================================

@@ -198,6 +198,15 @@ const server = http.createServer(async (req, res) => {
         if (pathname.startsWith('/api/admin/orders/') && method === 'PATCH') {
           const id = pathname.split('/').pop();
           const { status } = await readJsonBody(req);
+          const order = db.getOrders().find((item) => String(item.id) === String(id));
+          if (!order) {
+            return sendJson(res, 404, { success: false, error: 'Pedido no encontrado' });
+          }
+          const { validarTransicionEstado } = await import('./src/domain/pedido.fsm.ts');
+          const check = validarTransicionEstado(order.status, status);
+          if (!check.valida) {
+            return sendJson(res, 400, { success: false, error: check.error });
+          }
           db.updateOrderStatus(id, status);
           return sendJson(res, 200, { success: true, updated: id, status });
         }

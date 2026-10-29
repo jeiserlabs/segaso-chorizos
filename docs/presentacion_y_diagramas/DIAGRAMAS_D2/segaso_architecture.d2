@@ -1,0 +1,109 @@
+# ==============================================================================
+# SEGASO CHORIZOS S.A.S. — ARQUITECTURA Y ESPECIFICACIÓN DE SISTEMA (D2 LANGUAGE)
+# Proyecto Integrador CESDE 2026 — Ponente: Angelina Rojas / Tech: Harold Cortés
+# ==============================================================================
+
+direction: down
+
+title: "Segaso Chorizos S.A.S. — Plataforma Comercial Omnicanal & Back Office" {
+  near: top-center
+  shape: text
+  style.font-size: 24
+  style.bold: true
+}
+
+# ------------------------------------------------------------------------------
+# 1. TRÁFICO Y CANALES DIGITALES
+# ------------------------------------------------------------------------------
+canales_entrada: "Canales de Adquisición Digital" {
+  style.fill: "#f8fafc"
+  style.stroke: "#94a3b8"
+
+  tiktok: "TikTok Oficial (@segaso.chorizos)\nComunidad 29.2K Seguidores / 189K Likes" {
+    shape: page
+  }
+  instagram: "Instagram Oficial (@segaso.chorizos)\nVitrina Visual de Asados al Barril" {
+    shape: page
+  }
+  recorridos: "Clientes Locales Envigado / Eventos\n(Barrio Primavera, Fincas y Catering)" {
+    shape: person
+  }
+}
+
+# ------------------------------------------------------------------------------
+# 2. CAPA PÚBLICA B2C ($0 COSTO EN SERVIDORES)
+# ------------------------------------------------------------------------------
+plataforma_b2c: "Plataforma Web Comercial B2C (Responsive / Mobile-First)" {
+  style.fill: "#fff1f2"
+  style.stroke: "#e11d48"
+
+  catalogo: "Catálogo Oficial (9 Referencias x5 Uds / 450 g)\nCaserito (19.9k), Antioqueño (23.6k), Santarrosano (23.8k),\nTocineta (23.8k), Parrillero (23.8k), Picante (24.2k),\nArgentino (24.6k), Morcilla (15.0k), Chimichurri (14.5k)"
+
+  cotizador: "Cotizador Asados al Barril (Catering)\nMínimo 5 personas, 350g proteína/persona,\ncarbón vegetal y maestro parrillero"
+
+  asesor_ia: "Asesor Virtual Determinista (0 Tokens - Local First)\nResuelve dudas de gluten, empaque al vacío y preparación"
+
+  checkout: "Generador de Órdenes Inteligente\nEstructura mensaje de compra para WhatsApp"
+}
+
+canales_entrada.tiktok -> plataforma_b2c.catalogo: "Tráfico de videos virales"
+canales_entrada.instagram -> plataforma_b2c.cotizador: "Cotizaciones de eventos"
+canales_entrada.recorridos -> plataforma_b2c.checkout: "Pedidos directos"
+
+# ------------------------------------------------------------------------------
+# 3. CANAL DE CIERRE Y COMUNICACIÓN DIRECTA
+# ------------------------------------------------------------------------------
+whatsapp_gateway: "Cierre Comercial vía WhatsApp Business (+57 300 236 7180)\nMensaje estructurado: ítems, subtotal, dirección y método de pago" {
+  style.fill: "#f0fdf4"
+  style.stroke: "#16a34a"
+}
+
+plataforma_b2c.checkout -> whatsapp_gateway: "Despacha pedido sin fricción"
+
+# ------------------------------------------------------------------------------
+# 4. CAPA DE DOMINIO Y REGLAS DE NEGOCIO (TYPESCRIPT)
+# ------------------------------------------------------------------------------
+dominio_segaso: "Núcleo de Dominio y Contratos (TypeScript Strict / Zod 4)" {
+  style.fill: "#fefce8"
+  style.stroke: "#ca8a04"
+
+  fsm_pedidos: "Máquina de Estados de Pedidos (FSM)\npendiente ➔ confirmado ➔ preparando ➔ camino ➔ entregado\n(Prohíbe saltos ilegales de estado)" {
+    style.fill: "#fef3c7"
+  }
+
+  calculadora_catering: "Calculadora de Asados al Barril\nBase operativa (120k/200k/320k COP) + Proteína + Chimichurri" {
+    style.fill: "#fef3c7"
+  }
+
+  metricas_ltv: "Separación de Clientes y Cálculo LTV\nSegmentación: NUEVO, RECURRENTE y VIP (>=250k COP)" {
+    style.fill: "#fef3c7"
+  }
+}
+
+whatsapp_gateway -> dominio_segaso.fsm_pedidos: "Registra orden inicial"
+
+# ------------------------------------------------------------------------------
+# 5. BACK OFFICE GERENCIAL Y PERSISTENCIA (HAROLD PANEL)
+# ------------------------------------------------------------------------------
+backoffice: "Back Office Gerencial Privado (/admin con JWT)" {
+  style.fill: "#eff6ff"
+  style.stroke: "#2563eb"
+
+  kanban: "Tablero Kanban de Pedidos en Vivo\nControl de tiempos de despacho"
+  inventario: "Control de Stock en Frío\nAlerta de stock mínimo (< 5 paquetes)"
+  kpis: "Panel de Ventas (Hoy, Mes, Histórico y Ticket Promedio)"
+}
+
+database_segaso: "Persistencia Relacional (SQLite WAL: segaso.db)" {
+  style.fill: "#faf5ff"
+  style.stroke: "#9333ea"
+
+  t_orders: "orders (ID, Código, Ítems, Total, Estado, Fechas)"
+  t_clients: "clients (Teléfono, Nombre, Dirección, LTV, Segmento)"
+  t_inventory: "inventory (Código, Nombre, Stock, Precio COP, Mínimo)"
+  t_leads: "leads (Contactos de Academia y Eventos)"
+}
+
+dominio_segaso -> backoffice: "Aplica reglas de negocio"
+backoffice -> database_segaso: "Lecturas y escrituras atómicas"
+database_segaso.t_inventory -> backoffice.inventario: "Alimenta alertas de reposición"

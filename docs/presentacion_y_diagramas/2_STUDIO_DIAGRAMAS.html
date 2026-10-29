@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Segaso Chorizos • Diagram Studio Pro (React Flow, FSM & D2)</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0a0908;
+      --panel-bg: rgba(24, 18, 16, 0.88);
+      --border: rgba(255, 255, 255, 0.08);
+      --primary: #f97316;
+      --primary-glow: rgba(249, 115, 22, 0.3);
+      --secondary: #f59e0b;
+      --accent: #ef4444;
+      --emerald: #10b981;
+      --text: #f4f4f5;
+      --text-muted: #a1a1aa;
+      --font-sans: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Bar */
+    header {
+      height: 60px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(14, 11, 10, 0.9);
+      backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 50;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .badge {
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      background: rgba(249, 115, 22, 0.1);
+      border: 1px solid rgba(249, 115, 22, 0.35);
+      color: #fb923c;
+      font-family: var(--font-mono);
+    }
+    .tabs-nav {
+      display: flex;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 4px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      gap: 4px;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      background: rgba(249, 115, 22, 0.15);
+      color: #fff;
+      border: 1px solid rgba(249, 115, 22, 0.3);
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
+
+    /* Workspace */
+    .workspace {
+      flex: 1;
+      display: flex;
+      position: relative;
+      overflow: hidden;
+    }
+    .view-pane {
+      display: none;
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    .view-pane.active {
+      display: flex;
+    }
+
+    /* Canvas Grid */
+    .canvas-bg {
+      flex: 1;
+      position: relative;
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(249, 115, 22, 0.04) 0%, transparent 80%),
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 28px 28px, 28px 28px;
+      overflow: hidden;
+    }
+
+    /* Floating Canvas Controls */
+    .canvas-controls {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      display: flex;
+      gap: 8px;
+      background: rgba(22, 17, 15, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 6px;
+      backdrop-filter: blur(12px);
+      z-index: 30;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+    .ctrl-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .ctrl-btn:hover { background: rgba(255, 255, 255, 0.15); }
+
+    /* Draggable Nodes Container */
+    .nodes-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transform-origin: 0 0;
+    }
+    .rf-node {
+      position: absolute;
+      background: rgba(28, 22, 20, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      width: 210px;
+      padding: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      cursor: grab;
+      user-select: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .rf-node:active { cursor: grabbing; }
+    .rf-node:hover {
+      border-color: var(--primary);
+      box-shadow: 0 12px 36px var(--primary-glow);
+    }
+    .rf-node.selected {
+      border-color: #fb923c;
+      box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.4), 0 12px 36px var(--primary-glow);
+    }
+    .rf-node-tag {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--primary);
+      font-family: var(--font-mono);
+      display: flex;
+      justify-content: space-between;
+    }
+    .rf-node-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 4px;
+    }
+    .rf-node-body {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+    .rf-port {
+      width: 10px;
+      height: 10px;
+      background: var(--primary);
+      border: 2px solid #09090b;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .rf-port.left { left: -6px; }
+    .rf-port.right { right: -6px; }
+
+    /* SVG Connector Cables */
+    svg.connections-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .wire-glow {
+      stroke: var(--primary);
+      stroke-width: 2.5;
+      fill: none;
+      stroke-dasharray: 6 6;
+      animation: wireFlow 1.2s linear infinite;
+    }
+    @keyframes wireFlow {
+      from { stroke-dashoffset: 24; }
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* Inspector Sidebar */
+    .inspector-sidebar {
+      width: 330px;
+      border-left: 1px solid var(--border);
+      background: var(--panel-bg);
+      backdrop-filter: blur(20px);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-y: auto;
+      z-index: 20;
+    }
+    .inspector-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .inspector-prop {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .inspector-key {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-family: var(--font-mono);
+    }
+    .inspector-val {
+      font-size: 13px;
+      color: #fff;
+      font-weight: 600;
+      margin-top: 3px;
+    }
+
+    /* FSM Simulator */
+    .fsm-stage {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .fsm-nodes-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      margin-top: 40px;
+    }
+    .fsm-node-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: rgba(30, 22, 20, 0.95);
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 800;
+      color: #fff;
+      z-index: 2;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+    .fsm-node-circle.current {
+      border-color: var(--primary);
+      box-shadow: 0 0 28px var(--primary-glow);
+      transform: scale(1.1);
+      background: rgba(249, 115, 22, 0.15);
+      color: #fb923c;
+    }
+    .fsm-line-bg {
+      position: absolute;
+      top: 50%;
+      left: 60px;
+      right: 60px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      z-index: 1;
+      transform: translateY(-50%);
+    }
+
+    /* D2 Viewer Pane */
+    .d2-frame {
+      width: 100%;
+      height: 100%;
+      background: #0a0908;
+      display: flex;
+      flex-direction: column;
+    }
+    .d2-toolbar {
+      padding: 12px 24px;
+      background: rgba(24, 18, 16, 0.95);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .d2-preview-box {
+      flex: 1;
+      padding: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: auto;
+    }
+    .d2-preview-box img {
+      max-width: 95%;
+      max-height: 90%;
+      filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-left">
+      <div style="font-size: 20px;">🔥</div>
+      <div>
+        <h1 style="font-size: 15px; font-weight: 800;">Segaso Chorizos • Diagram Studio Pro</h1>
+        <p style="font-size: 11px; color: var(--text-muted);">Lienzo Dinámico: Arrastra los nodos con el mouse</p>
+      </div>
+      <span class="badge">D2 CLI v0.9.0 & React Flow</span>
+    </div>
+
+    <!-- Tabs Nav -->
+    <div class="tabs-nav">
+      <button class="tab-btn active" onclick="switchView('reactflow')">⚡ 1. React Flow (Nodos Arrastrables)</button>
+      <button class="tab-btn" onclick="switchView('fsm')">🔄 2. Máquina de Estados FSM</button>
+      <button class="tab-btn" onclick="switchView('d2')">📐 3. D2 Renderizado Oficial (SVG)</button>
+    </div>
+  </header>
+
+  <!-- Workspace -->
+  <main class="workspace">
+
+    <!-- VIEW 1: REACT FLOW CANVAS -->
+    <div id="view-reactflow" class="view-pane active">
+      <div class="canvas-bg" id="rf-canvas">
+        
+        <svg class="connections-layer" id="rf-svg">
+          <path id="wire-1-2" class="wire-glow"></path>
+          <path id="wire-2-3" class="wire-glow"></path>
+          <path id="wire-2-4" class="wire-glow"></path>
+          <path id="wire-3-5" class="wire-glow"></path>
+          <path id="wire-4-5" class="wire-glow"></path>
+        </svg>
+
+        <div class="nodes-container" id="nodesContainer">
+          <!-- Node 1 -->
+          <div class="rf-node selected" id="s1" style="top: 110px; left: 30px;" onclick="selectNode('s1')">
+            <div class="rf-node-tag"><span>Canal 1</span><span>WhatsApp / Web</span></div>
+            <div class="rf-node-title">Chatbot & Catálogo</div>
+            <div class="rf-node-body">Captura del pedido, menú y cotización express.</div>
+            <div class="rf-port right"></div>
+          </div>
+
+          <!-- Node 2 -->
+          <div class="rf-node" id="s2" style="top: 190px; left: 280px;" onclick="selectNode('s2')">
+            <div class="rf-port left"></div>
+            <div class="rf-node-tag"><span>Capa 2</span><span>Contratos Zod 4</span></div>
+            <div class="rf-node-title">Validador de Entrada</div>
+            <div class="rf-node-body">Celular de 10 dígitos y 9 referencias oficiales.</div>
+            <div class="rf-port right"></div>
+          </div>
+
+          <!-- Node 3 -->
+          <div class="rf-node" id="s3" style="top: 90px; left: 540px;" onclick="selectNode('s3')">
+            <div class="rf-port left"></div>
+            <div class="rf-node-tag"><span>Capa 3</span><span>Transacciones</span></div>
+            <div class="rf-node-title">FSM Motor Pedidos</div>
+            <div class="rf-node-body">Pendiente ➔ Confirmado ➔ Preparando ➔ En Camino.</div>
+            <div class="rf-port right"></div>
+          </div>
+
+          <!-- Node 4 -->
+          <div class="rf-node" id="s4" style="top: 290px; left: 540px;" onclick="selectNode('s4')">
+            <div class="rf-port left"></div>
+            <div class="rf-node-tag"><span>Capa 3</span><span>Analytics B2B</span></div>
+            <div class="rf-node-title">Catering & LTV</div>
+            <div class="rf-node-body">Cotizador al barril (350g/p) y VIP (≥250k).</div>
+            <div class="rf-port right"></div>
+          </div>
+
+          <!-- Node 5 -->
+          <div class="rf-node" id="s5" style="top: 190px; left: 810px;" onclick="selectNode('s5')">
+            <div class="rf-port left"></div>
+            <div class="rf-node-tag"><span>Capa 4</span><span>Operaciones</span></div>
+            <div class="rf-node-title">Cocina & Domicilios</div>
+            <div class="rf-node-body">Kanban de empaque al vacío y despacho en Aburrá.</div>
+          </div>
+        </div>
+
+        <!-- Floating Controls -->
+        <div class="canvas-controls">
+          <button class="ctrl-btn" onclick="zoomIn()" title="Acercar">+</button>
+          <button class="ctrl-btn" onclick="zoomOut()" title="Alejar">−</button>
+          <button class="ctrl-btn" onclick="resetZoom()" title="Reiniciar Zoom">⟲</button>
+        </div>
+      </div>
+
+      <!-- Inspector Panel -->
+      <aside class="inspector-sidebar">
+        <div class="inspector-title">
+          <span>🔍 Inspector de Nodo</span>
+        </div>
+        <div id="inspector-content">
+          <div class="inspector-prop">
+            <div class="inspector-key">Componente Activo</div>
+            <div class="inspector-val" id="ins-title">Chatbot WhatsApp & Web Store</div>
+          </div>
+          <div class="inspector-prop">
+            <div class="inspector-key">Responsabilidad</div>
+            <div class="inspector-val" id="ins-resp">Captación de pedidos B2C y B2B de clientes en Medellín.</div>
+          </div>
+          <div class="inspector-prop">
+            <div class="inspector-key">Tecnología / Protocolo</div>
+            <div class="inspector-val" id="ins-tech">Webhook Node.js, JSON schema tipado</div>
+          </div>
+          <div class="inspector-prop">
+            <div class="inspector-key">Calidad & Pruebas</div>
+            <div class="inspector-val" id="ins-qa">13/13 tests unitarios PASS en suite segaso</div>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: var(--text-muted); line-height: 1.5; margin-top: auto; border-top: 1px solid var(--border); padding-top: 12px;">
+          💡 <b>Demostración Comercial:</b> Arrastra los nodos para reorganizar el flujo omnicanal ante tus clientes o socios.
+        </div>
+      </aside>
+    </div>
+
+    <!-- VIEW 2: INTERACTIVE FSM STATE MACHINE -->
+    <div id="view-fsm" class="view-pane">
+      <div class="canvas-bg" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <div class="fsm-stage">
+          <div style="text-align: center;">
+            <span class="badge">Simulador Interactivo de Ciclo de Vida</span>
+            <h2 style="font-size: 24px; font-weight: 900; color: #fff; margin-top: 6px;">Máquina de Estados Finitos de Segaso</h2>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Haz clic en los botones para avanzar el pedido en tiempo real.</p>
+          </div>
+
+          <div class="fsm-nodes-row">
+            <div class="fsm-line-bg"></div>
+            <div class="fsm-node-circle current" id="node-pendiente">
+              <span style="font-size: 20px;">📥</span>
+              <span style="margin-top: 4px;">PENDIENTE</span>
+            </div>
+            <div class="fsm-node-circle" id="node-confirmado">
+              <span style="font-size: 20px;">💳</span>
+              <span style="margin-top: 4px;">CONFIRMADO</span>
+            </div>
+            <div class="fsm-node-circle" id="node-preparando">
+              <span style="font-size: 20px;">🍳</span>
+              <span style="margin-top: 4px;">PREPARANDO</span>
+            </div>
+            <div class="fsm-node-circle" id="node-camino">
+              <span style="font-size: 20px;">🛵</span>
+              <span style="margin-top: 4px;">EN CAMINO</span>
+            </div>
+            <div class="fsm-node-circle" id="node-entregado">
+              <span style="font-size: 20px;">✅</span>
+              <span style="margin-top: 4px;">ENTREGADO</span>
+            </div>
+          </div>
+
+          <!-- Controls -->
+          <div style="display: flex; gap: 12px; justify-content: center; margin-top: 24px;">
+            <button onclick="advanceFsm('confirmar')" style="background: rgba(249,115,22,0.15); border: 1px solid var(--primary); color: #fb923c; padding: 11px 18px; border-radius: 8px; font-weight: 800; cursor: pointer;">1. Confirmar Pago</button>
+            <button onclick="advanceFsm('cocinar')" style="background: rgba(245,158,11,0.15); border: 1px solid var(--secondary); color: #fcd34d; padding: 11px 18px; border-radius: 8px; font-weight: 800; cursor: pointer;">2. Pasar a Cocina</button>
+            <button onclick="advanceFsm('despachar')" style="background: rgba(59,130,246,0.15); border: 1px solid #3b82f6; color: #60a5fa; padding: 11px 18px; border-radius: 8px; font-weight: 800; cursor: pointer;">3. Despachar</button>
+            <button onclick="advanceFsm('entregar')" style="background: rgba(16,185,129,0.15); border: 1px solid var(--emerald); color: #34d399; padding: 11px 18px; border-radius: 8px; font-weight: 800; cursor: pointer;">4. Entregar</button>
+            <button onclick="resetFsm()" style="background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: #fff; padding: 11px 18px; border-radius: 8px; font-weight: 800; cursor: pointer;">↺ Reiniciar</button>
+          </div>
+
+          <div id="fsm-log" style="text-align: center; font-size: 13px; font-weight: 700; color: #34d399; background: rgba(0,0,0,0.5); padding: 14px; border-radius: 10px; border: 1px solid var(--border); font-family: var(--font-mono);">
+            Estado Inicial: Pedido #SEG-2026-0042 recibido desde WhatsApp. Esperando verificación de pago.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 3: D2 RENDERED OFFICIAL SVG -->
+    <div id="view-d2" class="view-pane">
+      <div class="d2-frame">
+        <div class="d2-toolbar">
+          <div>
+            <span style="font-size: 13px; font-weight: 800; color: #fff;">Diagrama Compilado Oficial con D2 CLI v0.9.0</span>
+            <span style="font-size: 11px; color: var(--text-muted); margin-left: 10px;">Archivo: DIAGRAMAS_D2/segaso_diagrama_oficial.svg</span>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <a href="DIAGRAMAS_D2/segaso_diagrama_oficial.svg" target="_blank" style="text-decoration: none; background: rgba(249,115,22,0.15); border: 1px solid var(--primary); color: #fb923c; font-size: 11px; font-weight: 800; padding: 6px 14px; border-radius: 6px;">Abrir SVG en pestaña nueva ↗</a>
+            <a href="https://play.d2lang.com" target="_blank" style="text-decoration: none; background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: #fff; font-size: 11px; font-weight: 800; padding: 6px 14px; border-radius: 6px;">D2 Web Playground ↗</a>
+          </div>
+        </div>
+        <div class="d2-preview-box">
+          <img src="DIAGRAMAS_D2/segaso_diagrama_oficial.svg" alt="Diagrama Oficial D2 Segaso">
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    function switchView(viewName) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.view-pane').forEach(p => p.classList.remove('active'));
+
+      event.currentTarget.classList.add('active');
+      document.getElementById('view-' + viewName).classList.add('active');
+      if (viewName === 'reactflow') updateWires();
+    }
+
+    // Dynamic Wire Calculator
+    function getPortCoords(el, side) {
+      const containerRect = document.getElementById('nodesContainer').getBoundingClientRect();
+      const rect = el.getBoundingClientRect();
+      const x = side === 'right' ? (rect.right - containerRect.left) : (rect.left - containerRect.left);
+      const y = (rect.top + rect.height / 2) - containerRect.top;
+      return { x, y };
+    }
+
+    function drawBezier(pathId, fromEl, toEl) {
+      const p1 = getPortCoords(fromEl, 'right');
+      const p2 = getPortCoords(toEl, 'left');
+      const dx = Math.abs(p2.x - p1.x) * 0.5;
+      const d = `M ${p1.x} ${p1.y} C ${p1.x + dx} ${p1.y}, ${p2.x - dx} ${p2.y}, ${p2.x} ${p2.y}`;
+      document.getElementById(pathId).setAttribute('d', d);
+    }
+
+    function updateWires() {
+      drawBezier('wire-1-2', document.getElementById('s1'), document.getElementById('s2'));
+      drawBezier('wire-2-3', document.getElementById('s2'), document.getElementById('s3'));
+      drawBezier('wire-2-4', document.getElementById('s2'), document.getElementById('s4'));
+      drawBezier('wire-3-5', document.getElementById('s3'), document.getElementById('s5'));
+      drawBezier('wire-4-5', document.getElementById('s4'), document.getElementById('s5'));
+    }
+
+    // Drag and Drop Logic
+    let isDragging = false;
+    let activeNode = null;
+    let offset = { x: 0, y: 0 };
+    let currentZoom = 1;
+
+    document.querySelectorAll('.rf-node').forEach(node => {
+      node.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        activeNode = node;
+        const rect = node.getBoundingClientRect();
+        offset.x = e.clientX - rect.left;
+        offset.y = e.clientY - rect.top;
+        node.style.zIndex = 50;
+      });
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging || !activeNode) return;
+      const containerRect = document.getElementById('nodesContainer').getBoundingClientRect();
+      const x = (e.clientX - containerRect.left - offset.x) / currentZoom;
+      const y = (e.clientY - containerRect.top - offset.y) / currentZoom;
+      activeNode.style.left = `${x}px`;
+      activeNode.style.top = `${y}px`;
+      updateWires();
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (activeNode) activeNode.style.zIndex = 10;
+      isDragging = false;
+      activeNode = null;
+    });
+
+    // Zoom Controls
+    function zoomIn() {
+      currentZoom = Math.min(currentZoom + 0.15, 1.6);
+      applyZoom();
+    }
+    function zoomOut() {
+      currentZoom = Math.max(currentZoom - 0.15, 0.7);
+      applyZoom();
+    }
+    function resetZoom() {
+      currentZoom = 1;
+      applyZoom();
+    }
+    function applyZoom() {
+      document.getElementById('nodesContainer').style.transform = `scale(${currentZoom})`;
+      document.getElementById('rf-svg').style.transform = `scale(${currentZoom})`;
+      document.getElementById('rf-svg').style.transformOrigin = '0 0';
+      updateWires();
+    }
+
+    // Inspector Selection
+    const segasoNodes = {
+      s1: {
+        title: "Chatbot WhatsApp & Web Store",
+        resp: "Captación de pedidos B2C y B2B de clientes en Medellín.",
+        tech: "Webhook Node.js, JSON schema tipado",
+        qa: "13/13 tests unitarios PASS en suite segaso"
+      },
+      s2: {
+        title: "Validador Zod 4",
+        resp: "Filtrado estricto de teléfono colombiano de 10 dígitos y catálogo oficial.",
+        tech: "Zod 4 runtime validation",
+        qa: "Rechazo de números con caracteres extraños o códigos de producto inválidos"
+      },
+      s3: {
+        title: "FSM Motor de Pedidos",
+        resp: "Control secuencial del ciclo de vida (pendiente ➔ confirmado ➔ preparando ➔ camino ➔ entregado).",
+        tech: "TypeScript puro, máquina de estados determinista",
+        qa: "Prohibición matemática de saltos ilegales"
+      },
+      s4: {
+        title: "Calculadora Catering & LTV",
+        resp: "Cotización de asados al barril (350g/persona) y cálculo de valor de vida del cliente.",
+        tech: "TypeScript, fórmulas de optimización de carnes",
+        qa: "Segmentación automática de clientes VIP (≥ 250k COP)"
+      },
+      s5: {
+        title: "Cocina & Domicilios",
+        resp: "Despacho express refrigerado en Medellín, Bello, Itagüí y Envigado.",
+        tech: "SQLite WAL persistence, despacho con mensajería",
+        qa: "Cero pérdida de pedidos tras cortes de luz"
+      }
+    };
+
+    function selectNode(id) {
+      document.querySelectorAll('.rf-node').forEach(n => n.classList.remove('selected'));
+      document.getElementById(id).classList.add('selected');
+      const data = segasoNodes[id];
+      if (data) {
+        document.getElementById('ins-title').innerText = data.title;
+        document.getElementById('ins-resp').innerText = data.resp;
+        document.getElementById('ins-tech').innerText = data.tech;
+        document.getElementById('ins-qa').innerText = data.qa;
+      }
+    }
+
+    // FSM Step Runner
+    let currentFsm = 'pendiente';
+    const validMoves = {
+      'pendiente': { 'confirmar': 'confirmado' },
+      'confirmado': { 'cocinar': 'preparando' },
+      'preparando': { 'despachar': 'camino' },
+      'camino': { 'entregar': 'entregado' }
+    };
+
+    function advanceFsm(action) {
+      const log = document.getElementById('fsm-log');
+      const next = validMoves[currentFsm] && validMoves[currentFsm][action];
+
+      if (next) {
+        document.getElementById('node-' + currentFsm).classList.remove('current');
+        currentFsm = next;
+        document.getElementById('node-' + currentFsm).classList.add('current');
+        log.style.color = '#34d399';
+        log.innerText = `✅ Transición exitosa: Pedido cambió al estado [${currentFsm.toUpperCase()}].`;
+      } else {
+        log.style.color = '#f87171';
+        log.innerText = `⛔ Acción no permitida: No puedes ejecutar '${action}' desde el estado actual [${currentFsm.toUpperCase()}].`;
+      }
+    }
+
+    function resetFsm() {
+      document.querySelectorAll('.fsm-node-circle').forEach(c => c.classList.remove('current'));
+      currentFsm = 'pendiente';
+      document.getElementById('node-pendiente').classList.add('current');
+      const log = document.getElementById('fsm-log');
+      log.style.color = '#fb923c';
+      log.innerText = '↺ Máquina reiniciada. Estado actual: [PENDIENTE].';
+    }
+
+    // Initial render
+    window.addEventListener('DOMContentLoaded', updateWires);
+    window.addEventListener('resize', updateWires);
+  </script>
+</body>
+</html>

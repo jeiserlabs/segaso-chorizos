@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Segaso Chorizos · Arquitectura Comercial & Back Office</title>
+  <style>
+    :root {
+      --bg: #09090b;
+      --card-bg: #18181b;
+      --card-border: #27272a;
+      --text: #f4f4f5;
+      --text-muted: #a1a1aa;
+      --crimson: #e11d48;
+      --crimson-glow: rgba(225, 29, 72, 0.2);
+      --amber: #f59e0b;
+      --green: #10b981;
+      --blue: #3b82f6;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 32px 24px; min-height: 100vh; }
+    header { max-width: 1200px; margin: 0 auto 32px auto; text-align: center; }
+    .badge { display: inline-block; padding: 4px 12px; background: rgba(225, 29, 72, 0.15); border: 1px solid var(--crimson); color: var(--crimson); border-radius: 9999px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
+    h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.02em; }
+    p.lead { color: var(--text-muted); font-size: 15px; max-width: 750px; margin: 0 auto; }
+    
+    .canvas-container { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+    
+    .layer-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 24px; transition: all 0.2s ease; }
+    .layer-card:hover { border-color: #3f3f46; box-shadow: 0 8px 30px rgba(0,0,0,0.5); }
+    .layer-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; border-bottom: 1px solid #27272a; padding-bottom: 12px; }
+    .layer-title { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 700; }
+    .layer-indicator { width: 10px; height: 10px; border-radius: 50%; }
+    
+    .nodes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+    .node-item { background: #121215; border: 1px solid #27272a; border-radius: 12px; padding: 16px; cursor: pointer; transition: transform 0.15s, border-color 0.15s; }
+    .node-item:hover { transform: translateY(-2px); border-color: var(--crimson); }
+    .node-item h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; }
+    .node-item p { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+    
+    .arrow-divider { text-align: center; color: var(--text-muted); font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .arrow-divider::before, .arrow-divider::after { content: ""; height: 1px; flex: 1; background: #27272a; }
+    
+    .drawer { position: fixed; bottom: 0; left: 0; right: 0; background: #18181b; border-top: 1px solid var(--crimson); padding: 24px; max-height: 45vh; overflow-y: auto; box-shadow: 0 -10px 40px rgba(0,0,0,0.8); display: none; z-index: 100; }
+    .drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .drawer-title { font-size: 18px; font-weight: 700; color: var(--crimson); }
+    .close-btn { background: #27272a; border: none; color: white; padding: 4px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+    pre { background: #09090b; padding: 16px; border-radius: 8px; font-family: monospace; font-size: 13px; overflow-x: auto; color: #a1a1aa; border: 1px solid #27272a; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="badge">Digitalización Comercial · Envigado 2026</div>
+    <h1>Segaso Chorizos S.A.S. — Arquitectura Interactiva</h1>
+    <p class="lead">Solución omnicanal B2C y Back Office administrativo. Haz clic sobre cada nodo para examinar la máquina de estados de pedidos (FSM), la calculadora de catering y las métricas de LTV.</p>
+  </header>
+
+  <div class="canvas-container">
+    
+    <!-- CAPA 1: ADQUISICIÓN Y CANALES -->
+    <div class="layer-card">
+      <div class="layer-header">
+        <div class="layer-title"><span class="layer-indicator" style="background: var(--blue);"></span> 1. Canales Digitales & Redes Sociales</div>
+        <span style="font-size: 12px; color: var(--text-muted);">Comunidad Orgánica en Redes</span>
+      </div>
+      <div class="nodes-grid">
+        <div class="node-item" onclick="mostrarDetalle('TikTok Oficial (@segaso.chorizos)', 'Comunidad de 29.2K seguidores y 189K me gusta con videos virales de preparación al barril.', 'Tráfico orgánico gastronómico dirigido hacia la landing page sin costo de pauta.')">
+          <h3>TikTok (29.2K Seg.) <span style="color:var(--blue);">→</span></h3>
+          <p>Videos demostrativos de cocción de choripán, ahumado y eventos.</p>
+        </div>
+        <div class="node-item" onclick="mostrarDetalle('Instagram Oficial', 'Canal visual para interacción con clientes de asados al barril y restaurantes aliados.', 'Punto de contacto visual para cotización de eventos corporativos y familiares.')">
+          <h3>Instagram Oficial <span style="color:var(--blue);">→</span></h3>
+          <p>Galería fotográfica de charcutería artesanal y eventos en fincas.</p>
+        </div>
+        <div class="node-item" onclick="mostrarDetalle('WhatsApp Business Directo (+57 300 236 7180)', 'Canal de cierre atendido por Harold Cortés.', 'Recibe el mensaje preformateado con ítems, subtotales exactos y dirección.')">
+          <h3>WhatsApp Business <span style="color:var(--green);">→</span></h3>
+          <p>Cierre de venta sin fricción en el canal favorito del cliente antioqueño.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-divider">↓ Captación & Selección de Productos ↓</div>
+
+    <!-- CAPA 2: TIENDA B2C -->
+    <div class="layer-card">
+      <div class="layer-header">
+        <div class="layer-title"><span class="layer-indicator" style="background: var(--crimson);"></span> 2. Vitrina B2C Comercial ($0 Costo en Tokens / Responsive)</div>
+        <span style="font-size: 12px; color: var(--text-muted);">Modo Online & Offline USB</span>
+      </div>
+      <div class="nodes-grid">
+        <div class="node-item" onclick="mostrarDetalle('Catálogo Oficial (9 Referencias)', 'Paquetes al vacío x5 unidades (450 g) entre 19.9k COP y 24.6k COP.', '1. Caserito Paisa: 19.9k COP\n2. Antioqueño: 23.6k COP\n3. Santarrosano: 23.8k COP\n4. Tocineta: 23.8k COP\n5. Parrillero: 23.8k COP\n6. Picante: 24.2k COP\n7. Argentino: 24.6k COP\n8. Morcilla Paisa: 15.0k COP\n9. Chimichurri 250ml: 14.5k COP')">
+          <h3>Catálogo 9 Referencias <span style="color:var(--crimson);">→</span></h3>
+          <p>Precios oficiales 2026 sin harinas ni almidones (100% pulpa de cerdo).</p>
+        </div>
+        <div class="node-item" onclick="mostrarDetalle('Cotizador Asados al Barril', 'Catering a domicilio desde 5 personas.', 'attendees >= 5\nPorción: 350g carne/persona + 2 chorizos\nLogística: 120k / 200k / 320k COP base según tamaño\nFrascos Chimichurri: 1 cada 10 personas')">
+          <h3>Asados al Barril (Catering) <span style="color:var(--amber);">→</span></h3>
+          <p>Cotizador automático de eventos gourmet con cálculo por persona en COP.</p>
+        </div>
+        <div class="node-item" onclick="mostrarDetalle('Asesor Virtual Determinista', 'Motor de preguntas frecuentes con costo $0 en tokens de IA.', 'Responde dudas de conservación en congelación (60 días), aptitud para celíacos e ingredientes limpios.')">
+          <h3>Asesor FAQ ($0 Tokens) <span style="color:var(--green);">→</span></h3>
+          <p>Resuelve dudas recurrentes de forma instantánea sin gastar APIs externas.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-divider">↓ Reglas de Dominio & Contratos TypeScript ↓</div>
+
+    <!-- CAPA 3: DOMINIO Y FSM -->
+    <div class="layer-card">
+      <div class="layer-header">
+        <div class="layer-title"><span class="layer-indicator" style="background: var(--amber);"></span> 3. Dominio & Máquina de Estados (TypeScript Strict)</div>
+        <span style="font-size: 12px; color: var(--text-muted);">Zod 4 Specs & Finite State Machine</span>
+      </div>
+      <div class="nodes-grid">
+        <div class="node-item" onclick="mostrarDetalle('FSM de Pedidos (Máquina de Estados)', 'Flujo cerrado que impide saltos ilegales en la preparación y entrega.', 'pendiente ➔ confirmado ➔ preparando ➔ camino ➔ entregado\n(o cancelado desde pendiente/confirmado/preparando)\n* Prohibido pasar de pendiente a entregado directo.')">
+          <h3>FSM de Pedidos <span style="color:var(--amber);">→</span></h3>
+          <p>Control secuencial de despacho de órdenes con timestamps de cambio.</p>
+        </div>
+        <div class="node-item" onclick="mostrarDetalle('Métricas de Clientes y LTV', 'Separación de Clientes y Pedidos para medir el valor de vida.', 'ordersCount >= 5 o totalSpent >= 250k COP -> VIP\nordersCount >= 2 -> RECURRENTE\nordersCount == 1 -> NUEVO\nTicket Promedio: totalSpent / ordersCount')">
+          <h3>LTV y Segmentación <span style="color:var(--amber);">→</span></h3>
+          <p>Identificación de clientes frecuentes en Envigado y Sabaneta para fidelización.</p>
+        </div>
+        <div class="node-item" onclick="mostrarDetalle('Contratos Zod 4 de Entrada', 'Validación estricta de nombres, teléfonos colombianos de 10 dígitos y métodos de pago.', 'CrearPedidoSchema.parse({\n  customer_name: \'Harold Cortés\',\n  customer_phone: \'3002367180\',\n  address: \'Calle 46 Sur # 46A - 16\',\n  neighborhood: \'Envigado (Primavera)\',\n  items: [...]\n});')">
+          <h3>Contratos Zod 4 <span style="color:var(--amber);">→</span></h3>
+          <p>Sanitización y validación estricta antes de ingresar a la base de datos.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-divider">↓ Persistencia en Disco & Back Office Gerencial ↓</div>
+
+    <!-- CAPA 4: BACK OFFICE Y PERSISTENCIA -->
+    <div class="layer-card">
+      <div class="layer-header">
+        <div class="layer-title"><span class="layer-indicator" style="background: var(--green);"></span> 4. Back Office Gerencial & SQLite WAL (`segaso.db`)</div>
+        <span style="font-size: 12px; color: var(--text-muted);">Acceso protegido con JWT RFC 7519</span>
+      </div>
+      <div class="nodes-grid">
+        <div class="node-item" onclick="mostrarDetalle('Tablero Kanban de Harold', 'Vista administrativa para mover pedidos entre columnas según estado de ahumado y entrega.', 'Permite actualizar el estado con un clic y sincroniza con el stock de paquetes al vacío.')">
+          <h3>Tablero Kanban <span style="color:var(--green);">→</span></h3>
+          <p>Control visual de órdenes pendientes, en preparación y en ruta de entrega.</p>
+        </div>
+        <div class="node-item" onclick="mostrarDetalle('Inventario en Frío y Alertas', 'Seguimiento de existencias de paquetes x5 sellados al vacío.', 'Alerta automática cuando una referencia cae a <= 5 paquetes en nevera.')">
+          <h3>Inventario en Frío <span style="color:var(--green);">→</span></h3>
+          <p>Control de existencias mínimas para no prometer referencias agotadas.</p>
+        </div>
+        <div class="node-item" onclick="mostrarDetalle('Base de Datos SQLite WAL', 'Almacenamiento de alto rendimiento local-first en segaso.db.', 'Tablas: admin_users, inventory, orders, clients, leads.\nModo WAL activado para lecturas y escrituras atómicas ultrarrápidas.')">
+          <h3>SQLite WAL (segaso.db) <span style="color:var(--green);">→</span></h3>
+          <p>Persistencia 100% local sin costos de hosting mensual para la microempresa.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DRAWER INTERACTIVO -->
+  <div class="drawer" id="drawer">
+    <div class="drawer-header">
+      <div class="drawer-title" id="drawerTitle">Detalle del Nodo</div>
+      <button class="close-btn" onclick="cerrarDrawer()">Cerrar ✕</button>
+    </div>
+    <p id="drawerDesc" style="color:var(--text); margin-bottom: 12px; font-size: 14px;"></p>
+    <pre id="drawerCode"></pre>
+  </div>
+
+  <script>
+    function mostrarDetalle(titulo, desc, codigo) {
+      document.getElementById('drawerTitle').innerText = titulo;
+      document.getElementById('drawerDesc').innerText = desc;
+      document.getElementById('drawerCode').innerText = codigo;
+      document.getElementById('drawer').style.display = 'block';
+    }
+    function cerrarDrawer() {
+      document.getElementById('drawer').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

@@ -86,7 +86,7 @@
     }
 
     /* Vista de Panel de Control (Autenticado) */
-    .dashboard-wrap { display: none; max-width: 1240px; margin: 0 auto; padding: 28px 20px 60px; }
+    .dashboard-wrap { display: none; max-width: 1500px; margin: 0 auto; padding: 28px 20px 60px; }
     .admin-header {
       display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
       background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);
@@ -132,25 +132,31 @@
     .table-box {
       background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); overflow-x: auto;
     }
-    .data-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+    .data-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; }
     .data-table th {
-      background: rgba(0,0,0,0.3); padding: 12px 16px; color: var(--cream-muted); font-weight: 700; font-size: 11px; text-transform: uppercase;
+      background: rgba(0,0,0,0.3); padding: 9px 8px; color: var(--cream-muted); font-weight: 700; font-size: 11px; text-transform: uppercase;
       border-bottom: 1px solid var(--border-subtle);
     }
-    .data-table td { padding: 14px 16px; border-bottom: 1px solid var(--border-subtle); color: var(--cream); vertical-align: middle; }
+    .data-table td { padding: 9px 8px; border-bottom: 1px solid var(--border-subtle); color: var(--cream); vertical-align: middle; }
     .data-table tr:hover { background: rgba(255,255,255,0.02); }
+    @media (max-width: 1500px) {
+      .orders-table th:nth-child(3), .orders-table td:nth-child(3),
+      .orders-table th:nth-child(4), .orders-table td:nth-child(4),
+      .orders-table th:nth-child(5), .orders-table td:nth-child(5) { display: none; }
+    }
 
     .status-badge {
       display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; text-transform: uppercase;
     }
     .status-pendiente { background: rgba(245, 158, 11, 0.15); color: #FCD34D; border: 1px solid #F59E0B; }
+    .status-confirmado { background: rgba(14, 165, 233, 0.15); color: #7DD3FC; border: 1px solid #0EA5E9; }
     .status-preparando { background: rgba(59, 130, 246, 0.15); color: #93C5FD; border: 1px solid #3B82F6; }
     .status-camino { background: rgba(168, 85, 247, 0.15); color: #D8B4FE; border: 1px solid #A855F7; }
     .status-entregado { background: rgba(16, 185, 129, 0.15); color: #6EE7B7; border: 1px solid #10B981; }
 
     .status-select {
       background: #120B0E; border: 1px solid var(--border-subtle); color: var(--cream);
-      padding: 6px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; outline: none;
+      width: 92px; padding: 5px 5px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; outline: none;
     }
 
     /* Inventario Cards */
@@ -179,7 +185,7 @@
   <div id="loginView" class="login-container">
     <div class="login-box">
       <div class="login-brand">
-        <img src="logo_segaso_web.png" alt="Logo Segaso" onerror="this.style.display='none'">
+        <img src="logo_segaso.svg" alt="Logo Segaso" onerror="this.style.display='none'">
         <h1>SEGASO CHORIZOS</h1>
       </div>
       <p class="login-subtitle">
@@ -270,7 +276,7 @@
     <!-- Pestaña 1: Pedidos -->
     <div id="pane-orders" class="tab-pane active">
       <div class="table-box">
-        <table class="data-table">
+        <table class="data-table orders-table">
           <thead>
             <tr>
               <th>Código</th>
@@ -462,6 +468,7 @@
                 <td>
                   <select class="status-select" onchange="updateOrderStatus(${o.id}, this.value)">
                     <option value="pendiente" ${o.status==='pendiente'?'selected':''}>Pendiente</option>
+                    <option value="confirmado" ${o.status==='confirmado'?'selected':''}>Confirmado</option>
                     <option value="preparando" ${o.status==='preparando'?'selected':''}>Preparando</option>
                     <option value="camino" ${o.status==='camino'?'selected':''}>En Camino</option>
                     <option value="entregado" ${o.status==='entregado'?'selected':''}>Entregado</option>
@@ -479,7 +486,7 @@
 
     async function updateOrderStatus(id, newStatus) {
       try {
-        await fetch(`${API_BASE}/admin/orders/${id}`, {
+        const res = await fetch(`${API_BASE}/admin/orders/${id}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -487,6 +494,10 @@
           },
           body: JSON.stringify({ status: newStatus })
         });
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          alert(data.error || 'No se pudo cambiar el estado del pedido.');
+        }
         await loadKPIs();
         await loadOrders();
       } catch (err) {

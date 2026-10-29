@@ -344,6 +344,24 @@
     .tiktok-video-title { font-size: 13.5px; font-weight: 700; color: #fff; line-height: 1.4; margin-bottom: 8px; }
     .tiktok-video-link { font-size: 11.5px; font-weight: 700; color: #FF6685; display: flex; align-items: center; gap: 4px; }
 
+    .tiktok-photos {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 32px;
+    }
+    .tiktok-photo-card {
+      display: block; background: #191013; border: 1px solid var(--border-subtle); border-radius: var(--radius-md);
+      overflow: hidden; text-decoration: none; color: inherit; transition: all 0.25s;
+    }
+    .tiktok-photo-card:hover { transform: translateY(-3px); border-color: rgba(229,169,60,0.5); }
+    .tiktok-photo-card img {
+      width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; background: #0E080A;
+    }
+    .tiktok-photo-caption {
+      padding: 10px 12px 12px; font-size: 12.5px; line-height: 1.35; font-weight: 600; color: var(--cream);
+    }
+    @media (max-width: 640px) {
+      .tiktok-photos { grid-template-columns: repeat(2, 1fr); }
+    }
+
     /* ==========================================================
        NUEVA SECCIÓN: CURSOS Y TALLERES (PRÓXIMAMENTE)
        ========================================================== */
@@ -613,7 +631,7 @@
   <header>
     <div class="container nav-inner">
       <div class="brand-group" onclick="goHome()">
-        <img src="logo_segaso_web.png" alt="Logo Segaso Chorizos" class="brand-logo-img" onerror="this.style.display='none'">
+        <img src="logo_segaso.svg" alt="Logo Segaso Chorizos" class="brand-logo-img" onerror="this.style.display='none'">
         <div class="brand-text">
           <h1>SEGASO</h1>
           <span>Chorizos de Tradición</span>
@@ -659,7 +677,7 @@
     <section class="hero">
       <div class="container">
         <div class="hero-badge-wrap">
-          <span class="badge badge-gold">🔥 100% Cerdo Magro · Envigado, Antioquia</span>
+          <span class="badge badge-gold">🔥 Cerdo Seleccionado · Envigado, Antioquia</span>
         </div>
         <h1 class="hero-title">
           El Auténtico Sabor del <span>Chorizo de Tradición</span>
@@ -671,7 +689,7 @@
         <div class="hero-metrics">
           <div class="metric-card">
             <div class="metric-val">100%</div>
-            <div class="metric-lbl">Cerdo Magro Seleccionado</div>
+            <div class="metric-lbl">Carne de Cerdo</div>
           </div>
           <div class="metric-card">
             <div class="metric-val">0%</div>
@@ -683,7 +701,7 @@
           </div>
           <div class="metric-card">
             <div class="metric-val">x 5 Unid</div>
-            <div class="metric-lbl">Paquete ~500 Gramos</div>
+            <div class="metric-lbl">Paquete 450 g</div>
           </div>
         </div>
 
@@ -708,17 +726,17 @@
           <div class="bento-card">
             <div class="bento-icon">🌾</div>
             <h3>100% Sin Harinas ni Rellenos</h3>
-            <p>A diferencia de los chorizos comerciales con soya o féculas, en Segaso cada bocado es carne pura de cerdo sazonada con especias naturales.</p>
+            <p>A diferencia de los chorizos comerciales con soya o féculas, en Segaso cada bocado es carne de cerdo seleccionada sazonada con especias naturales.</p>
           </div>
           <div class="bento-card">
             <div class="bento-icon">❄️</div>
             <h3>Empaque al Vacío Grado Alimenticio</h3>
-            <p>Cada paquete de 5 unidades (~500g) está sellado al vacío, preservando jugosidad, olor y textura durante 60 días en congelación.</p>
+            <p>Cada paquete de 5 unidades (450 g) está sellado al vacío, preservando jugosidad, olor y textura durante 60 días en congelación.</p>
           </div>
           <div class="bento-card">
             <div class="bento-icon">🇨🇴</div>
             <h3>Sazón de Tradición Paisa</h3>
-            <p>Receta familiar perfeccionada en Envigado. Fusión exacta de ahumado, carnes magras y toques parrilleros incomparables.</p>
+            <p>Receta familiar perfeccionada en Envigado. Fusión exacta de ahumado, cortes seleccionados de cerdo y toques parrilleros incomparables.</p>
           </div>
           <div class="bento-card">
             <div class="bento-icon">🛵</div>
@@ -735,7 +753,7 @@
         <div class="section-header">
           <span class="badge badge-gold">Lista Oficial 2026</span>
           <h2 class="section-title" style="margin-top: 8px;">Nuestros Chorizos Artesanales</h2>
-          <p class="section-desc">Todos los paquetes vienen por 5 unidades (peso aprox. 500 gramos)</p>
+          <p class="section-desc">Todos los paquetes vienen por 5 unidades (peso neto 450 g)</p>
         </div>
 
         <div class="filter-tabs">
@@ -777,8 +795,8 @@
 
           <!-- BENTO GALLERY VISUAL DE ASADOS AL BARRIL -->
           <div class="barril-bento-gallery">
-            <div class="barril-bento-main" onclick="openLightbox('img/barril_1.jpg', 'Asador al Barril en Acero Inoxidable', 'Ahumado lento con carbón seleccionado y leña aromática para eventos en todo el Valle de Aburrá.')" title="Clic para ampliar fotografía">
-              <img src="img/barril_1.jpg" alt="Ahumador al barril en acción con costillas y chorizos" loading="lazy">
+            <div class="barril-bento-main" onclick="openLightbox('media/social/tiktok/keyframes/7128213952567315718_01.jpg', 'Asador al Barril en Acero Inoxidable', 'Ahumado lento con carbón seleccionado y leña aromática para eventos en todo el Valle de Aburrá.')" title="Clic para ampliar fotografía">
+              <img src="media/social/tiktok/keyframes/7128213952567315718_01.jpg" alt="Ahumador al barril en acción con costillas y chorizos" loading="lazy" onerror="this.style.display='none'">
               <div class="bento-overlay">
                 <span class="badge badge-gold" style="width: fit-content;">🔥 Ahumador en Acción</span>
                 <h4>Asado al Barril Artesanal</h4>
@@ -786,15 +804,15 @@
               </div>
             </div>
             <div class="barril-bento-sub">
-              <div class="barril-bento-subcard" onclick="openLightbox('img/barril_2.jpg', 'Maestro Parrillero en Finca', 'Picado y servicio gourmet en vivo de chicharrón crocante y chorizos artesanales.')" title="Clic para ampliar fotografía">
-                <img src="img/barril_2.jpg" alt="Maestro parrillero rebanando chicharrón crocante" loading="lazy">
+              <div class="barril-bento-subcard" onclick="openLightbox('media/social/tiktok/keyframes/7470531437788155141_01.jpg', 'Maestro Parrillero en Finca', 'Picado y servicio gourmet en vivo de chicharrón crocante y chorizos artesanales.')" title="Clic para ampliar fotografía">
+                <img src="media/social/tiktok/keyframes/7470531437788155141_01.jpg" alt="Maestro parrillero rebanando chicharrón crocante" loading="lazy" onerror="this.style.display='none'">
                 <div class="bento-overlay">
                   <span class="badge badge-primary" style="width: fit-content;">👨‍🍳 En Finca</span>
                   <h4>Maestro Parrillero</h4>
                 </div>
               </div>
-              <div class="barril-bento-subcard" onclick="openLightbox('img/barril_3.jpg', 'Banquete & Degustación Parrillera', 'Arepitas de maíz blanco con queso, papas criollas doradas y carnes al barril.')" title="Clic para ampliar fotografía">
-                <img src="img/barril_3.jpg" alt="Banquete de asado al barril servido" loading="lazy">
+              <div class="barril-bento-subcard" onclick="openLightbox('media/social/tiktok/keyframes/7137390171976109317_02.jpg', 'Banquete & Degustación Parrillera', 'Arepitas de maíz blanco con queso, papas criollas doradas y carnes al barril.')" title="Clic para ampliar fotografía">
+                <img src="media/social/tiktok/keyframes/7137390171976109317_02.jpg" alt="Banquete de asado al barril servido" loading="lazy" onerror="this.style.display='none'">
                 <div class="bento-overlay">
                   <span class="badge badge-primary" style="width: fit-content;">🍽️ Mesa Servida</span>
                   <h4>Banquete Gourmet</h4>
@@ -806,8 +824,8 @@
 
         <div class="barril-cards-grid">
           <div class="barril-plan-card">
-            <div class="barril-plan-img-wrap" onclick="openLightbox('img/barril_1.jpg', 'Plan Familiar (5 a 10 Personas)', 'Degustación de 4 variedades de chorizos artesanales, arepas con queso y chimichurri.')" style="cursor: pointer;">
-              <img src="img/barril_1.jpg" alt="Plan Familiar" class="barril-plan-img" loading="lazy">
+            <div class="barril-plan-img-wrap" onclick="openLightbox('media/social/tiktok/keyframes/7128213952567315718_01.jpg', 'Plan Familiar (5 a 10 Personas)', 'Degustación de 4 variedades de chorizos artesanales, arepas con queso y chimichurri.')" style="cursor: pointer;">
+              <img src="media/social/tiktok/keyframes/7128213952567315718_01.jpg" alt="Plan Familiar" class="barril-plan-img" loading="lazy" onerror="this.style.display='none'">
               <div style="position: absolute; top: 10px; left: 10px;">
                 <span class="badge badge-primary">Plan Pequeño</span>
               </div>
@@ -821,8 +839,8 @@
           </div>
 
           <div class="barril-plan-card" style="border-color: var(--primary);">
-            <div class="barril-plan-img-wrap" onclick="openLightbox('img/barril_2.jpg', 'Parrillada Amigos (10 a 25 Personas)', 'Chorizos mixtos al barril + bondiola o costilla ahumada, morcilla y acompañamientos.')" style="cursor: pointer;">
-              <img src="img/barril_2.jpg" alt="Parrillada Amigos" class="barril-plan-img" loading="lazy">
+            <div class="barril-plan-img-wrap" onclick="openLightbox('media/social/tiktok/keyframes/7470531437788155141_01.jpg', 'Parrillada Amigos (10 a 25 Personas)', 'Chorizos mixtos al barril + bondiola o costilla ahumada, morcilla y acompañamientos.')" style="cursor: pointer;">
+              <img src="media/social/tiktok/keyframes/7470531437788155141_01.jpg" alt="Parrillada Amigos" class="barril-plan-img" loading="lazy" onerror="this.style.display='none'">
               <div style="position: absolute; top: 10px; left: 10px;">
                 <span class="badge badge-gold">⭐ El Más Popular</span>
               </div>
@@ -836,8 +854,8 @@
           </div>
 
           <div class="barril-plan-card">
-            <div class="barril-plan-img-wrap" onclick="openLightbox('img/barril_3.jpg', 'Eventos Grandes & Fincas (25+ Personas)', 'Múltiples barriles ahumadores, equipo parrillero completo y servicio continuo.')" style="cursor: pointer;">
-              <img src="img/barril_3.jpg" alt="Eventos Grandes" class="barril-plan-img" loading="lazy">
+            <div class="barril-plan-img-wrap" onclick="openLightbox('media/social/tiktok/keyframes/7137390171976109317_02.jpg', 'Eventos Grandes & Fincas (25+ Personas)', 'Múltiples barriles ahumadores, equipo parrillero completo y servicio continuo.')" style="cursor: pointer;">
+              <img src="media/social/tiktok/keyframes/7137390171976109317_02.jpg" alt="Eventos Grandes" class="barril-plan-img" loading="lazy" onerror="this.style.display='none'">
               <div style="position: absolute; top: 10px; left: 10px;">
                 <span class="badge badge-primary">Eventos Grandes</span>
               </div>
@@ -868,16 +886,16 @@
             <div class="tiktok-stat-lbl">Seguidores</div>
           </div>
           <div class="tiktok-stat">
-            <div class="tiktok-stat-num">189.3K</div>
+            <div class="tiktok-stat-num">189.5K</div>
             <div class="tiktok-stat-lbl">Me Gusta</div>
           </div>
           <div class="tiktok-stat">
-            <div class="tiktok-stat-num">145</div>
+            <div class="tiktok-stat-num">150</div>
             <div class="tiktok-stat-lbl">Videos Publicados</div>
           </div>
           <div class="tiktok-stat">
             <div class="tiktok-stat-num">100%</div>
-            <div class="tiktok-stat-lbl">Carne de Cerdo Magra</div>
+            <div class="tiktok-stat-lbl">Sin Harinas ni Extensores</div>
           </div>
         </div>
 
@@ -951,6 +969,37 @@
           </div>
         </div>
 
+        <div style="margin: 8px 0 18px;">
+          <h3 style="font-size: 20px; font-weight: 800; color: var(--cream);">Confianza y trazabilidad</h3>
+          <p style="font-size: 13.5px; color: var(--cream-muted); max-width: 760px;">
+            Contenido real de la cuenta oficial: ingredientes, elaboración y lo que hay detrás de cada paquete.
+            <a href="https://www.tiktok.com/@segaso.chorizos/photo/7701116193192561938" target="_blank" rel="noopener" style="color: var(--gold); font-weight: 700;">Ver el post en TikTok</a>
+          </p>
+        </div>
+
+        <div class="tiktok-photos">
+          <a class="tiktok-photo-card" href="https://www.tiktok.com/@segaso.chorizos/photo/7701116193192561938" target="_blank" rel="noopener">
+            <img src="videos/tiktok_fotos/photo_01.jpg" loading="lazy" alt="Lo que debes saber antes de llevarlo a tu mesa">
+            <div class="tiktok-photo-caption">Lo que debes saber antes de llevarlo a tu mesa</div>
+          </a>
+          <a class="tiktok-photo-card" href="https://www.tiktok.com/@segaso.chorizos/photo/7701116193192561938" target="_blank" rel="noopener">
+            <img src="videos/tiktok_fotos/photo_02.jpg" loading="lazy" alt="El color no demuestra la calidad">
+            <div class="tiktok-photo-caption">El color no demuestra la calidad</div>
+          </a>
+          <a class="tiktok-photo-card" href="https://www.tiktok.com/@segaso.chorizos/photo/7701116193192561938" target="_blank" rel="noopener">
+            <img src="videos/tiktok_fotos/photo_03.jpg" loading="lazy" alt="Siempre empieza por los ingredientes">
+            <div class="tiktok-photo-caption">Siempre empieza por los ingredientes</div>
+          </a>
+          <a class="tiktok-photo-card" href="https://www.tiktok.com/@segaso.chorizos/photo/7701116193192561938" target="_blank" rel="noopener">
+            <img src="videos/tiktok_fotos/photo_04.jpg" loading="lazy" alt="Conoce también quién lo hace">
+            <div class="tiktok-photo-caption">Conoce también quién lo hace</div>
+          </a>
+          <a class="tiktok-photo-card" href="https://www.tiktok.com/@segaso.chorizos/photo/7701116193192561938" target="_blank" rel="noopener">
+            <img src="videos/tiktok_fotos/photo_05.jpg" loading="lazy" alt="La confianza empieza con saber qué eliges">
+            <div class="tiktok-photo-caption">La confianza empieza con saber qué eliges</div>
+          </a>
+        </div>
+
         <div style="text-align: center;">
           <a href="https://www.tiktok.com/@segaso.chorizos?is_from_webapp=1&sender_device=pc" target="_blank" class="btn-primary" style="background: #FE2C55; border-color: #FE2C55;">
             📱 Ver Perfil Completo en TikTok (@segaso.chorizos)
@@ -972,7 +1021,7 @@
               Aprende el oficio tradicional de la elaboración de chorizos gourmet desde cero con nuestros maestros charcuteros en Envigado:
             </p>
             <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 13.5px; color: var(--cream);">
-              <li>🥩 <strong>Selección y despiece:</strong> porcentaje exacto de carne magra y grasa noble.</li>
+              <li>🥩 <strong>Selección y despiece:</strong> porcentaje exacto de carne de cerdo y grasa noble.</li>
               <li>🌿 <strong>Condimentación limpia:</strong> formulación de especias naturales sin químicos ni féculas.</li>
               <li>🌀 <strong>Embutido y atado:</strong> técnicas en tripa natural y conservación al vacío.</li>
               <li>🔥 <strong>Cocción perfecta:</strong> técnicas de asado a la parrilla y ahumado al barril.</li>
@@ -1013,7 +1062,7 @@
               ¿Los chorizos Segaso contienen harina o gluten? <span>▼</span>
             </div>
             <div class="faq-answer">
-              <strong>No, 100% libres de gluten y harinas.</strong> En Segaso no usamos almidones, harina de trigo ni extensores de soya. Son 100% carne de cerdo magra seleccionada y especias naturales, aptos para celíacos y dietas limpias.
+              <strong>No, 100% libres de gluten y harinas.</strong> En Segaso no usamos almidones, harina de trigo ni extensores de soya. Son chorizos de carne de cerdo seleccionada, sin harinas ni extensores, con especias naturales, aptos para celíacos y dietas limpias.
             </div>
           </div>
           <div class="faq-item">
@@ -1048,7 +1097,7 @@
     <footer id="contacto">
       <div class="container">
         <div class="footer-brand">
-          <img src="logo_segaso_web.png" alt="Logo Segaso" style="height: 38px;">
+          <img src="logo_segaso.svg" alt="Logo Segaso" style="height: 38px;">
           <strong style="color: var(--cream); font-size: 16px;">SEGASO CHORIZOS S.A.S.</strong>
         </div>
         <div class="footer-info">
@@ -1117,7 +1166,7 @@
         
         <div id="lightboxTags" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
           <span style="font-size: 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 4px 10px; color: var(--cream);">🌾 Sin Harina ni Gluten</span>
-          <span style="font-size: 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 4px 10px; color: var(--cream);">🥩 Cerdo Magro Seleccionado</span>
+          <span style="font-size: 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 4px 10px; color: var(--cream);">🥩 Cerdo Seleccionado</span>
           <span style="font-size: 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 4px 10px; color: var(--cream);">🌀 Tripa 100% Natural</span>
           <span style="font-size: 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 4px 10px; color: var(--cream);">❄️ Sellado al Vacío</span>
         </div>
@@ -1240,9 +1289,9 @@
   <script>
     const PRODUCTS = [
       { id: 'caserito', name: 'Chorizo Caserito Paisa', price: 19.9, category: 'tradicional', icon: '🥓', tag: '⭐ Más Vendido', desc: 'El sabor tradicional de la casa. Carne seleccionada y sazón paisa suave para el desayuno o la arepa.' },
-      { id: 'antioqueno', name: 'Chorizo Antioqueño', price: 23.6, category: 'tradicional', icon: '🇳🇬', tag: 'Tradicional', desc: 'Sabor auténtico antioqueño con picado fino, ahumado natural y el balance perfecto de grasa magra.' },
+      { id: 'antioqueno', name: 'Chorizo Antioqueño', price: 23.6, category: 'tradicional', icon: '🇳🇬', tag: 'Tradicional', desc: 'Sabor auténtico antioqueño con picado fino, ahumado natural y el balance perfecto de grasa natural.' },
       { id: 'santarrosano', name: 'Chorizo Santarrosano', price: 23.8, category: 'tradicional', icon: '🇨🇴', tag: 'Tradicional', desc: 'Inspirado en la receta típica de Santa Rosa de Cabal. Trozos jugosos y especias de montaña.' },
-      { id: 'tocineta', name: 'Chorizo con Tocineta', price: 23.8, category: 'especial', icon: '🥓', tag: 'Especial', desc: 'Fusión irresistible de cerdo magro con crujiente tocineta ahumada. Explosión de sabor a la parrilla.' },
+      { id: 'tocineta', name: 'Chorizo con Tocineta', price: 23.8, category: 'especial', icon: '🥓', tag: 'Especial', desc: 'Fusión irresistible de cerdo seleccionado con crujiente tocineta ahumada. Explosión de sabor a la parrilla.' },
       { id: 'parrillero', name: 'Chorizo Parrillero al Ajo', price: 23.8, category: 'especial', icon: '🍴', tag: 'Parrillero', desc: 'Toque gourmet de ajo macerado y pimienta suave. Ideal para asados de fin de semana con amigos.' },
       { id: 'picante', name: 'Chorizo Picante Artesanal', price: 24.2, category: 'especial', icon: '🌶️', tag: 'Especial', desc: 'Intensidad media con ají casero y páprika. Pica lo justo sin opacar la calidad de la carne.' },
       { id: 'argentino', name: 'Chorizo Estilo Argentino', price: 24.6, category: 'especial', icon: '🇦🇷', tag: 'Parrillero', desc: 'Picado grueso, vino tinto y nuez moscada. Especial para choripán con abundante chimichurri.' },
@@ -1463,7 +1512,7 @@
           </div>
           <div class="prod-body">
             <h3 class="prod-name">${p.name}</h3>
-            <div class="prod-pack">Paquete x 5 unidades (~500g)</div>
+            <div class="prod-pack">Paquete x 5 unidades (450 g)</div>
             <p class="prod-desc">${p.desc}</p>
             <div style="font-size: 11.5px; margin-bottom: 6px;">
               ${isOutOfStock 
@@ -1619,7 +1668,7 @@
       renderProducts(currentCategoryFilter);
     }
 
-    function submitCustomerOrder() {
+    async function submitCustomerOrder() {
       const itemsKeys = Object.keys(cart);
       if (itemsKeys.length === 0) {
         showToast('El pedido está vacío');
@@ -1634,6 +1683,11 @@
 
       if (!name || !phone || !address) {
         alert('Por favor completa tu nombre, teléfono y dirección de entrega.');
+        return;
+      }
+
+      if (!/^\d{10}$/.test(phone)) {
+        alert('El teléfono debe tener 10 dígitos (ejemplo: 3001234567).');
         return;
       }
 
@@ -1659,7 +1713,30 @@
       const finalTotal = total - discount;
 
       const now = new Date();
-      const orderId = 'SEG-' + (now.getFullYear() % 100) + Math.floor(1000 + Math.random() * 9000);
+      let orderId = 'SEG-' + (now.getFullYear() % 100) + Math.floor(1000 + Math.random() * 9000);
+
+      try {
+        const res = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            customer_name: name,
+            customer_phone: phone,
+            address: address,
+            neighborhood: city,
+            payment_method: payment,
+            items: orderItems,
+            total_cop: Math.round(finalTotal * 1000)
+          })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && data.code) orderId = data.code;
+        }
+      } catch (_) {
+        console.log('Modo offline: orden guardada en almacenamiento local');
+      }
+
       const newOrder = {
         id: orderId,
         date: now.toLocaleDateString('es-CO') + ' ' + now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0'),
@@ -1704,21 +1781,6 @@
       msg += 'Por favor me confirmas el despacho. ¡Muchas gracias!';
 
       const waUrl = 'https://wa.me/573002367180?text=' + encodeURIComponent(msg);
-
-      // Persistir automáticamente en la base de datos de Harold
-      fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          customer_name:  name,
-          customer_phone: phone,
-          address:        address,
-          neighborhood:   city,
-          payment_method: payment,
-          items:          orderItems,
-          total_cop:      Math.round(finalTotal * 1000)
-        })
-      }).catch(() => console.log('Modo offline: orden guardada en almacenamiento local'));
 
       showToast('¡Pedido ' + orderId + ' creado con éxito!');
       
@@ -1791,6 +1853,13 @@
         </video>
       `;
 
+      const source = container.querySelector('source');
+      if (source) {
+        source.addEventListener('error', () => {
+          container.innerHTML = `<div style="padding: 28px; text-align: center; color: var(--cream-muted); font-size: 13px;">El video local no está disponible en este equipo.<br><a href="https://www.tiktok.com/@segaso.chorizos/video/${videoId}" target="_blank" rel="noopener" style="color: var(--gold); font-weight: 700;">Verlo en TikTok</a></div>`;
+        }, { once: true });
+      }
+
       modal.classList.add('open');
     }
 
@@ -1823,7 +1892,7 @@
       img.src = `img/${p.id}.jpg`;
       img.alt = p.name;
       title.textContent = p.name;
-      subtitle.textContent = p.id === 'chimichurri' ? 'Frasco de vidrio hermético x 250g' : 'Paquete sellado al vacío x 5 unidades (~500g)';
+      subtitle.textContent = p.id === 'chimichurri' ? 'Frasco de vidrio hermético x 250g' : 'Paquete sellado al vacío x 5 unidades (450 g)';
       price.innerHTML = `${p.price.toFixed(1)}k <small style="font-size: 12px; color: var(--text-muted);">COP</small>`;
       desc.textContent = p.desc;
 
@@ -1885,7 +1954,7 @@
 
       if (type === 'gluten') {
         userQ = '¿Los chorizos tienen harina o gluten?';
-        botA = '🌾 <strong>100% Libres de Gluten y Harina.</strong> En Segaso usamos pura carne de cerdo magra y condimentos naturales. Cero fécula, cero soya, cero almidón.';
+        botA = '🌾 <strong>100% Libres de Gluten y Harina.</strong> En Segaso usamos carne de cerdo seleccionada y condimentos naturales. Cero fécula, cero soya, cero almidón.';
       } else if (type === 'asados') {
         userQ = '¿Cómo funciona el asado al barril a domicilio?';
         botA = '🔥 <strong>Catering al Barril:</strong> Vamos a tu casa o finca desde 5 personas en adelante. Llevamos el barril ahumador, carbón, maestro parrillero y el menú completo de chorizos, carnes al barril y arepitas.';
@@ -1894,7 +1963,7 @@
         botA = '❄️ <strong>Conservación:</strong> Duran hasta 60 días congelados (-18°C) y hasta 15 días refrigerados (0-4°C). Para asar, baja a la nevera 2 horas antes.';
       } else if (type === 'precios') {
         userQ = '¿Cuáles son los precios oficiales?';
-        botA = '📋 <strong>Catálogo x 5 unidades (~500g):</strong><br>• Caserito Paisa: 19.9k COP<br>• Morcilla Tradicional: 15.0k COP<br>• Antioqueño: 23.6k COP<br>• Santarrosano / Tocineta / Parrillero: 23.8k COP<br>• Picante: 24.2k COP<br>• Argentino: 24.6k COP<br>• Chimichurri: 14.5k COP';
+        botA = '📋 <strong>Catálogo x 5 unidades (450 g):</strong><br>• Caserito Paisa: 19.9k COP<br>• Morcilla Tradicional: 15.0k COP<br>• Antioqueño: 23.6k COP<br>• Santarrosano / Tocineta / Parrillero: 23.8k COP<br>• Picante: 24.2k COP<br>• Argentino: 24.6k COP<br>• Chimichurri: 14.5k COP';
       } else if (type === 'asesor') {
         userQ = 'Quiero hablar directo con Harold';
         botA = '📞 <strong>Contacto Directo Gerencia:</strong> Escríbele al WhatsApp <a href="https://wa.me/573002367180" target="_blank" style="color: #6EE7B7; font-weight: 700;">300 236 7180</a>. ¡Te atenderá de inmediato!';

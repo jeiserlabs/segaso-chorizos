@@ -1,33 +1,58 @@
 # Segaso Chorizos .gitignore
 # Dependencias
 node_modules/
+coverage/
 
-# Entorno y Secretos
+# Entorno y secretos
 .env
+.env.*
+!.env.example
 *.secret
 
-# Binarios de Base de Datos
+# Bases de datos
 *.db
 *.db-wal
 *.db-shm
 
-# Videos y Medios Pesados (Regla Global 15: 0 Binarios en Git)
+# Estado local de agentes
+.engram/
+
+# Videos y medios pesados (GitHub solo texto/código)
 *.mp4
+*.mov
+*.m4v
 *.webm
 *.avi
 *.part
 videos/
+media/
 
-# Imágenes binarias y capturas (Regla 15: GitHub solo texto / Drive o local para binarios)
+# Imágenes binarias y capturas
 *.png
 *.jpg
 *.jpeg
+*.webp
+*.heic
+*.avif
 *.gif
 *.ico
+docs/SUSTENTACION_2026/CAPTURAS/
 
-# Documentos PDF (Custodiados localmente y en Drive)
+# Documentos y comprimidos
 *.pdf
+*.zip
+*.tar.gz
 
-# Backups y Logs
+# Audio
+*.mp3
+*.wav
+*.opus
+*.m4a
+
+# Backups y logs
 *.log
 *.bak
+
+# Pruebas
+test-results/
+playwright-report/

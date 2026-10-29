@@ -172,11 +172,14 @@ async function runE2E() {
     console.log(`  ✓ Último pedido en Back Office verificado: ${firstOrderCode}`);
 
     // Cambiar estado del pedido
-    const statusSelect = await page.$('#ordersTableBody tr:first-child select.status-select');
+    let statusSelect = await page.$('#ordersTableBody tr:first-child select.status-select');
     if (statusSelect) {
+      await statusSelect.selectOption('confirmado');
+      await page.waitForTimeout(500);
+      statusSelect = await page.$('#ordersTableBody tr:first-child select.status-select');
       await statusSelect.selectOption('preparando');
       await page.waitForTimeout(500);
-      console.log('  ✓ Transición FSM de pedido a "preparando" ejecutada exitosamente');
+      console.log('  ✓ Transición FSM confirmado → preparando ejecutada exitosamente');
     }
 
     // Cambiar a pestaña de inventario

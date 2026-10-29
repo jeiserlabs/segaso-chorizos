@@ -108,8 +108,32 @@ Debe terminar en verde y cumplir:
 
 **Resultado medido:** 1.28 MB, 0 imágenes rotas, 1 H1, 0 campos sin etiqueta, 0 taps <44 px, 0 errores de consola, 8/8 rutas HTTP y `npm run verify` en verde.
 
-**Límites declarados:**
+---
 
-- Los binarios de producto y redes no viven en Git; un clon limpio no muestra las fotos hasta ejecutar `npm run media:products` y `npm run media:web` con los medios locales.
-- El video promocional final de Gemini/Veo no se genera en este repositorio; el kit de prompts y storyboard queda listo.
-- La línea de WhatsApp y la cuenta principal de Instagram siguen pendientes de unificación con Harold.
+## 8. Ronda UX/UI — 2026-10-29
+
+**Veredicto:** la paleta base es correcta y coincide con el logo (#A61828 / #F3ECDA / #120C0E / #E5A93C); el problema era de ejecución, no de identidad.
+
+**Correcciones aplicadas:**
+
+- Galería TikTok: `height: auto` para respetar 4:5, 3 columnas desktop / 2 tablet / 1 móvil y captions duplicados eliminados.
+- Móvil: FAB oculto, “Asesor Virtual” en el menú, backdrop del menú, carrito apilado y drawer con scroll completo.
+- Contraste: botones sociales sobre superficie oscura con texto crema; copyright del footer a `--text-muted` sin opacidad.
+- Semántica: tarjetas TikTok separadas en `role=button` (reproducir) + enlace externo sibling; ya no hay controles anidados.
+- Iconos: los emojis de beneficios se reemplazaron por un set SVG de línea en oro.
+- Copy: fuera “Sprint 3” y “Proyecto Académico CESDE”; el hero aclara “Congelado a -18°C”.
+- Sistema: tokens de superficie, acentos suaves y marcas; `docs/DESIGN_SYSTEM.md` como SSOT.
+- Promo y documentación alineados al tinto #A61828 y carbón #120C0E.
+
+**Evidencia:**
+
+- `npm run verify` en verde (unitarias 13/13, E2E 5 fases, audit desktop/móvil).
+- axe-core WCAG 2.1 AA: **0 violaciones**.
+- Galería: 5 imágenes con ratio 0.8; 0 controles anidados; 0 taps <44 px.
+- Peso: 1.29 MB.
+
+**Límites que siguen abiertos:**
+
+- Precios en notación `19.9k COP`: se mantiene por la convención del proyecto; cambiar a `19.900 COP` es una decisión de negocio.
+- Instagram principal/alterna y WhatsApp 300/312: pendiente de unificación con Harold.
+- Los binarios de producto y redes no viven en Git; un clon limpio no muestra las fotos hasta ejecutar los scripts de medios con las fuentes locales.

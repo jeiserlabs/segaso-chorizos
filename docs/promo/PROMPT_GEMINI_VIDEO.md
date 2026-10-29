@@ -68,8 +68,8 @@ Crea un comercial de 30 segundos para Segaso Chorizos, empresa artesanal de Envi
 Concepto: “El fuego se hereda”. La tradición no se inventa; se transmite.
 Tono: premium, cálido, familiar, real. Nada de estética de supermercado.
 Formato master: 9:16, 1080x1920, 24 fps, 30 s. Versión secundaria 16:9.
-Paleta: borgoña #7C101C, dorado #E5A93C, crema #F3ECDA, carbón #0E080A.
-Luz: ámbar cálida, sombras borgoña, altas luces crema.
+Paleta: tinto #A61828, dorado #E5A93C, crema #F3ECDA, carbón #120C0E.
+Luz: ámbar cálida, sombras tinto, altas luces crema.
 Cámara: push-in lento, poca profundidad de campo, grano suave, sin cortes rápidos.
 Audio: cumbia/porro moderna con guitarra y percusión, sin voz ni samples con copyright; brasas y sizzle.
 Voz: adulto cálido, español de Colombia, ritmo pausado.
@@ -93,7 +93,7 @@ No incluyas menores de edad. No escribas texto dentro de la imagen; se agrega en
 
 ### Escena 1 — Hook (3 s)
 ~~~text
-Vertical 9:16, 3 segundos. Macro de chorizo y costilla sobre parrilla de carbón, mano tostando un pan, brasas, humo y jugos chisporroteando. Push-in lento. Luz ámbar cálida, sombras borgoña, 24 fps, poca profundidad de campo. Usa como referencia visual exacta el keyframe 7128213952567315718_01.jpg. Sin texto, sin logo, sin caras.
+Vertical 9:16, 3 segundos. Macro de chorizo y costilla sobre parrilla de carbón, mano tostando un pan, brasas, humo y jugos chisporroteando. Push-in lento. Luz ámbar cálida, sombras tinto, 24 fps, poca profundidad de campo. Usa como referencia visual exacta el keyframe 7128213952567315718_01.jpg. Sin texto, sin logo, sin caras.
 ~~~
 
 ### Escena 2 — Origen (4 s)
@@ -148,7 +148,7 @@ Ensambla un comercial vertical de 30 s con los clips y keyframes adjuntos, sigui
 - 9:16, 1080x1920, 24 fps.
 - Orden: hook de parrilla, origen/producción, empaque, choripanes, textura, mesa, vitrina real, cierre con logo.
 - Agrega la voz en off y la música indicadas; no inventes tomas nuevas.
-- Agrega los textos del storyboard en crema, con fondo borgoña semitransparente y márgenes seguros.
+- Agrega los textos del storyboard en crema, con fondo tinto semitransparente y márgenes seguros.
 - No uses primeros planos de menores.
 - No generes una UI falsa: usa la captura real de la vitrina y el carrito.
 - Exporta 9:16 y 16:9, con SRT y versión con subtítulos quemados.
@@ -169,7 +169,7 @@ No menores de edad, no rostros de niños, no manos deformes, no comida plástica
 - **Master:** 1080 × 1920, 30 s, 24 fps, H.264, AAC, 9:16.
 - **Horizontal:** 1920 × 1080, 30 s, 16:9.
 - **Cortes:** 15 s y 6 s.
-- **Texto:** crema sobre borgoña; máximo 6 palabras por línea; sin texto sobre caras.
+- **Texto:** crema sobre tinto; máximo 6 palabras por línea; sin texto sobre caras.
 - **Audio:** voz -14 LUFS, música -22 LUFS, efectos -24 LUFS; techo -2 dBFS.
 - **Control:** empaque legible, 450 g correcto, sin menores, sin UI falsa, logo intacto, SRT incluido.
 - **Entrega:** MP4 9:16, MP4 16:9, SRT, miniatura y versión con subtítulos quemados.

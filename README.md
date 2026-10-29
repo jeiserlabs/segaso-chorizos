@@ -203,15 +203,18 @@ Estado medido el 2026-10-29:
 
 | Métrica | Antes | Después |
 |---|---:|---:|
-| Peso de la página (desktop/móvil) | 10.31 MB | 1.28 MB |
+| Peso de la página (desktop/móvil) | 10.31 MB | 1.29 MB |
 | Imágenes rotas | 10 | 0 |
 | H1 en la página | 2 | 1 |
 | Campos sin etiqueta | 8 | 0 |
 | Objetivos táctiles <44 px | 15 | 0 |
 | Errores de consola | 15 (assets faltantes) | 0 |
 | Rutas sensibles expuestas | `.env`, código y BD descargables | 404 |
+| Galería TikTok | recortada 219×1350 | 4:5 completa, 3/2/1 columnas |
+| Controles interactivos anidados | 4 | 0 |
+| Violaciones axe WCAG 2.1 AA | 2 reglas / 7 nodos | 0 |
 
-El gate exige además 0 imágenes rotas, 0 respuestas ≥400, JSON-LD con 9 ofertas, 4 diálogos accesibles, 0 desbordamiento horizontal y menos de 3 MB de transferencia.
+El gate exige además 0 imágenes rotas, 0 respuestas ≥400, JSON-LD con 9 ofertas, 4 diálogos accesibles, galería 4:5, 0 controles anidados, 0 desbordamiento horizontal y menos de 3 MB de transferencia.
 
 ---
 
@@ -219,6 +222,7 @@ El gate exige además 0 imágenes rotas, 0 respuestas ≥400, JSON-LD con 9 ofer
 
 - [`docs/README.md`](docs/README.md) — índice de documentación.
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — arquitectura, datos y seguridad.
+- [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md) — paleta canónica, contraste, componentes y accesibilidad.
 - [`docs/API.md`](docs/API.md) — endpoints y ejemplos.
 - [`docs/social/REDES_SEGASO.md`](docs/social/REDES_SEGASO.md) — auditoría de TikTok, Instagram y Facebook.
 - [`docs/social/MEDIA_MANIFEST.md`](docs/social/MEDIA_MANIFEST.md) — biblioteca audiovisual y limitaciones.

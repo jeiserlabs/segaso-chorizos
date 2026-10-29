@@ -4,7 +4,7 @@
 > **Formato master:** 9:16, 1080 × 1920, 30 s, 24 fps.
 > **Versión secundaria:** 16:9, 1920 × 1080.
 > **Tono:** premium, cálido, artesanal, familiar y real.
-> **Paleta:** borgoña `#7C101C`, dorado `#E5A93C`, crema `#F3ECDA`, carbón `#0E080A`.
+> **Paleta:** tinto `#A61828`, dorado `#E5A93C`, crema `#F3ECDA`, carbón `#120C0E`.
 
 ---
 
@@ -40,7 +40,7 @@
 
 ## 4. Dirección de arte
 
-- Luz cálida ámbar, sombras borgoña, altas luces crema.
+- Luz cálida ámbar, sombras tinto, altas luces crema.
 - Cámara lenta en los cortes de producto; push-in suave; sin cortes rápidos.
 - Grano de película 5%; 24 fps; enfoque superficial.
 - Texto crema sobre fondos oscuros; sin texto sobre caras.

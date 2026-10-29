@@ -50,13 +50,13 @@ PROHIBIDO
 
 ESTILO VISUAL
 - Formato 16:9, 13.333 x 7.5 pulgadas.
-- Fondo crema cálido #F7F4EE; texto carbón #1D1B18; acento borgoña #7C101C; acento dorado #C8A24A; gris #6B6560.
+- Fondo crema cálido #F7F4EE; texto carbón #1D1B18; acento tinto #A61828; acento dorado #E5A93C; gris #6B6560.
 - Tipografía: Inter o Manrope para todo el cuerpo; Fraunces o Playfair Display solo para el título de la portada. Si no están disponibles, usa Arial o Georgia.
 - Títulos de 36 a 44 pt; cuerpo de 18 a 22 pt; números grandes de 64 a 80 pt; pies de foto de 12 a 14 pt.
 - Márgenes de 0.6 pulgadas; texto alineado a la izquierda; una idea por diapositiva.
 - Máximo 5 viñetas por diapositiva; ideal 3. Sin párrafos largos.
 - Línea fina dorada como separador y pie de página: “Segaso Chorizos · CESDE 2026 · [número]”.
-- Usa SOLO las 5 fotos reales adjuntas. Recórtalas en 4:5, con esquinas redondeadas de 12 px, sin estirarlas y sin texto encima. Si una foto no encaja, usa un panel borgoña liso con una frase corta, no una foto de stock.
+- Usa SOLO las 5 fotos reales adjuntas. Recórtalas en 4:5, con esquinas redondeadas de 12 px, sin estirarlas y sin texto encima. Si una foto no encaja, usa un panel tinto liso con una frase corta, no una foto de stock.
 - Las fotos son:
   1. Empaque con el rótulo “Lo que debes saber antes de llevarlo a tu mesa”.
   2. Parrilla con la frase “El color no demuestra la calidad”.
@@ -79,7 +79,7 @@ ESTRUCTURA EXACTA (15 DIAPOSITIVAS)
 3. El problema.
    Título: “El producto era bueno; el proceso no”.
    Tres viñetas: “Pedidos por WhatsApp en conversaciones dispersas: 15–20 min por cliente”; “Inventario en libreta: se prometían productos agotados”; “29.2K seguidores en TikTok sin un canal propio de compra”.
-   Pregunta al pie, en borgoña: “¿Cómo ordenar el catálogo, el pedido y el stock sin pagar una plataforma costosa?”.
+   Pregunta al pie, en tinto: “¿Cómo ordenar el catálogo, el pedido y el stock sin pagar una plataforma costosa?”.
 
 4. Objetivo general.
    Título: “Objetivo general”.

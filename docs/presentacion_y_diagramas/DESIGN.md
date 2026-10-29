@@ -1,5 +1,6 @@
 # Segaso Chorizos S.A.S. • Design System & Visual Identity Tokens
-> Basado en las directrices globales de `ui_ux_pro_max` (106k ⭐) y `premium_ui`.
+> **SSOT canónico:** [`docs/DESIGN_SYSTEM.md`](../DESIGN_SYSTEM.md). Este documento resume la identidad y los componentes de la presentación; si hay conflicto de color, manda el SSOT.
+> Basado en las directrices globales de `ui_ux_pro_max` y `premium_ui`.
 
 ## 1. Identidad de Marca & Concepto Visual
 - **Arquetipo:** Charcutería Gourmet Artesanal, Food-Tech de Alta Gama & Asados al Barril.
@@ -9,21 +10,22 @@
 ---
 
 ## 2. Paleta Cromática Canónica (Tailored HSL & Hex)
-- **Fondo Base (Dark Canvas):** `#09090b` (Zinc 950 con resplandor cálido de brasa).
-- **Superficie de Tarjetas (Surface Card):** `rgba(24, 18, 16, 0.8)` con `backdrop-filter: blur(20px)`.
-- **Bordes Semitransparentes:** `rgba(255, 255, 255, 0.08)` (estado normal) y `rgba(249, 115, 22, 0.4)` (hover activo).
-- **Color Primario (Fuego & Brasa):** `#f97316` (Glow: `rgba(249, 115, 22, 0.3)`). Identidad del asado al barril.
-- **Color Secundario (Dorado Ahumado):** `#f59e0b`. Resalta la calidad de las especias y la tripa natural.
-- **Color de Acento (Rojo Artesanal):** `#ef4444`. Intensidad y pureza cárnica.
-- **Color de Éxito Operativo:** `#10b981`. Pedidos entregados y pagos confirmados.
+- **Fondo Base (Dark Canvas):** `#120C0E` (carbón cálido, no negro puro).
+- **Superficie de Tarjetas:** `#23171B`; superficies de profundidad `#191013`, `#1C1216`, `#0E080A`.
+- **Bordes Semitransparentes:** `rgba(243, 236, 218, 0.12)` normal; `rgba(166, 24, 40, 0.5)` en hover activo.
+- **Color Primario (Tinto de Marca):** `#A61828` (hover `#8C1320`). Botones principales, filtros y badges.
+- **Color Secundario (Dorado Brasas):** `#E5A93C`. Métricas, precios, iconos y acentos de valor.
+- **Color de Lectura (Crema):** `#F3ECDA`; secundario `#D8CEB8`; muted `#A39699`.
+- **Estados:** éxito `#10B981`, advertencia `#F59E0B`, peligro `#EF4444`.
+- **Marcas externas:** TikTok `#FE2C55` e Instagram `#DD2A7B` solo en iconos/bordes; los botones sociales usan superficie oscura y texto crema.
 
 ---
 
 ## 3. Tipografía & Jerarquía Visual
-- **Fuente Primaria (Headings & UI):** `Plus Jakarta Sans` (Google Fonts, pesos 600, 700, 800, 900).
-  * *Tracking:* `-0.03em` para títulos gastronómicos con impacto.
-  * *Contraste:* Títulos en `#ffffff`, subtítulos en `#d4d4d8` (Zinc 300).
-- **Fuente Técnica & Financiera (Precios k COP & FSM):** `JetBrains Mono` (Google Fonts, pesos 500, 700).
+- **Fuente Primaria (Headings & UI):** `Plus Jakarta Sans` (Google Fonts, pesos 400, 500, 600, 700, 800).
+  * *Tracking:* `-1.2px` en hero y `-0.6px` en títulos de sección.
+  * *Contraste:* títulos en `#FFFFFF`; subtítulos en `#D8CEB8`.
+- **Precios y UI:** misma familia, peso 800; no se carga una fuente mono adicional.
 
 ---
 

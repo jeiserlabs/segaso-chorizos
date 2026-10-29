@@ -7,6 +7,7 @@
 | Documento | Contenido |
 |---|---|
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Stack, componentes, datos, seguridad, rendimiento y FSM. |
+| [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) | Paleta canónica, contraste, tipografía, componentes, movimiento y reglas de accesibilidad. |
 | [API.md](API.md) | Endpoints, autenticación, ejemplos y errores. |
 | [social/PRODUCT_PHOTOS.md](social/PRODUCT_PHOTOS.md) | Procedencia real de las 9 fotos de producto y cómo regenerarlas. |
 | [../GEMINI.md](../GEMINI.md) | Contrato operativo para agentes de IA. |
@@ -44,7 +45,7 @@
 | Documento | Contenido |
 |---|---|
 | [../.odd/tasks/segaso_calidad_pagina.odd.md](../.odd/tasks/segaso_calidad_pagina.odd.md) | ODD de la auditoría de página, fotos reales, accesibilidad y performance. |
-| `npm run audit:page` | Gate reproducible de peso, imágenes, metadatos, accesibilidad y superficie HTTP. |
+| `npm run audit:page` | Gate reproducible de peso, imágenes, metadatos, accesibilidad, galería y superficie HTTP. |
 | `npm run verify` | Typecheck + unitarias + E2E 5 fases + auditoría de página. |
 
 ## Legado

@@ -48,11 +48,28 @@ const MIME_TYPES = {
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
+  '.webp': 'image/webp',
+  '.avif': 'image/avif',
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon',
+  '.woff2': 'font/woff2',
   '.mp4': 'video/mp4',
   '.webm': 'video/webm'
 };
+
+const ASSET_EXTENSIONS = new Set(Object.keys(MIME_TYPES));
+const NO_CACHE_EXTENSIONS = new Set(['.html', '.css', '.js', '.json']);
+const PUBLIC_FILES = new Set([
+  'index.html',
+  'admin.html',
+  'logo_segaso.svg',
+  'favicon.svg',
+  'favicon.ico',
+  'robots.txt',
+  'sitemap.xml',
+  'manifest.webmanifest'
+]);
+const PUBLIC_DIRS = ['assets/', 'img/', 'media/', 'videos/'];
 
 function readJsonBody(req) {
   return new Promise((resolve, reject) => {
@@ -93,6 +110,11 @@ function requireAuth(req, res) {
 const server = http.createServer(async (req, res) => {
   const [pathname, queryString] = req.url.split('?');
   const method = req.method.toUpperCase();
+
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
 
   // -------------------------------------------------------------
   // 1. ENDPOINTS DE API (Autenticación & Datos)
@@ -237,9 +259,17 @@ const server = http.createServer(async (req, res) => {
   // -------------------------------------------------------------
   // 2. ENRUTAMIENTO DE VISTAS Y ARCHIVOS ESTÁTICOS
   // -------------------------------------------------------------
-  let safePath = path.normalize(pathname).replace(/^(\.\.[\/\\])+/, '');
+  let requestedPath;
+  try {
+    requestedPath = decodeURIComponent(pathname);
+  } catch (_) {
+    res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' });
+    return res.end('Ruta inválida');
+  }
 
-  // Ruta secreta de administración para Harold: servir admin.html
+  let safePath = path.normalize(requestedPath);
+
+  // Ruta de administración para Harold: servir admin.html
   if (
     safePath === '/chorizos-segaso/admin' ||
     safePath === '\\chorizos-segaso\\admin' ||
@@ -251,26 +281,68 @@ const server = http.createServer(async (req, res) => {
     safePath = '/index.html';
   }
 
-  const fullPath = path.join(PUBLIC_DIR, safePath);
+  const relativeSafePath = safePath.replace(/^[\\/]+/, '');
+  const normalizedRelative = relativeSafePath.split(path.sep).join('/');
+  const fullPath = path.resolve(PUBLIC_DIR, relativeSafePath);
+  const relativePath = path.relative(PUBLIC_DIR, fullPath);
+  const isInsidePublic = relativePath && !relativePath.startsWith('..') && !path.isAbsolute(relativePath);
+  const hasHiddenSegment = normalizedRelative.split('/').some(segment => segment.startsWith('.'));
+  const ext = path.extname(fullPath).toLowerCase();
+  const isPublicStatic =
+    isInsidePublic &&
+    !hasHiddenSegment &&
+    (PUBLIC_FILES.has(normalizedRelative) || PUBLIC_DIRS.some(dir => normalizedRelative.startsWith(dir)));
+  const isSpaRoute = isInsidePublic && !hasHiddenSegment && !ext;
+
+  if (!isPublicStatic && !isSpaRoute) {
+    res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' });
+    return res.end('Recurso no encontrado');
+  }
+
+  const isAssetRequest = ASSET_EXTENSIONS.has(ext);
 
   fs.stat(fullPath, (err, stats) => {
     if (!err && stats.isFile()) {
-      const ext = path.extname(fullPath).toLowerCase();
       const contentType = MIME_TYPES[ext] || 'application/octet-stream';
-      res.writeHead(200, { 'Content-Type': contentType });
-      fs.createReadStream(fullPath).pipe(res);
+      const cacheControl = NO_CACHE_EXTENSIONS.has(ext)
+        ? 'no-cache'
+        : 'public, max-age=86400';
+      const headers = {
+        'Content-Type': contentType,
+        'Content-Length': stats.size,
+        'Last-Modified': stats.mtime.toUTCString(),
+        'Cache-Control': cacheControl
+      };
+      res.writeHead(200, headers);
+      if (method === 'HEAD') return res.end();
+      fs.createReadStream(fullPath)
+        .on('error', () => {
+          if (!res.headersSent) res.writeHead(500);
+          res.end();
+        })
+        .pipe(res);
       return;
     }
 
-    // Fallback: Servir index.html para rutas del cliente
+    // Un asset inexistente es 404 real: nunca devolver HTML con status 200.
+    if (isAssetRequest) {
+      res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' });
+      return res.end('Archivo no encontrado');
+    }
+
+    // Fallback solo para rutas de vista sin extensión (SPA).
     const fallbackPath = path.join(PUBLIC_DIR, 'index.html');
     fs.readFile(fallbackPath, (fallbackErr, data) => {
       if (fallbackErr) {
-        res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
-        res.end('Error al cargar la plataforma Segaso Chorizos.');
-        return;
+        res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' });
+        return res.end('Error al cargar la plataforma Segaso Chorizos.');
       }
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.writeHead(200, {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Content-Length': data.length,
+        'Cache-Control': 'no-cache'
+      });
+      if (method === 'HEAD') return res.end();
       res.end(data);
     });
   });

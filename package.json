@@ -14,6 +14,8 @@
     "typecheck": "tsc --noEmit",
     "test": "node --no-warnings --test tests/segaso_domain.test.ts",
     "test:e2e": "node --env-file=.env tests/e2e_segaso_playwright.js",
+    "audit:page": "node scripts/audit_page.js",
+    "verify": "npm run typecheck && npm test && npm run test:e2e && npm run audit:page",
     "start": "node --env-file=.env server.js",
     "dev": "node --env-file=.env --watch server.js",
     "social:manifest": "node scripts/social_manifest.js",

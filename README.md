@@ -78,14 +78,14 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 npm install
 npx playwright install chromium
 
-# 3. Verificación
-npm run typecheck
-npm test
-npm run test:e2e
+# 3. Verificación completa (typecheck + unit + E2E + auditoría de página)
+npm run verify
 
 # 4. Servidor
 npm start
 ```
+
+El gate `npm run verify` incluye `npm run audit:page`, que mide peso, imágenes rotas, metadatos, accesibilidad y la superficie HTTP (`.env`, código y base deben responder 404).
 
 - Tienda: `http://localhost:3000`
 - Back office: `http://localhost:3000/chorizos-segaso/admin`
@@ -106,6 +106,15 @@ node scripts/social_manifest.js
 ```
 
 Genera `media/social/manifest.json` y la documentación de `docs/social/`. Los binarios no se versionan.
+
+### Medios de la página
+
+```bash
+npm run media:products   # 9 fotos reales + miniaturas 480/900 en img/products
+npm run media:web        # galería, portadas y barril en WebP (assets/img)
+```
+
+Ambos scripts exigen `ffmpeg` y las fuentes locales. Si falta un archivo, fallan con el nombre exacto de la fuente: no inventan imágenes. La procedencia está en [`docs/social/PRODUCT_PHOTOS.md`](docs/social/PRODUCT_PHOTOS.md).
 
 ---
 
@@ -145,27 +154,35 @@ El detalle y ejemplos están en [`docs/API.md`](docs/API.md).
 
 ```text
 .
-├── index.html                  # Vitrina pública
+├── index.html                  # Vitrina pública (estructura)
+├── assets/
+│   ├── styles.css              # Estilos de la vitrina
+│   ├── app.js                  # Carrito, catálogo, modales y FAQ
+│   └── img/                    # WebP de galería, portadas y barril (local)
+├── img/products/               # 9 fotos reales + miniaturas (local)
 ├── admin.html                  # Back office
-├── server.js                   # HTTP server y rutas
+├── server.js                   # HTTP server, API y estáticos con whitelist
 ├── db.js                       # SQLite, schema, seed, queries
 ├── auth.js                     # scrypt + JWT
 ├── src/
 │   ├── domain/                 # FSM, catering, métricas
 │   ├── schemas/                # Contratos Zod v4
 │   └── types/                  # Tipos TypeScript
-├── tests/                      # Unitarias + E2E Playwright
+├── tests/                      # Unitarias, helper de calidad y E2E Playwright
 ├── scripts/
 │   ├── fetch_tiktok_assets.js  # Assets locales de la página
+│   ├── build_product_photos.js # Fotos reales de producto + miniaturas
+│   ├── build_web_media.js      # WebP de galería, portadas y barril
+│   ├── audit_page.js           # Gate de calidad de la página
 │   └── social_manifest.js      # Manifiesto de la biblioteca social
 ├── docs/
 │   ├── ARCHITECTURE.md
 │   ├── API.md
-│   ├── social/                 # Auditoría de redes y manifiesto
+│   ├── social/                 # Auditoría de redes, manifiesto y fotos
 │   ├── promo/                  # Storyboard y prompts para Gemini/Veo
 │   └── SUSTENTACION_2026/      # Guías y prompt de la sustentación CESDE
 ├── .odd/tasks/                 # Documentos ODD
-├── logo_segaso.svg
+├── logo_segaso.svg             # Logo vectorial optimizado
 └── README.md
 ```
 
@@ -176,12 +193,25 @@ Los binarios de la página (`videos/`), de la biblioteca social (`media/`), la b
 ## 9. Pruebas y calidad
 
 ```bash
-npm run typecheck   # 0 errores
-npm test            # 13/13
-npm run test:e2e    # 4 fases: catálogo, carrito, backoffice, consola
+npm run verify      # typecheck + unit + E2E 5 fases + auditoría de página
+npm run audit:page  # solo el gate de calidad visual, SEO y seguridad
 ```
 
-El E2E valida el catálogo de 9 productos, el carrito con 2 unidades y 10% de descuento, la creación del pedido en SQLite, el login JWT, los KPIs, la transición FSM `confirmado → preparando`, el inventario 9/9 y la consola sin errores críticos.
+El E2E valida el catálogo de 9 productos, el carrito con 2 unidades y 10% de descuento, la creación del pedido en SQLite, el login JWT, los KPIs, la transición FSM `confirmado → preparando`, el inventario 9/9, el gate de calidad y la consola sin errores.
+
+Estado medido el 2026-10-29:
+
+| Métrica | Antes | Después |
+|---|---:|---:|
+| Peso de la página (desktop/móvil) | 10.31 MB | 1.28 MB |
+| Imágenes rotas | 10 | 0 |
+| H1 en la página | 2 | 1 |
+| Campos sin etiqueta | 8 | 0 |
+| Objetivos táctiles <44 px | 15 | 0 |
+| Errores de consola | 15 (assets faltantes) | 0 |
+| Rutas sensibles expuestas | `.env`, código y BD descargables | 404 |
+
+El gate exige además 0 imágenes rotas, 0 respuestas ≥400, JSON-LD con 9 ofertas, 4 diálogos accesibles, 0 desbordamiento horizontal y menos de 3 MB de transferencia.
 
 ---
 

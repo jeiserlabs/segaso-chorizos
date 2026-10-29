@@ -21,8 +21,10 @@ if (!process.env.JWT_SECRET) {
 
 const { chromium } = require('playwright');
 const server = require('../server.js');
+const { collectPageQuality, assertPageQuality, checkHttpSurface } = require('./page_quality.js');
 
 const TEST_PORT = 3089;
+const BASE_URL = `http://127.0.0.1:${TEST_PORT}`;
 
 async function runE2E() {
   console.log('🧪 Iniciando Auditoría E2E con Playwright para Segaso Chorizos MVP...');
@@ -193,16 +195,50 @@ async function runE2E() {
     console.log(`  ✓ Inventario de 9 referencias en tiempo real verificado (${invCards.length}/9)`);
 
     // -------------------------------------------------------------
-    // FASE 4: AUDITORÍA DE CONSOLA Y CERO ERRORES
+    // FASE 4: GATE DE CALIDAD DE PÁGINA
     // -------------------------------------------------------------
-    console.log('▶ [FASE 4] Verificando Consola y Manejo de Errores...');
-    // Filtrar posibles 404 de favicons si no son críticos
-    const criticalErrors = consoleErrors.filter(err => !err.includes('favicon.ico'));
-    if (criticalErrors.length > 0) {
-      console.warn(`  ⚠️ Errores no críticos en consola:`, criticalErrors);
-    } else {
-      console.log('  ✓ Cero errores de JavaScript en consola');
+    console.log('▶ [FASE 4] Ejecutando gate de calidad visual, SEO y seguridad...');
+    const qualityContext = await browser.newContext({ viewport: { width: 1440, height: 900 }, locale: 'es-CO' });
+    const qualityPage = await qualityContext.newPage();
+    const qualityConsoleErrors = [];
+    const qualityPageErrors = [];
+    const qualityBadResponses = [];
+    const qualityFailedRequests = [];
+    qualityPage.on('console', (msg) => { if (msg.type() === 'error') qualityConsoleErrors.push(msg.text()); });
+    qualityPage.on('pageerror', (err) => qualityPageErrors.push(err.message));
+    qualityPage.on('response', (res) => { if (res.status() >= 400) qualityBadResponses.push({ url: res.url(), status: res.status() }); });
+    qualityPage.on('requestfailed', (req) => qualityFailedRequests.push({ url: req.url(), error: req.failure()?.errorText }));
+
+    await qualityPage.goto(BASE_URL, { waitUntil: 'networkidle' });
+    await qualityPage.waitForSelector('#productsContainer .product-card');
+    for (const selector of ['#calidad', '#catalogo', '#asados', '#tiktok', '#contacto']) {
+      const section = await qualityPage.$(selector);
+      if (section) await section.scrollIntoViewIfNeeded();
+      await qualityPage.waitForTimeout(250);
     }
+    await qualityPage.waitForTimeout(600);
+    const quality = await collectPageQuality(qualityPage, {
+      consoleErrors: qualityConsoleErrors,
+      pageErrors: qualityPageErrors,
+      badResponses: qualityBadResponses,
+      failedRequests: qualityFailedRequests
+    });
+    assertPageQuality(quality);
+    await checkHttpSurface(qualityContext.request, BASE_URL);
+    await qualityContext.close();
+    console.log(`  ✓ Gate de calidad: ${(quality.totalTransfer / 1048576).toFixed(2)} MB · ${quality.brokenImages.length} rotas · H1 ${quality.h1Count} · ${quality.smallTapTargets.length} taps <44`);
+    console.log('  ✓ Superficie HTTP: 8/8 rutas con status esperado');
+    console.log('  ✓ JSON-LD: FoodEstablishment con 9 ofertas');
+
+    // -------------------------------------------------------------
+    // FASE 5: AUDITORÍA DE CONSOLA Y CERO ERRORES
+    // -------------------------------------------------------------
+    console.log('▶ [FASE 5] Verificando Consola y Manejo de Errores...');
+    const allConsoleErrors = consoleErrors.concat(qualityConsoleErrors);
+    if (allConsoleErrors.length > 0) {
+      throw new Error(`Errores de consola detectados: ${JSON.stringify(allConsoleErrors)}`);
+    }
+    console.log('  ✓ Cero errores de JavaScript en consola');
 
     console.log('\n🎉 ¡AUDITORÍA PLAYWRIGHT 100% EXITOSA! MVP Funcional y Estable.');
     return true;

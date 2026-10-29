@@ -20,8 +20,8 @@ El servidor es Node.js nativo. La persistencia es SQLite en modo WAL. La autenti
 | Datos | SQLite WAL + `better-sqlite3` | Transaccional, local, sin servidor de BD. |
 | Auth | `node:crypto` scrypt + JWT HS256 | Sin librerías externas de autenticación. |
 | Contratos | Zod v4 + TypeScript | Validación y tipos en dominio. |
-| Frontend | HTML5 + CSS3 + JS vanilla | Sin build; portable. |
-| Pruebas | `node:test` + Playwright | Unitarias de dominio y E2E real. |
+| Frontend | HTML5 + CSS3 + JS vanilla | Sin build; portable, cacheable y sin frameworks. |
+| Pruebas | `node:test` + Playwright | Unitarias de dominio, E2E de 5 fases y gate de página. |
 
 ---
 
@@ -32,13 +32,45 @@ El servidor es Node.js nativo. La persistencia es SQLite en modo WAL. La autenti
 | `server.js` | Router HTTP, API, archivos estáticos, rate limiting, validación FSM. |
 | `db.js` | Schema, migraciones, seed, consultas parametrizadas. |
 | `auth.js` | Hash scrypt, verificación, firma y validación JWT. |
-| `index.html` | Vitrina, carrito, checkout, asesor FAQ, TikTok y asados. |
+| `index.html` | Estructura de la vitrina y metadatos SEO/JSON-LD. |
+| `assets/styles.css` | Estilos, responsive, foco visible y objetivos táctiles. |
+| `assets/app.js` | Catálogo, carrito, checkout, modales, FAQ y TikTok. |
 | `admin.html` | Login, dashboard, pedidos, inventario y leads. |
 | `src/domain/pedido.fsm.ts` | Estados y transiciones válidas. |
 | `src/domain/catering.calculator.ts` | Cálculo de catering. |
 | `src/domain/cliente.metrics.ts` | LTV y segmentación. |
 | `src/schemas/segaso.schemas.ts` | Contratos Zod v4. |
+| `tests/page_quality.js` | Métricas y aserciones compartidas por E2E y auditoría. |
+| `scripts/audit_page.js` | Gate de calidad desktop/móvil y superficie HTTP. |
 | `tests/` | Dominio y E2E. |
+
+## Archivos estáticos y seguridad
+
+- `server.js` sirve solo una whitelist: `index.html`, `admin.html`, `logo_segaso.svg`, `favicon.svg`, `robots.txt` y los directorios `assets/`, `img/`, `media/`, `videos/`.
+- `.env`, `server.js`, `db.js`, `segaso.db`, tests, scripts y documentos responden **404**; no se pueden descargar.
+- Los segmentos ocultos (`.git`, `.odd`, `.env`) se rechazan antes de tocar el disco.
+- Un asset inexistente responde 404 `text/plain`; el fallback a `index.html` queda reservado para rutas de vista sin extensión.
+- Cabeceras: `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, `Referrer-Policy` y `Permissions-Policy`.
+- `server.js` solo abre el puerto cuando se ejecuta directamente (`require.main === module`); los tests lo importan y eligen su propio puerto.
+
+## Rendimiento y accesibilidad
+
+Medición del 2026-10-29 con el gate `npm run audit:page`:
+
+| Métrica | Antes | Después |
+|---|---:|---:|
+| Transferencia desktop/móvil | 10.31 MB | 1.28 MB |
+| Imágenes rotas | 10 | 0 |
+| H1 | 2 | 1 |
+| Campos sin etiqueta | 8 | 0 |
+| Objetivos táctiles <44 px | 15 | 0 |
+| Errores de consola | 15 | 0 |
+
+- Galería, portadas y barril se sirven en WebP; las tarjetas de producto usan `srcset` 480/900 y el lightbox conserva 900 px.
+- Todas las imágenes de contenido tienen dimensiones, `loading="lazy"` y `decoding="async"`.
+- `assets/styles.css` y `assets/app.js` están separados del HTML para cachearse; el HTML quedó en ~50 KB.
+- Los diálogos usan `role="dialog"`, `aria-modal`, foco inicial, trampa de Tab, Escape y retorno de foco.
+- El gate exige 0 respuestas ≥400, JSON-LD con 9 ofertas, 4 diálogos accesibles, 0 overflow y <3 MB.
 
 ---
 

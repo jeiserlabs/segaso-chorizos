@@ -348,9 +348,13 @@ const server = http.createServer(async (req, res) => {
   });
 });
 
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Segaso Chorizos Server activo en http://localhost:${PORT}`);
-  console.log(`🔒 Panel Back Office Harold: http://localhost:${PORT}/chorizos-segaso/admin`);
-});
+if (require.main === module) {
+  server.listen(PORT, '0.0.0.0', () => {
+    const address = server.address();
+    const activePort = typeof address === 'object' && address ? address.port : PORT;
+    console.log(`🚀 Segaso Chorizos Server activo en http://localhost:${activePort}`);
+    console.log(`🔒 Panel Back Office Harold: http://localhost:${activePort}/chorizos-segaso/admin`);
+  });
+}
 
 module.exports = server;

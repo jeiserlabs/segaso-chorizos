@@ -125,10 +125,10 @@
     .brand-logo-img {
       height: 54px; width: auto; object-fit: contain; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.6));
     }
-    .brand-text h1 {
-      font-size: 20px; font-weight: 800; letter-spacing: -0.5px; color: var(--cream); line-height: 1.1;
+    .brand-text .brand-name {
+      display: block; font-size: 20px; font-weight: 800; letter-spacing: -0.5px; color: var(--cream); line-height: 1.1;
     }
-    .brand-text span {
+    .brand-text .brand-tagline {
       font-size: 11px; font-weight: 500; color: var(--gold); letter-spacing: 0.8px; text-transform: uppercase;
     }
     .nav-links { display: flex; align-items: center; gap: 22px; list-style: none; }
@@ -406,7 +406,7 @@
     }
     .tiktok-card-body { padding: 16px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
     .tiktok-video-title { font-size: 13.5px; font-weight: 700; color: #fff; line-height: 1.4; margin-bottom: 8px; }
-    .tiktok-video-link { font-size: 11.5px; font-weight: 700; color: #FF6685; display: flex; align-items: center; gap: 4px; }
+    .tiktok-video-link { font-size: 11.5px; font-weight: 700; color: #FF6685; display: flex; align-items: center; gap: 4px; min-height: 44px; }
 
     .tiktok-photos {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 32px;
@@ -686,23 +686,58 @@
       .tiktok-stats-strip { gap: 16px; }
       .filter-tabs { gap: 6px; }
       .filter-btn { font-size: 12px; padding: 7px 12px; }
+      .nav-inner { gap: 8px; }
+      .brand-logo-img { height: 44px; }
+      .brand-text .brand-name { font-size: 18px; }
+      .brand-text .brand-tagline { font-size: 9px; letter-spacing: 0.4px; }
+      .cart-label { display: none; }
+    }
+
+    /* Accesibilidad: foco visible, saltar contenido y objetivos táctiles */
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
+    .skip-link {
+      position: absolute; top: -60px; left: 12px; z-index: 3000;
+      background: var(--gold); color: #000; padding: 10px 16px;
+      border-radius: 0 0 8px 8px; font-weight: 800; text-decoration: none;
+      transition: top 0.2s;
+    }
+    .skip-link:focus { top: 0; }
+    :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+    button, .btn-primary, .btn-outline, .btn-gold, .add-to-cart-btn, .bo-btn,
+    .filter-btn, .drawer-close, .hamburger-btn, .cart-btn { min-height: 44px; }
+    .qty-btn, .drawer-close, .hamburger-btn { min-width: 44px; }
+    .qty-btn { width: 44px; height: 44px; }
+    .nav-links a, .mobile-nav a, .footer-links a, .footer-info a {
+      min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center;
+    }
+    .cart-item { flex-wrap: wrap; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important; animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important; scroll-behavior: auto !important;
+      }
     }
   </style>
 </head>
 <body>
 
+  <a class="skip-link" href="#clientView">Saltar al contenido principal</a>
+
   <!-- Header Principal Público -->
   <header>
     <div class="container nav-inner">
-      <div class="brand-group" onclick="goHome()">
+      <div class="brand-group" role="button" tabindex="0" aria-label="Ir al inicio" onclick="goHome()">
         <img src="logo_segaso.svg" alt="Logo Segaso Chorizos" class="brand-logo-img" onerror="this.style.display='none'">
         <div class="brand-text">
-          <h1>SEGASO</h1>
-          <span>Chorizos de Tradición</span>
+          <span class="brand-name">SEGASO</span>
+          <span class="brand-tagline">Chorizos de Tradición</span>
         </div>
       </div>
 
-      <ul class="nav-links" id="clientNavLinks">
+      <ul class="nav-links" id="clientNavLinks" aria-label="Navegación principal">
         <li><a href="#catalogo">Catálogo</a></li>
         <li><a href="#asados">Asados al Barril</a></li>
         <li><a href="#tiktok">TikTok & Recetas</a></li>
@@ -713,16 +748,16 @@
       </ul>
 
       <div class="nav-actions">
-        <button class="cart-btn" id="clientCartBtn" onclick="openCart()">
-          🛒 Pedido <span class="cart-count" id="cartCount">0</span>
+        <button class="cart-btn" id="clientCartBtn" onclick="openCart()" aria-label="Abrir carrito de pedido" aria-haspopup="dialog" aria-controls="cartDrawer">
+          🛒 <span class="cart-label">Pedido</span> <span class="cart-count" id="cartCount" aria-live="polite">0</span>
         </button>
-        <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMobileNav()" aria-label="Menú">☰</button>
+        <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMobileNav()" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileNav">☰</button>
       </div>
     </div>
   </header>
 
   <!-- Menú Mobile -->
-  <nav class="mobile-nav" id="mobileNav">
+  <nav class="mobile-nav" id="mobileNav" aria-label="Navegación móvil">
     <a href="#catalogo" onclick="closeMobileNav()">🥩 Catálogo</a>
     <a href="#asados" onclick="closeMobileNav()">🔥 Asados al Barril</a>
     <a href="#tiktok" onclick="closeMobileNav()">🎬 TikTok & Recetas</a>
@@ -859,7 +894,7 @@
 
           <!-- BENTO GALLERY VISUAL DE ASADOS AL BARRIL -->
           <div class="barril-bento-gallery">
-            <div class="barril-bento-main" onclick="openLightbox('media/social/tiktok/keyframes/7128213952567315718_01.jpg', 'Asador al Barril en Acero Inoxidable', 'Ahumado lento con carbón seleccionado y leña aromática para eventos en todo el Valle de Aburrá.')" title="Clic para ampliar fotografía">
+            <div class="barril-bento-main" role="button" tabindex="0" aria-label="Ampliar foto del asador al barril" onclick="openLightbox('media/social/tiktok/keyframes/7128213952567315718_01.jpg', 'Asador al Barril en Acero Inoxidable', 'Ahumado lento con carbón seleccionado y leña aromática para eventos en todo el Valle de Aburrá.')" title="Clic para ampliar fotografía">
               <img src="media/social/tiktok/keyframes/7128213952567315718_01.jpg" alt="Ahumador al barril en acción con costillas y chorizos" loading="lazy" onerror="this.style.display='none'">
               <div class="bento-overlay">
                 <span class="badge badge-gold" style="width: fit-content;">🔥 Ahumador en Acción</span>
@@ -868,14 +903,14 @@
               </div>
             </div>
             <div class="barril-bento-sub">
-              <div class="barril-bento-subcard" onclick="openLightbox('media/social/tiktok/keyframes/7470531437788155141_01.jpg', 'Maestro Parrillero en Finca', 'Picado y servicio gourmet en vivo de chicharrón crocante y chorizos artesanales.')" title="Clic para ampliar fotografía">
+              <div class="barril-bento-subcard" role="button" tabindex="0" aria-label="Ampliar foto del maestro parrillero" onclick="openLightbox('media/social/tiktok/keyframes/7470531437788155141_01.jpg', 'Maestro Parrillero en Finca', 'Picado y servicio gourmet en vivo de chicharrón crocante y chorizos artesanales.')" title="Clic para ampliar fotografía">
                 <img src="media/social/tiktok/keyframes/7470531437788155141_01.jpg" alt="Maestro parrillero rebanando chicharrón crocante" loading="lazy" onerror="this.style.display='none'">
                 <div class="bento-overlay">
                   <span class="badge badge-primary" style="width: fit-content;">👨‍🍳 En Finca</span>
                   <h4>Maestro Parrillero</h4>
                 </div>
               </div>
-              <div class="barril-bento-subcard" onclick="openLightbox('media/social/tiktok/keyframes/7137390171976109317_02.jpg', 'Banquete & Degustación Parrillera', 'Arepitas de maíz blanco con queso, papas criollas doradas y carnes al barril.')" title="Clic para ampliar fotografía">
+              <div class="barril-bento-subcard" role="button" tabindex="0" aria-label="Ampliar foto del banquete parrillero" onclick="openLightbox('media/social/tiktok/keyframes/7137390171976109317_02.jpg', 'Banquete & Degustación Parrillera', 'Arepitas de maíz blanco con queso, papas criollas doradas y carnes al barril.')" title="Clic para ampliar fotografía">
                 <img src="media/social/tiktok/keyframes/7137390171976109317_02.jpg" alt="Banquete de asado al barril servido" loading="lazy" onerror="this.style.display='none'">
                 <div class="bento-overlay">
                   <span class="badge badge-primary" style="width: fit-content;">🍽️ Mesa Servida</span>
@@ -888,7 +923,7 @@
 
         <div class="barril-cards-grid">
           <div class="barril-plan-card">
-            <div class="barril-plan-img-wrap" onclick="openLightbox('media/social/tiktok/keyframes/7128213952567315718_01.jpg', 'Plan Familiar (5 a 10 Personas)', 'Degustación de 4 variedades de chorizos artesanales, arepas con queso y chimichurri.')" style="cursor: pointer;">
+            <div class="barril-plan-img-wrap" role="button" tabindex="0" aria-label="Ampliar foto del Plan Familiar" onclick="openLightbox('media/social/tiktok/keyframes/7128213952567315718_01.jpg', 'Plan Familiar (5 a 10 Personas)', 'Degustación de 4 variedades de chorizos artesanales, arepas con queso y chimichurri.')" style="cursor: pointer;">
               <img src="media/social/tiktok/keyframes/7128213952567315718_01.jpg" alt="Plan Familiar" class="barril-plan-img" loading="lazy" onerror="this.style.display='none'">
               <div style="position: absolute; top: 10px; left: 10px;">
                 <span class="badge badge-primary">Plan Pequeño</span>
@@ -903,7 +938,7 @@
           </div>
 
           <div class="barril-plan-card" style="border-color: var(--primary);">
-            <div class="barril-plan-img-wrap" onclick="openLightbox('media/social/tiktok/keyframes/7470531437788155141_01.jpg', 'Parrillada Amigos (10 a 25 Personas)', 'Chorizos mixtos al barril + bondiola o costilla ahumada, morcilla y acompañamientos.')" style="cursor: pointer;">
+            <div class="barril-plan-img-wrap" role="button" tabindex="0" aria-label="Ampliar foto de la Parrillada Amigos" onclick="openLightbox('media/social/tiktok/keyframes/7470531437788155141_01.jpg', 'Parrillada Amigos (10 a 25 Personas)', 'Chorizos mixtos al barril + bondiola o costilla ahumada, morcilla y acompañamientos.')" style="cursor: pointer;">
               <img src="media/social/tiktok/keyframes/7470531437788155141_01.jpg" alt="Parrillada Amigos" class="barril-plan-img" loading="lazy" onerror="this.style.display='none'">
               <div style="position: absolute; top: 10px; left: 10px;">
                 <span class="badge badge-gold">⭐ El Más Popular</span>
@@ -918,7 +953,7 @@
           </div>
 
           <div class="barril-plan-card">
-            <div class="barril-plan-img-wrap" onclick="openLightbox('media/social/tiktok/keyframes/7137390171976109317_02.jpg', 'Eventos Grandes & Fincas (25+ Personas)', 'Múltiples barriles ahumadores, equipo parrillero completo y servicio continuo.')" style="cursor: pointer;">
+            <div class="barril-plan-img-wrap" role="button" tabindex="0" aria-label="Ampliar foto de Eventos Grandes" onclick="openLightbox('media/social/tiktok/keyframes/7137390171976109317_02.jpg', 'Eventos Grandes & Fincas (25+ Personas)', 'Múltiples barriles ahumadores, equipo parrillero completo y servicio continuo.')" style="cursor: pointer;">
               <img src="media/social/tiktok/keyframes/7137390171976109317_02.jpg" alt="Eventos Grandes" class="barril-plan-img" loading="lazy" onerror="this.style.display='none'">
               <div style="position: absolute; top: 10px; left: 10px;">
                 <span class="badge badge-primary">Eventos Grandes</span>
@@ -965,7 +1000,7 @@
 
         <div class="tiktok-grid">
           <!-- Video Card 1 -->
-          <div class="tiktok-card" onclick="playTikTokVideo('7690072472544283924', 'Cevichito de chicharrón en asados al barril')">
+          <div class="tiktok-card" role="button" tabindex="0" aria-label="Reproducir video: Cevichito de chicharrón en asados al barril" onclick="playTikTokVideo('7690072472544283924', 'Cevichito de chicharrón en asados al barril')">
             <div class="tiktok-cover" style="height: 280px;">
               <img class="tiktok-thumb" src="videos/thumb_1.jpg" loading="lazy" alt="Cevichito de chicharrón en asados al barril" onerror="this.style.display='none'">
               <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 60%);"></div>
@@ -982,7 +1017,7 @@
           </div>
 
           <!-- Video Card 2 -->
-          <div class="tiktok-card" onclick="playTikTokVideo('7678100505100356884', 'Información para restaurantes y negocios')">
+          <div class="tiktok-card" role="button" tabindex="0" aria-label="Reproducir video: Información para restaurantes y negocios" onclick="playTikTokVideo('7678100505100356884', 'Información para restaurantes y negocios')">
             <div class="tiktok-cover" style="height: 280px;">
               <img class="tiktok-thumb" src="videos/thumb_2.jpg" loading="lazy" alt="Información para restaurantes y negocios" onerror="this.style.display='none'">
               <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 60%);"></div>
@@ -999,7 +1034,7 @@
           </div>
 
           <!-- Video Card 3 -->
-          <div class="tiktok-card" onclick="playTikTokVideo('7674733063032540437', 'Receta de domingo con chorizos Segaso')">
+          <div class="tiktok-card" role="button" tabindex="0" aria-label="Reproducir video: Receta de domingo con chorizos Segaso" onclick="playTikTokVideo('7674733063032540437', 'Receta de domingo con chorizos Segaso')">
             <div class="tiktok-cover" style="height: 280px;">
               <img class="tiktok-thumb" src="videos/thumb_3.jpg" loading="lazy" alt="Receta de domingo con chorizos Segaso" onerror="this.style.display='none'">
               <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 60%);"></div>
@@ -1016,7 +1051,7 @@
           </div>
 
           <!-- Video Card 4 -->
-          <div class="tiktok-card" onclick="playTikTokVideo('7671306377410678036', 'Harold y Giseth: Historia de Segaso Chorizos')">
+          <div class="tiktok-card" role="button" tabindex="0" aria-label="Reproducir video: Harold y Giseth, historia de Segaso Chorizos" onclick="playTikTokVideo('7671306377410678036', 'Harold y Giseth: Historia de Segaso Chorizos')">
             <div class="tiktok-cover" style="height: 280px;">
               <img class="tiktok-thumb" src="videos/thumb_4.jpg" loading="lazy" alt="Harold y Giseth: Historia de Segaso Chorizos" onerror="this.style.display='none'">
               <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 60%);"></div>
@@ -1037,7 +1072,7 @@
           <h3 style="font-size: 20px; font-weight: 800; color: var(--cream);">Confianza y trazabilidad</h3>
           <p style="font-size: 13.5px; color: var(--cream-muted); max-width: 760px;">
             Contenido real de la cuenta oficial: ingredientes, elaboración y lo que hay detrás de cada paquete.
-            <a href="https://www.tiktok.com/@segaso.chorizos/photo/7701116193192561938" target="_blank" rel="noopener" style="color: var(--gold); font-weight: 700;">Ver el post en TikTok</a>
+            <a href="https://www.tiktok.com/@segaso.chorizos/photo/7701116193192561938" target="_blank" rel="noopener" style="color: var(--gold); font-weight: 700; display: inline-flex; align-items: center; min-height: 44px;">Ver el post en TikTok</a>
           </p>
         </div>
 
@@ -1098,10 +1133,12 @@
               Déjanos tu contacto para ser el primero en recibir el temario, fechas y precio especial de lanzamiento.
             </p>
             <div class="form-group">
-              <input type="text" id="courseName" class="form-input" placeholder="Tu nombre completo">
+              <label class="sr-only" for="courseName">Nombre completo</label>
+              <input type="text" id="courseName" class="form-input" placeholder="Tu nombre completo" autocomplete="name" aria-required="true">
             </div>
             <div class="form-group">
-              <input type="tel" id="coursePhone" class="form-input" placeholder="Tu celular (WhatsApp)">
+              <label class="sr-only" for="coursePhone">Celular de contacto (WhatsApp)</label>
+              <input type="tel" id="coursePhone" class="form-input" placeholder="Tu celular (WhatsApp)" autocomplete="tel" inputmode="tel" aria-required="true">
             </div>
             <button class="btn-gold" style="width: 100%; justify-content: center;" onclick="joinCourseWaitlist()">
               📩 Inscribirme en Lista de Espera
@@ -1122,7 +1159,7 @@
 
         <div class="faq-list">
           <div class="faq-item open">
-            <div class="faq-question" onclick="toggleFaq(this)">
+            <div class="faq-question" role="button" tabindex="0" aria-expanded="true" onclick="toggleFaq(this)">
               ¿Los chorizos Segaso contienen harina o gluten? <span>▼</span>
             </div>
             <div class="faq-answer">
@@ -1130,7 +1167,7 @@
             </div>
           </div>
           <div class="faq-item">
-            <div class="faq-question" onclick="toggleFaq(this)">
+            <div class="faq-question" role="button" tabindex="0" aria-expanded="false" onclick="toggleFaq(this)">
               ¿Tienen opciones veganas o vegetarianas? <span>▼</span>
             </div>
             <div class="faq-answer">
@@ -1138,7 +1175,7 @@
             </div>
           </div>
           <div class="faq-item">
-            <div class="faq-question" onclick="toggleFaq(this)">
+            <div class="faq-question" role="button" tabindex="0" aria-expanded="false" onclick="toggleFaq(this)">
               ¿Cómo debo conservarlos y cuánto tiempo duran? <span>▼</span>
             </div>
             <div class="faq-answer">
@@ -1146,7 +1183,7 @@
             </div>
           </div>
           <div class="faq-item">
-            <div class="faq-question" onclick="toggleFaq(this)">
+            <div class="faq-question" role="button" tabindex="0" aria-expanded="false" onclick="toggleFaq(this)">
               ¿Cómo funciona el servicio de Asado al Barril a domicilio? <span>▼</span>
             </div>
             <div class="faq-answer">
@@ -1169,10 +1206,10 @@
           <p>📄 NIT: 1037619618-5 · Cámara de Comercio Aburrá Sur</p>
           <p>📞 Contacto Gerencia / Harold: <a href="https://wa.me/573002367180" target="_blank" rel="noopener" style="color: var(--cream); text-decoration: underline;">300 236 7180</a> · Envigado</p>
           <div style="margin-top: 14px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-            <a href="https://www.instagram.com/segaso.chorizos/?hl=es-la" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 7px; background: linear-gradient(45deg, #F58529, #DD2A7B, #8134AF, #515BD4); color: #fff; padding: 7px 16px; border-radius: 20px; font-weight: 700; font-size: 12.5px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); transition: transform 0.2s;">
+            <a href="https://www.instagram.com/segaso.chorizos/?hl=es-la" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 7px; background: linear-gradient(45deg, #F58529, #DD2A7B, #8134AF, #515BD4); color: #fff; padding: 12px 16px; border-radius: 20px; font-weight: 700; font-size: 12.5px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); transition: transform 0.2s;">
               <span>📸</span> Instagram: @segaso.chorizos
             </a>
-            <a href="https://www.tiktok.com/@segaso.chorizos?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 7px; background: #FE2C55; color: #fff; padding: 7px 16px; border-radius: 20px; font-weight: 700; font-size: 12.5px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); transition: transform 0.2s;">
+            <a href="https://www.tiktok.com/@segaso.chorizos?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 7px; background: #FE2C55; color: #fff; padding: 12px 16px; border-radius: 20px; font-weight: 700; font-size: 12.5px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); transition: transform 0.2s;">
               <span>🎵</span> TikTok: @segaso.chorizos
             </a>
           </div>
@@ -1193,11 +1230,11 @@
   </main>
 
   <!-- MODAL DE REPRODUCTOR TIKTOK EMBEBIDO ($0 Tokens / Embebido Oficial) -->
-  <div class="modal-center" id="tiktokPlayerModal" onclick="if(event.target===this) closeTikTokModal()">
+  <div class="modal-center" id="tiktokPlayerModal" role="dialog" aria-modal="true" aria-labelledby="tiktokModalTitle" aria-hidden="true">
     <div class="pin-box" style="max-width: 420px; text-align: left; position: relative; padding: 24px;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
         <h4 id="tiktokModalTitle" style="color: var(--gold); font-size: 14px; font-weight: 700;">Video Oficial Segaso</h4>
-        <button onclick="closeTikTokModal()" style="background: transparent; border: none; color: var(--cream-muted); font-size: 22px; cursor: pointer;">✕</button>
+        <button onclick="closeTikTokModal()" aria-label="Cerrar video" style="background: transparent; border: none; color: var(--cream-muted); font-size: 22px; cursor: pointer; min-width: 44px; min-height: 44px;">✕</button>
       </div>
       <div id="tiktokEmbedContainer" style="min-height: 480px; display: flex; align-items: center; justify-content: center; background: #000; border-radius: 10px; overflow: hidden;">
         <div style="color: var(--cream-muted); font-size: 13px;">Cargando video de TikTok...</div>
@@ -1211,11 +1248,11 @@
   </div>
 
   <!-- MODAL DE VISUALIZACIÓN RÁPIDA / LIGHTBOX GOURMET -->
-  <div class="modal-center" id="imageLightboxModal" onclick="if(event.target===this) closeLightbox()">
+  <div class="modal-center" id="imageLightboxModal" role="dialog" aria-modal="true" aria-labelledby="lightboxTitle" aria-hidden="true">
     <div class="lightbox-box" style="background: rgba(20, 14, 16, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(229,169,60,0.3); border-radius: var(--radius-lg); max-width: 680px; width: 100%; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.9);">
       <div style="position: relative; height: 340px; background: #0E080A;">
         <img id="lightboxImg" src="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%221%22 height=%221%22/%3E" alt="" width="900" height="900" decoding="async" style="width: 100%; height: 100%; object-fit: cover;">
-        <button onclick="closeLightbox()" style="position: absolute; top: 14px; right: 14px; width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.background='var(--primary)'" onmouseout="this.style.background='rgba(0,0,0,0.7)'">✕</button>
+        <button onclick="closeLightbox()" aria-label="Cerrar detalle del producto" style="position: absolute; top: 14px; right: 14px; width: 44px; height: 44px; border-radius: 50%; background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.background='var(--primary)'" onmouseout="this.style.background='rgba(0,0,0,0.7)'">✕</button>
         <div id="lightboxBadgeWrap" style="position: absolute; bottom: 14px; left: 14px;"></div>
       </div>
       <div style="padding: 24px;">
@@ -1244,11 +1281,11 @@
   </div>
 
   <!-- DRAWER DE CARRITO & CHECKOUT -->
-  <div class="drawer-overlay" id="cartDrawer" onclick="if(event.target===this) closeCart()">
+  <div class="drawer-overlay" id="cartDrawer" role="dialog" aria-modal="true" aria-labelledby="cartDrawerTitle" aria-hidden="true">
     <div class="drawer-content">
       <div class="drawer-header">
-        <h3>🛒 Tu Pedido Segaso</h3>
-        <button class="drawer-close" onclick="closeCart()">✕</button>
+        <h3 id="cartDrawerTitle">🛒 Tu Pedido Segaso</h3>
+        <button class="drawer-close" onclick="closeCart()" aria-label="Cerrar carrito">✕</button>
       </div>
 
       <div class="drawer-body" id="cartDrawerBody"></div>
@@ -1266,7 +1303,7 @@
             <span class="badge badge-gold" style="font-size: 10px;">SEGASO10 (-10%)</span>
           </div>
           <div style="display: flex; gap: 6px;">
-            <input type="text" id="promoCodeInput" class="form-input" placeholder="SEGASO10" value="SEGASO10" style="padding: 6px 10px; font-size: 12px; text-transform: uppercase;">
+            <input type="text" id="promoCodeInput" class="form-input" placeholder="SEGASO10" value="SEGASO10" aria-label="Código de descuento" autocomplete="off" style="padding: 6px 10px; font-size: 12px; text-transform: uppercase;">
             <button type="button" class="btn-primary" style="padding: 6px 12px; font-size: 11px; white-space: nowrap;" onclick="applyPromoCode()">Aplicar</button>
           </div>
           <div id="promoFeedback" style="font-size: 11px; color: var(--success); margin-top: 4px; font-weight: 600;">✓ 10% de descuento automático de bienvenida activo</div>
@@ -1274,20 +1311,20 @@
 
         <div id="checkoutFormSection">
           <div class="form-group">
-            <label class="form-label">Nombre Completo</label>
-            <input type="text" id="custName" class="form-input" placeholder="Ej: Carlos Restrepo">
+            <label class="form-label" for="custName">Nombre Completo</label>
+            <input type="text" id="custName" class="form-input" placeholder="Ej: Carlos Restrepo" autocomplete="name" aria-required="true">
           </div>
           <div class="form-group">
-            <label class="form-label">Teléfono Celular (WhatsApp)</label>
-            <input type="tel" id="custPhone" class="form-input" placeholder="Ej: 301 456 7890">
+            <label class="form-label" for="custPhone">Teléfono Celular (WhatsApp)</label>
+            <input type="tel" id="custPhone" class="form-input" placeholder="Ej: 301 456 7890" autocomplete="tel" inputmode="tel" aria-required="true">
           </div>
           <div class="form-group">
-            <label class="form-label">Dirección y Barrio</label>
-            <input type="text" id="custAddress" class="form-input" placeholder="Ej: Cra 43A # 38 Sur - 20, La Magnolia">
+            <label class="form-label" for="custAddress">Dirección y Barrio</label>
+            <input type="text" id="custAddress" class="form-input" placeholder="Ej: Cra 43A # 38 Sur - 20, La Magnolia" autocomplete="street-address" aria-required="true">
           </div>
           <div class="form-group">
-            <label class="form-label">Municipio</label>
-            <select id="custCity" class="form-select">
+            <label class="form-label" for="custCity">Municipio</label>
+            <select id="custCity" class="form-select" autocomplete="address-level2">
               <option value="Envigado">Envigado (Domicilio Prioritario)</option>
               <option value="Sabaneta">Sabaneta</option>
               <option value="Itagüí">Itagüí</option>
@@ -1296,7 +1333,7 @@
             </select>
           </div>
           <div class="form-group">
-            <label class="form-label">Método de Pago</label>
+            <label class="form-label" for="custPayment">Método de Pago</label>
             <select id="custPayment" class="form-select">
               <option value="Transferencia Nequi/Bancolombia">Transferencia Nequi / Bancolombia</option>
               <option value="Contra Entrega (Efectivo)">Contra Entrega en Domicilio</option>
@@ -1312,17 +1349,17 @@
   </div>
 
   <!-- MODAL DE BOT ASESOR VIRTUAL -->
-  <div class="drawer-overlay" id="botModal" onclick="if(event.target===this) closeBotModal()">
+  <div class="drawer-overlay" id="botModal" role="dialog" aria-modal="true" aria-labelledby="botModalTitle" aria-hidden="true">
     <div class="drawer-content" style="max-width: 440px;">
       <div class="drawer-header" style="background: #140E10;">
         <div style="display: flex; align-items: center; gap: 10px;">
           <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 18px;">🤖</div>
           <div>
-            <h4 style="font-size: 14.5px; color: #fff;">Asesor Virtual Segaso</h4>
+            <h4 id="botModalTitle" style="font-size: 14.5px; color: #fff;">Asesor Virtual Segaso</h4>
             <span style="font-size: 11px; color: var(--success); font-weight: 600;">● En línea · Respuestas Rápidas</span>
           </div>
         </div>
-        <button class="drawer-close" onclick="closeBotModal()">✕</button>
+        <button class="drawer-close" onclick="closeBotModal()" aria-label="Cerrar asesor virtual">✕</button>
       </div>
 
       <div class="drawer-body" id="botChatMessages" style="background: #0E090B;">
@@ -1343,12 +1380,12 @@
     </div>
   </div>
 
-  <div class="bot-fab" onclick="openBotModal()" title="Preguntas y Asesor Virtual">
+  <div class="bot-fab" role="button" tabindex="0" aria-label="Abrir asesor virtual" onclick="openBotModal()" title="Preguntas y Asesor Virtual">
     💬
     <div class="bot-fab-badge">Ayuda</div>
   </div>
 
-  <div class="toast-container" id="toastContainer"></div>
+  <div class="toast-container" id="toastContainer" role="status" aria-live="polite" aria-atomic="true"></div>
 
   <script>
     const PRODUCTS = [
@@ -1384,6 +1421,7 @@
     let inventory = {};
     let orders = [];
     let waitlistLeads = [];
+    let lastFocusedElement = null;
 
     window.addEventListener('DOMContentLoaded', () => {
       initData();
@@ -1405,14 +1443,10 @@
     }
 
     function promptAdminPin() {
-      document.getElementById('adminPinModal').classList.add('open');
-      const input = document.getElementById('adminPinInput');
-      input.value = '';
-      setTimeout(() => input.focus(), 150);
+      window.location.href = '/chorizos-segaso/admin';
     }
 
     function closeAdminPinModal() {
-      document.getElementById('adminPinModal').classList.remove('open');
       if (window.location.hash.includes('admin')) {
         history.replaceState(null, null, ' ');
       }
@@ -1578,7 +1612,7 @@
         const card = document.createElement('div');
         card.className = 'product-card ' + (isOutOfStock ? 'out-of-stock' : '');
         card.innerHTML = `
-          <div class="prod-visual" onclick="openProductDetail('${p.id}')" title="Clic para ver fotografía en alta definición y detalles">
+          <div class="prod-visual" role="button" tabindex="0" aria-label="Ver detalle de ${p.name}" onclick="openProductDetail('${p.id}')" title="Clic para ver fotografía en alta definición y detalles">
             <img src="${PRODUCT_PHOTOS[p.id]}" class="prod-real-img" alt="${p.name} — presentación real Segaso" width="900" height="900" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
             <div class="prod-placeholder-icon" style="display: none;">${p.icon}</div>
             <div class="prod-badge-pos">
@@ -1650,6 +1684,23 @@
       if (typeof saveCart === 'function') saveCart();
     }
 
+    function setModalOpen(modal, isOpen) {
+      if (!modal) return;
+      const wasOpen = modal.classList.contains('open');
+      modal.classList.toggle('open', isOpen);
+      modal.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      if (isOpen && !wasOpen) {
+        lastFocusedElement = document.activeElement;
+        setTimeout(() => {
+          const focusable = modal.querySelector('button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])');
+          if (focusable) focusable.focus();
+        }, 60);
+      } else if (!isOpen && wasOpen) {
+        if (lastFocusedElement && document.contains(lastFocusedElement)) lastFocusedElement.focus();
+        lastFocusedElement = null;
+      }
+    }
+
     function openCart() {
       const drawer = document.getElementById('cartDrawer');
       const body = document.getElementById('cartDrawerBody');
@@ -1665,7 +1716,7 @@
           </div>
         `;
         document.getElementById('cartTotalAmount').textContent = '0.0k COP';
-        drawer.classList.add('open');
+        setModalOpen(drawer, true);
         return;
       }
 
@@ -1738,7 +1789,7 @@
       openCart();
     }
 
-    function closeCart() { document.getElementById('cartDrawer').classList.remove('open'); }
+    function closeCart() { setModalOpen(document.getElementById('cartDrawer'), false); }
     function removeCartItem(prodId) {
       delete cart[prodId];
       updateCartBadge();
@@ -1938,12 +1989,12 @@
         }, { once: true });
       }
 
-      modal.classList.add('open');
+      setModalOpen(modal, true);
     }
 
     function closeTikTokModal() {
       const modal = document.getElementById('tiktokPlayerModal');
-      modal.classList.remove('open');
+      setModalOpen(modal, false);
       const video = document.getElementById('activeTikTokPlayer');
       if (video) {
         video.pause();
@@ -1983,7 +2034,7 @@
         btnContainer.innerHTML = `<button class="btn-primary" onclick="updateCartItemQty('${p.id}', 1); closeLightbox(); showToast('¡${p.name} agregado al carrito!');">🛒 Agregar al Carrito</button>`;
       }
 
-      modal.classList.add('open');
+      setModalOpen(modal, true);
     }
 
     function openLightbox(imgSrc, titleText, descText) {
@@ -2005,12 +2056,12 @@
       badgeWrap.innerHTML = `<span class="badge badge-gold">🔥 Asados al Barril</span>`;
       btnContainer.innerHTML = `<a href="https://wa.me/573002367180?text=Hola%20Harold,%20estoy%20interesado%20en%20el%20servicio%20de%20asado%20al%20barril." target="_blank" class="btn-gold" style="text-decoration: none;">📲 Cotizar por WhatsApp</a>`;
 
-      modal.classList.add('open');
+      setModalOpen(modal, true);
     }
 
     function closeLightbox() {
       const modal = document.getElementById('imageLightboxModal');
-      if (modal) modal.classList.remove('open');
+      setModalOpen(modal, false);
       const img = document.getElementById('lightboxImg');
       if (img) {
         img.src = LIGHTBOX_PLACEHOLDER;
@@ -2019,16 +2070,50 @@
     }
 
     document.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('[role="button"][onclick]')) {
+        e.preventDefault();
+        e.target.click();
+        return;
+      }
       if (e.key === 'Escape') {
         closeLightbox();
         closeTikTokModal();
         closeCart();
+        closeBotModal();
+        closeMobileNav();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const modal = document.querySelector('.modal-center.open, .drawer-overlay.open');
+      if (!modal) return;
+      const focusables = Array.from(
+        modal.querySelectorAll('button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')
+      ).filter((el) => el.getClientRects().length > 0);
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && (document.activeElement === first || !modal.contains(document.activeElement))) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && (document.activeElement === last || !modal.contains(document.activeElement))) {
+        e.preventDefault();
+        first.focus();
       }
     });
 
+    document.querySelectorAll('.modal-center, .drawer-overlay').forEach((modal) => {
+      modal.addEventListener('click', (e) => {
+        if (e.target !== modal) return;
+        if (modal.id === 'cartDrawer') closeCart();
+        else if (modal.id === 'botModal') closeBotModal();
+        else if (modal.id === 'imageLightboxModal') closeLightbox();
+        else if (modal.id === 'tiktokPlayerModal') closeTikTokModal();
+      });
+    });
+
     // ASESOR VIRTUAL ($0 Tokens / Determinista)
-    function openBotModal() { document.getElementById('botModal').classList.add('open'); }
-    function closeBotModal() { document.getElementById('botModal').classList.remove('open'); }
+    function openBotModal() { setModalOpen(document.getElementById('botModal'), true); }
+    function closeBotModal() { setModalOpen(document.getElementById('botModal'), false); }
 
     function handleBotQuery(type) {
       const chat = document.getElementById('botChatMessages');
@@ -2066,7 +2151,10 @@
       }, 250);
     }
 
-    function toggleFaq(el) { el.parentElement.classList.toggle('open'); }
+    function toggleFaq(el) {
+      const isOpen = el.parentElement.classList.toggle('open');
+      el.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    }
 
     function showToast(msg) {
       const container = document.getElementById('toastContainer');
@@ -2089,7 +2177,8 @@
       const btn = document.getElementById('hamburgerBtn');
       const isOpen = nav.classList.toggle('open');
       btn.textContent = isOpen ? '✕' : '☰';
-      btn.setAttribute('aria-expanded', isOpen);
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      btn.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Abrir menú');
     }
 
     function closeMobileNav() {
@@ -2097,7 +2186,8 @@
       const btn = document.getElementById('hamburgerBtn');
       nav.classList.remove('open');
       btn.textContent = '☰';
-      btn.setAttribute('aria-expanded', false);
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-label', 'Abrir menú');
     }
 
     // Cerrar el menú mobile al hacer clic fuera

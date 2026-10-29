@@ -617,6 +617,7 @@
       .brand-text .brand-name { font-size: 18px; }
       .brand-text .brand-tagline { font-size: 9px; letter-spacing: 0.4px; }
       .cart-label { display: none; }
+      .hero-bot-cta { display: none; }
     }
 
     /* Accesibilidad: foco visible, saltar contenido y objetivos táctiles */

@@ -17,7 +17,8 @@
     "start": "node --env-file=.env server.js",
     "dev": "node --env-file=.env --watch server.js",
     "social:manifest": "node scripts/social_manifest.js",
-    "media:products": "node scripts/build_product_photos.js"
+    "media:products": "node scripts/build_product_photos.js",
+    "media:web": "node scripts/build_web_media.js"
   },
   "dependencies": {
     "better-sqlite3": "^13.0.2",

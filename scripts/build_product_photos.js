@@ -35,5 +35,16 @@ for (const [id, { source, crop }] of Object.entries(PHOTOS)) {
     '-an',
     outputPath
   ], { stdio: 'inherit' });
-  console.log(`✓ ${id}.webp`);
+  const thumbPath = path.join(OUTPUT_DIR, `${id}-480.webp`);
+  execFileSync('ffmpeg', [
+    '-y', '-v', 'error',
+    '-i', outputPath,
+    '-vf', 'scale=480:480:flags=lanczos',
+    '-c:v', 'libwebp',
+    '-quality', '80',
+    '-compression_level', '6',
+    '-an',
+    thumbPath
+  ], { stdio: 'inherit' });
+  console.log(`✓ ${id}.webp + ${id}-480.webp`);
 }

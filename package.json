@@ -16,7 +16,8 @@
     "test:e2e": "node --env-file=.env tests/e2e_segaso_playwright.js",
     "start": "node --env-file=.env server.js",
     "dev": "node --env-file=.env --watch server.js",
-    "social:manifest": "node scripts/social_manifest.js"
+    "social:manifest": "node scripts/social_manifest.js",
+    "media:products": "node scripts/build_product_photos.js"
   },
   "dependencies": {
     "better-sqlite3": "^13.0.2",

@@ -1150,7 +1150,7 @@
   <div class="modal-center" id="imageLightboxModal" onclick="if(event.target===this) closeLightbox()">
     <div class="lightbox-box" style="background: rgba(20, 14, 16, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(229,169,60,0.3); border-radius: var(--radius-lg); max-width: 680px; width: 100%; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.9);">
       <div style="position: relative; height: 340px; background: #0E080A;">
-        <img id="lightboxImg" alt="" decoding="async" style="width: 100%; height: 100%; object-fit: cover;">
+        <img id="lightboxImg" alt="" width="900" height="900" decoding="async" style="width: 100%; height: 100%; object-fit: cover;">
         <button onclick="closeLightbox()" style="position: absolute; top: 14px; right: 14px; width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.background='var(--primary)'" onmouseout="this.style.background='rgba(0,0,0,0.7)'">✕</button>
         <div id="lightboxBadgeWrap" style="position: absolute; bottom: 14px; left: 14px;"></div>
       </div>
@@ -1298,6 +1298,18 @@
       { id: 'morcilla', name: 'Morcilla Paisa Tradicional', price: 15.0, category: 'complemento', icon: '🥩', tag: 'Tradicional', desc: 'Arroz esponjoso, especias de huerta y sangre fresca seleccionada. Crujiente por fuera y suave por dentro.' },
       { id: 'chimichurri', name: 'Chimichurri Especial de la Casa', price: 14.5, category: 'complemento', icon: '🌿', tag: 'Acompañamiento', desc: 'Frasco artesanal con perejil fresco, ajo, aceite de oliva virgen y orégano. El maridaje perfecto.' }
     ];
+
+    const PRODUCT_PHOTOS = {
+      caserito: 'img/products/caserito.webp',
+      antioqueno: 'img/products/antioqueno.webp',
+      santarrosano: 'img/products/santarrosano.webp',
+      tocineta: 'img/products/tocineta.webp',
+      parrillero: 'img/products/parrillero.webp',
+      picante: 'img/products/picante.webp',
+      argentino: 'img/products/argentino.webp',
+      morcilla: 'img/products/morcilla.webp',
+      chimichurri: 'img/products/chimichurri.webp'
+    };
 
     let currentMode = 'client';
     let currentCategoryFilter = 'all';
@@ -1501,7 +1513,7 @@
         card.className = 'product-card ' + (isOutOfStock ? 'out-of-stock' : '');
         card.innerHTML = `
           <div class="prod-visual" onclick="openProductDetail('${p.id}')" title="Clic para ver fotografía en alta definición y detalles">
-            <img src="img/${p.id}.jpg" class="prod-real-img" alt="${p.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <img src="${PRODUCT_PHOTOS[p.id]}" class="prod-real-img" alt="${p.name} — presentación real Segaso" width="900" height="900" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
             <div class="prod-placeholder-icon" style="display: none;">${p.icon}</div>
             <div class="prod-badge-pos">
               <span class="badge ${p.id === 'caserito' ? 'badge-gold' : 'badge-primary'}">${p.tag}</span>
@@ -1889,8 +1901,8 @@
       const badgeWrap = document.getElementById('lightboxBadgeWrap');
       const btnContainer = document.getElementById('lightboxBtnContainer');
 
-      img.src = `img/${p.id}.jpg`;
-      img.alt = p.name;
+      img.src = PRODUCT_PHOTOS[p.id];
+      img.alt = `${p.name} — presentación real Segaso`;
       title.textContent = p.name;
       subtitle.textContent = p.id === 'chimichurri' ? 'Frasco de vidrio hermético x 250g' : 'Paquete sellado al vacío x 5 unidades (450 g)';
       price.innerHTML = `${p.price.toFixed(1)}k <small style="font-size: 12px; color: var(--text-muted);">COP</small>`;

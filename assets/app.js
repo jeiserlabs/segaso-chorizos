@@ -27,7 +27,7 @@ const PRODUCTS = [
     let currentMode = 'client';
     let currentCategoryFilter = 'all';
     let cart = {};
-    let appliedDiscountPct = 10; // Táctica 3 / Sprint 3 Edison Galván: Mensaje automático con 10% de descuento
+    let appliedDiscountPct = 10; // Descuento de bienvenida automático del 10%
     let inventory = {};
     let orders = [];
     let waitlistLeads = [];
@@ -239,7 +239,7 @@ const PRODUCTS = [
             <div style="font-size: 11.5px; margin-bottom: 6px;">
               ${isOutOfStock 
                 ? '<span style="color: var(--danger); font-weight: 700;">🔴 Agotado momentáneamente</span>' 
-                : '<span style="color: var(--success); font-weight: 600;">🟢 Disponible en fábrica (' + stock + ' paq)</span>'}
+                : '<span style="color: var(--success); font-weight: 600;">🟢 Disponible · ' + stock + ' paq</span>'}
             </div>
           </div>
           <div class="prod-footer">
@@ -345,12 +345,14 @@ const PRODUCTS = [
           </div>
           <div style="display: flex; align-items: center; gap: 8px;">
             <div class="qty-selector" style="gap: 4px;">
-              <button class="qty-btn" onclick="updateCartItemQty('${id}', -1)" title="Restar 1">-</button>
+              <button class="qty-btn" onclick="updateCartItemQty('${id}', -1)" title="Restar 1" aria-label="Restar una unidad de ${prod.name}">-</button>
               <span class="qty-val" style="min-width: 20px; text-align: center; font-weight: 700;">${qty}</span>
-              <button class="qty-btn" onclick="updateCartItemQty('${id}', 1)" title="Sumar 1">+</button>
+              <button class="qty-btn" onclick="updateCartItemQty('${id}', 1)" title="Sumar 1" aria-label="Sumar una unidad de ${prod.name}">+</button>
             </div>
             <span style="font-weight: 800; color: var(--cream); min-width: 52px; text-align: right;">${subtotal.toFixed(1)}k</span>
-            <button class="qty-btn" onclick="removeCartItem('${id}')" style="color: var(--danger); margin-left: 2px;" title="Eliminar del pedido">🗑️</button>
+            <button class="qty-btn" onclick="removeCartItem('${id}')" style="color: var(--danger); margin-left: 2px;" title="Eliminar del pedido" aria-label="Eliminar ${prod.name} del pedido">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v5M14 11v5"/></svg>
+            </button>
           </div>
         `;
         body.appendChild(row);
@@ -744,7 +746,7 @@ const PRODUCTS = [
         botA = '📋 <strong>Catálogo x 5 unidades (450 g):</strong><br>• Caserito Paisa: 19.9k COP<br>• Morcilla Tradicional: 15.0k COP<br>• Antioqueño: 23.6k COP<br>• Santarrosano / Tocineta / Parrillero: 23.8k COP<br>• Picante: 24.2k COP<br>• Argentino: 24.6k COP<br>• Chimichurri: 14.5k COP';
       } else if (type === 'asesor') {
         userQ = 'Quiero hablar directo con Harold';
-        botA = '📞 <strong>Contacto Directo Gerencia:</strong> Escríbele al WhatsApp <a href="https://wa.me/573002367180" target="_blank" style="color: #6EE7B7; font-weight: 700;">300 236 7180</a>. ¡Te atenderá de inmediato!';
+        botA = '📞 <strong>Contacto Directo Gerencia:</strong> Escríbele al WhatsApp <a href="https://wa.me/573002367180" target="_blank" style="color: var(--success-soft); font-weight: 700;">300 236 7180</a>. ¡Te atenderá de inmediato!';
       }
 
       const userBubble = document.createElement('div');
@@ -785,20 +787,29 @@ const PRODUCTS = [
     function toggleMobileNav() {
       const nav = document.getElementById('mobileNav');
       const btn = document.getElementById('hamburgerBtn');
+      const backdrop = document.getElementById('mobileNavBackdrop');
       const isOpen = nav.classList.toggle('open');
       btn.textContent = isOpen ? '✕' : '☰';
       btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
       btn.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Abrir menú');
+      if (backdrop) backdrop.classList.toggle('open', isOpen);
+      document.body.classList.toggle('menu-open', isOpen);
     }
 
     function closeMobileNav() {
       const nav = document.getElementById('mobileNav');
       const btn = document.getElementById('hamburgerBtn');
+      const backdrop = document.getElementById('mobileNavBackdrop');
       nav.classList.remove('open');
       btn.textContent = '☰';
       btn.setAttribute('aria-expanded', 'false');
       btn.setAttribute('aria-label', 'Abrir menú');
+      if (backdrop) backdrop.classList.remove('open');
+      document.body.classList.remove('menu-open');
     }
+
+    const mobileNavBackdrop = document.getElementById('mobileNavBackdrop');
+    if (mobileNavBackdrop) mobileNavBackdrop.addEventListener('click', closeMobileNav);
 
     // Cerrar el menú mobile al hacer clic fuera
     document.addEventListener('click', (e) => {

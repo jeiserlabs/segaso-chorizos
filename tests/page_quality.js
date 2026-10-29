@@ -35,6 +35,13 @@ function collectPageQuality(page, extra = {}) {
       })
       .map((el) => ({ text: text(el).slice(0, 40), w: Math.round(el.getBoundingClientRect().width), h: Math.round(el.getBoundingClientRect().height) }));
 
+    const galleryImages = q('.tiktok-photo-card img').map((img) => {
+      const rect = img.getBoundingClientRect();
+      return { w: Math.round(rect.width), h: Math.round(rect.height), ratio: rect.width && rect.height ? Number((rect.width / rect.height).toFixed(2)) : 0 };
+    });
+    const badGalleryAspect = galleryImages.filter((item) => item.w > 0 && (item.ratio < 0.7 || item.ratio > 0.9));
+    const nestedInteractive = q('[role="button"] a[href], [role="button"] button, [role="button"] input, [role="button"] select, [role="button"] textarea').length;
+
     const resources = performance.getEntriesByType('resource');
     const totalTransfer = resources.reduce((sum, item) => sum + (item.transferSize || 0), 0);
     const ids = q('[id]').map((el) => el.id);
@@ -70,6 +77,9 @@ function collectPageQuality(page, extra = {}) {
       fieldsNoLabel,
       clickableNoRole,
       smallTapTargets,
+      galleryImages,
+      badGalleryAspect,
+      nestedInteractive,
       duplicateIds,
       dialogs: q('[role="dialog"][aria-modal="true"]').length,
       landmarks: {
@@ -107,6 +117,9 @@ function assertPageQuality(metrics, options = {}) {
   if (metrics.fieldsNoLabel) failures.push(`Campos sin etiqueta: ${metrics.fieldsNoLabel}`);
   if (metrics.clickableNoRole.length) failures.push(`Clickeables sin role/teclado: ${JSON.stringify(metrics.clickableNoRole)}`);
   if (metrics.smallTapTargets.length) failures.push(`Objetivos táctiles <44px: ${JSON.stringify(metrics.smallTapTargets)}`);
+  if (metrics.galleryImages.length !== 5) failures.push(`Galería TikTok incompleta: ${metrics.galleryImages.length}/5`);
+  if (metrics.badGalleryAspect.length) failures.push(`Galería con aspect ratio roto: ${JSON.stringify(metrics.badGalleryAspect)}`);
+  if (metrics.nestedInteractive > 0) failures.push(`Controles interactivos anidados: ${metrics.nestedInteractive}`);
   if (metrics.duplicateIds.length) failures.push(`IDs duplicados: ${metrics.duplicateIds.join(', ')}`);
   if (metrics.dialogs < 4) failures.push(`Diálogos accesibles insuficientes: ${metrics.dialogs}`);
   if (metrics.landmarks.main < 1 || metrics.landmarks.header < 1 || metrics.landmarks.footer < 1) failures.push('Faltan landmarks');

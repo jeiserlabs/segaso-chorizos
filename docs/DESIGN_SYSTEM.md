@@ -66,7 +66,7 @@
 | Blanco sobre `--primary` | 7.55:1 | AAA |
 | Negro sobre `--gold` | 10.07:1 | AAA |
 | `--text-muted` sobre `--bg-card` | 6.10:1 | AA/AAA |
-| Crema sobre superficie social oscura | 12.39:1 | AAA |
+| Crema sobre superficie social oscura | 15.58:1 | AAA |
 
 **Regla social:** los botones de TikTok e Instagram usan superficie oscura y texto crema. El color de marca vive en el icono y el borde. Nunca texto blanco sobre `#FE2C55` (3.68:1) ni sobre el naranja del gradiente de Instagram (2.54:1).
 

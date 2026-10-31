@@ -21,12 +21,7 @@
 | Documento | Contenido |
 |---|---|
 | [../PROYECTO_SEGASO_CHORIZOS_ENTREGABLE.md](../PROYECTO_SEGASO_CHORIZOS_ENTREGABLE.md) | Entregable CESDE: empresa, DOFA, PESTEL, EFI/EFE, arquitectura e impacto. |
-| [SUSTENTACION_2026/01_GUIA_MAESTRA.md](SUSTENTACION_2026/01_GUIA_MAESTRA.md) | Flujo de sustentación, transiciones y banco de preguntas. |
-| [SUSTENTACION_2026/02_GUIA_ANGELINA.md](SUSTENTACION_2026/02_GUIA_ANGELINA.md) | Guía de Angelina. |
-| [SUSTENTACION_2026/03_GUIA_BRAYAN.md](SUSTENTACION_2026/03_GUIA_BRAYAN.md) | Guía de Brayan. |
-| [SUSTENTACION_2026/04_GUIA_EDISON.md](SUSTENTACION_2026/04_GUIA_EDISON.md) | Guía de Edison. |
-| [SUSTENTACION_2026/05_GUIA_MARIA.md](SUSTENTACION_2026/05_GUIA_MARIA.md) | Guía de María. |
-| [SUSTENTACION_2026/06_GUIA_ISABEL.md](SUSTENTACION_2026/06_GUIA_ISABEL.md) | Guía de Isabel. |
+| [guias_actualizadas/](guias_actualizadas/) | **Guías vigentes del equipo** (15 bloques, 450 g, 23/23). Las guías `SUSTENTACION_2026/01–06` son la versión base anterior. |
 | [SUSTENTACION_2026/07_DEMO_MVP.md](SUSTENTACION_2026/07_DEMO_MVP.md) | Demo paso a paso y plan B. |
 | [SUSTENTACION_2026/08_CRONOGRAMA_Y_ROLES.md](SUSTENTACION_2026/08_CRONOGRAMA_Y_ROLES.md) | Roles, semanas y mapa de bloques del guion. |
 | [SUSTENTACION_2026/09_ANEXO_MATRICES_EFI_EFE.md](SUSTENTACION_2026/09_ANEXO_MATRICES_EFI_EFE.md) | Tablas y cálculos EFI/EFE. |

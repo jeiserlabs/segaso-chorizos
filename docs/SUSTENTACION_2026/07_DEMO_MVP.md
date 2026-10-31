@@ -10,7 +10,7 @@
 Abre una terminal en:
 
 ```text
-C:\PROYECTOS\Mis_Proyectos\Asistente_Personal\projects\segaso-app
+C:\PROYECTOS\Mis_Proyectos\Segaso
 ```
 
 Verifica Node y dependencias:

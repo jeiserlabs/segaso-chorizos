@@ -33,8 +33,9 @@
 
 ## 3. Carga de contexto
 
-1. `README.md`
-2. `docs/README.md`
+1. `SSOT_Y_TIMELINE.md` — rutas, repos, Drive y timeline única.
+2. `README.md`
+3. `docs/README.md`
 3. `docs/ARCHITECTURE.md`
 4. `docs/API.md`
 5. `docs/social/REDES_SEGASO.md`

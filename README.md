@@ -16,8 +16,8 @@ El proyecto combina una vitrina B2C, un carrito que genera un pedido estructurad
 | Back office con JWT y scrypt | Operativo |
 | FSM de pedidos y validación en el endpoint | Operativo |
 | Inventario y KPIs | Operativo |
-| Pruebas de dominio | 13/13 |
-| E2E Playwright | 4 fases, 0 errores críticos de consola |
+| Pruebas de dominio | 23/23 |
+| E2E Playwright | 5 fases, 0 errores críticos de consola |
 | Producto | 450 g netos / 5 unidades, 60 días congelado |
 
 ---
@@ -26,8 +26,9 @@ El proyecto combina una vitrina B2C, un carrito que genera un pedido estructurad
 
 - **Vitrina:** 9 referencias con precio oficial 2026, ficha de producto, filtros, lightbox y diseño responsive.
 - **Carrito:** total en vivo, cupón SEGASO10 (10% primera compra) y persistencia en el navegador.
-- **Pedido:** formulario con nombre, teléfono de 10 dígitos, dirección, ciudad y pago; mensaje estructurado a WhatsApp y registro en SQLite.
-- **Back office:** login con correo y contraseña, JWT HS256, KPIs, pedidos, inventario y leads.
+- **Pedido:** formulario con nombre, teléfono de 10 dígitos, dirección, ciudad y pago; mensaje estructurado a WhatsApp y registro en SQLite. El servidor calcula precio, descuento del 10% y total contra el inventario real: el cliente no puede imponerlos.
+- **Back office:** login con correo y contraseña, JWT HS256, KPIs, pedidos, inventario y leads. Los datos se escapan antes de pintarse y todas las respuestas llevan CSP.
+- **Defensas del API:** validación Zod de pedidos y leads, control de stock, rate limit de 10 pedidos y 5 leads por minuto por IP, y errores 400/429 con mensaje claro.
 - **FSM:** `pendiente → confirmado → preparando → camino → entregado` (o `cancelado`); el endpoint rechaza saltos inválidos con HTTP 400.
 - **Contenido real:** galería con las 5 fotos del TikTok oficial y videos locales de la marca.
 - **Asesor virtual determinista:** respuestas FAQ sin costo de tokens.

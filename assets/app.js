@@ -456,8 +456,9 @@ const PRODUCTS = [
       const now = new Date();
       let orderId = 'SEG-' + (now.getFullYear() % 100) + Math.floor(1000 + Math.random() * 9000);
 
+      let response = null;
       try {
-        const res = await fetch('/api/orders', {
+        response = await fetch('/api/orders', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -466,16 +467,33 @@ const PRODUCTS = [
             address: address,
             neighborhood: city,
             payment_method: payment,
-            items: orderItems,
-            total_cop: Math.round(finalTotal * 1000)
+            items: orderItems
           })
         });
-        if (res.ok) {
-          const data = await res.json();
-          if (data.success && data.code) orderId = data.code;
-        }
       } catch (_) {
         console.log('Modo offline: orden guardada en almacenamiento local');
+      }
+
+      // Si el servidor rechaza el pedido, se devuelve el stock local y no se
+      // muestra una confirmación falsa: la base es la fuente de verdad.
+      if (response && !response.ok) {
+        let mensaje = 'No pudimos registrar el pedido. Intenta de nuevo.';
+        try {
+          const data = await response.json();
+          if (data.error) mensaje = data.error;
+        } catch (_) {}
+        for (const it of orderItems) inventory[it.id] = (inventory[it.id] || 0) + it.qty;
+        saveInventory();
+        renderProducts(currentCategoryFilter);
+        alert(mensaje);
+        return;
+      }
+
+      if (response) {
+        try {
+          const data = await response.json();
+          if (data.success && data.code) orderId = data.code;
+        } catch (_) {}
       }
 
       const newOrder = {

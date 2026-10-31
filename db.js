@@ -38,7 +38,9 @@ db.exec(`
     customer_phone TEXT NOT NULL,
     address TEXT NOT NULL,
     neighborhood TEXT NOT NULL,
-    items_json TEXT NOT NULL,         -- formato: [{ id, name, qty, price_cop }]
+    items_json TEXT NOT NULL,         -- formato: [{ id, name, qty, price_cop, subtotal_cop }]
+    subtotal_cop INTEGER NOT NULL DEFAULT 0,
+    discount_cop INTEGER NOT NULL DEFAULT 0,
     total_cop INTEGER NOT NULL,
     payment_method TEXT DEFAULT 'no especificado',
     status TEXT NOT NULL DEFAULT 'pendiente', -- pendiente | preparando | camino | entregado | cancelado
@@ -62,6 +64,8 @@ db.exec(`
 const migrations = [
   "ALTER TABLE orders ADD COLUMN payment_method TEXT DEFAULT 'no especificado'",
   "ALTER TABLE orders ADD COLUMN updated_at TEXT",
+  "ALTER TABLE orders ADD COLUMN subtotal_cop INTEGER NOT NULL DEFAULT 0",
+  "ALTER TABLE orders ADD COLUMN discount_cop INTEGER NOT NULL DEFAULT 0",
 ];
 for (const sql of migrations) {
   try { db.exec(sql); } catch (_) { /* columna ya existe */ }
@@ -178,12 +182,12 @@ module.exports = {
     db.prepare(`
       INSERT INTO orders
         (code, customer_name, customer_phone, address, neighborhood,
-         items_json, total_cop, payment_method, status)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pendiente')
+         items_json, subtotal_cop, discount_cop, total_cop, payment_method, status)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pendiente')
     `).run(
       order.code, order.customer_name, order.customer_phone,
       order.address, order.neighborhood,
-      order.items_json, order.total_cop,
+      order.items_json, order.subtotal_cop, order.discount_cop, order.total_cop,
       order.payment_method || 'no especificado'
     ),
 

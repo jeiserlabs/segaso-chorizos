@@ -21,7 +21,7 @@
 4. **Catálogo oficial inmutable:** 9 referencias, paquetes x5, **450 g netos**, 60 días congelado, sin harinas ni extensores. Precios SSOT en `db.js` y `GEMINI.md`; no inventar.
 5. **ODD:** todo requerimiento sustancial vive en `.odd/tasks/<feature>.odd.md`. Un documento vivo por feature.
 6. **Diseño gourmet y UX:** paleta carbón/borgoña/dorado/crema, Bento grid, lightbox, carrito reactivo, cupón SEGASO10 y responsive.
-7. **Verificación obligatoria:** `npm run typecheck`, `npm test` (13/13) y `npm run test:e2e` (4 fases, 0 errores críticos) antes de cerrar un cambio.
+7. **Verificación obligatoria:** `npm run typecheck`, `npm test` (23/23) y `npm run test:e2e` (5 fases, 0 errores críticos) antes de cerrar un cambio.
 8. **Medios y contenido social:** usar solo cuentas oficiales de Segaso. Fotos, videos, capturas, PDF y ZIP viven en `videos/`, `media/` o en el paquete local/Drive; nunca en Git. No usar primeros planos de menores sin autorización. No afirmar 500 g, “100% carne magra” ni “bot 24/7”.
 9. **Documentación y enlaces:** README, `docs/README.md`, `docs/ARCHITECTURE.md` y `docs/API.md` deben reflejar el estado real. Prohibidas las rutas absolutas `C:/Users/...` en HTML o docs; usar rutas relativas o notas de “asset local”.
 

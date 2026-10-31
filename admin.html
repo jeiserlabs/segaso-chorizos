@@ -332,6 +332,12 @@
     const API_BASE = '/api';
     let jwtToken = sessionStorage.getItem('segaso_jwt_token') || null;
 
+    // Todo dato proveniente de la base se escapa antes de tocar innerHTML.
+    const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (c) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+    const digits = (value) => String(value ?? '').replace(/[^\d+]/g, '');
+
     // Verificar si ya tiene sesión JWT válida al cargar
     document.addEventListener('DOMContentLoaded', async () => {
       if (jwtToken) {
@@ -453,23 +459,24 @@
           document.getElementById('ordersBadge').textContent = data.orders.length;
           tbody.innerHTML = data.orders.map(o => {
             // Compatible con ambos formatos de items_json
-            const items = JSON.parse(o.items_json || '[]');
-            const itemsText = items.map(i => `${i.qty}x ${i.name || i.id}`).join(', ');
+            let items = [];
+            try { items = JSON.parse(o.items_json || '[]'); } catch (_) { items = []; }
+            const itemsText = items.map(i => `${Number(i.qty) || 0}x ${esc(i.name || i.id)}`).join(', ');
             const pago = o.payment_method || '—';
             const updatedAt = o.updated_at
               ? new Date(o.updated_at).toLocaleString('es-CO', { timeZone: 'America/Bogota', dateStyle: 'short', timeStyle: 'short' })
               : '—';
             return `
               <tr>
-                <td><strong>${o.code}</strong><br><small style="color:var(--cream-muted)">${new Date(o.created_at).toLocaleDateString('es-CO')}</small></td>
-                <td>${o.customer_name}</td>
-                <td><a href="https://wa.me/57${o.customer_phone}" target="_blank" style="color:var(--gold); text-decoration:none;">📱 ${o.customer_phone}</a></td>
-                <td>${o.address}<br><small style="color:var(--cream-muted)">${o.neighborhood}</small></td>
-                <td><small>${itemsText}</small><br><small style="color:var(--cream-muted)">💳 ${pago}</small></td>
-                <td><strong>${(o.total_cop / 1000).toFixed(1)}k COP</strong></td>
-                <td><span class="status-badge status-${o.status}">${o.status}</span><br><small style="color:var(--cream-muted)">${updatedAt}</small></td>
+                <td><strong>${esc(o.code)}</strong><br><small style="color:var(--cream-muted)">${esc(new Date(o.created_at).toLocaleDateString('es-CO'))}</small></td>
+                <td>${esc(o.customer_name)}</td>
+                <td><a href="https://wa.me/57${digits(o.customer_phone)}" target="_blank" rel="noopener" style="color:var(--gold); text-decoration:none;">📱 ${esc(o.customer_phone)}</a></td>
+                <td>${esc(o.address)}<br><small style="color:var(--cream-muted)">${esc(o.neighborhood)}</small></td>
+                <td><small>${itemsText}</small><br><small style="color:var(--cream-muted)">💳 ${esc(pago)}</small></td>
+                <td><strong>${(Number(o.total_cop || 0) / 1000).toFixed(1)}k COP</strong></td>
+                <td><span class="status-badge status-${esc(o.status)}">${esc(o.status)}</span><br><small style="color:var(--cream-muted)">${esc(updatedAt)}</small></td>
                 <td>
-                  <select class="status-select" onchange="updateOrderStatus(${o.id}, this.value)">
+                  <select class="status-select" onchange="updateOrderStatus(${Number(o.id)}, this.value)">
                     <option value="pendiente" ${o.status==='pendiente'?'selected':''}>Pendiente</option>
                     <option value="confirmado" ${o.status==='confirmado'?'selected':''}>Confirmado</option>
                     <option value="preparando" ${o.status==='preparando'?'selected':''}>Preparando</option>
@@ -519,15 +526,15 @@
           grid.innerHTML = data.inventory.map(p => `
             <div class="inv-card">
               <div class="inv-card-header">
-                <span class="inv-title">${p.name}</span>
-                <small style="color:var(--gold);">${(p.price_cop/1000).toFixed(1)}k COP</small>
+                <span class="inv-title">${esc(p.name)}</span>
+                <small style="color:var(--gold);">${(Number(p.price_cop || 0) / 1000).toFixed(1)}k COP</small>
               </div>
               <div class="inv-controls">
-                <small style="color:var(--cream-muted);">Mínimo: ${p.min_stock} paqs</small>
+                <small style="color:var(--cream-muted);">Mínimo: ${Number(p.min_stock) || 0} paqs</small>
                 <div class="inv-btn-group">
-                  <button class="inv-btn" onclick="changeStock('${p.code}', ${p.stock - 1})">-</button>
-                  <span class="inv-stock" style="color: ${p.stock <= p.min_stock ? 'var(--danger)' : '#fff'}">${p.stock}</span>
-                  <button class="inv-btn" onclick="changeStock('${p.code}', ${p.stock + 1})">+</button>
+                  <button class="inv-btn" onclick="changeStock('${esc(p.code)}', ${Number(p.stock) - 1})">-</button>
+                  <span class="inv-stock" style="color: ${Number(p.stock) <= Number(p.min_stock) ? 'var(--danger)' : '#fff'}">${Number(p.stock) || 0}</span>
+                  <button class="inv-btn" onclick="changeStock('${esc(p.code)}', ${Number(p.stock) + 1})">+</button>
                 </div>
               </div>
             </div>
@@ -570,11 +577,11 @@
           }
           tbody.innerHTML = data.leads.map(l => `
             <tr>
-              <td>#${l.id}</td>
-              <td><strong>${l.name}</strong></td>
-              <td><a href="https://wa.me/57${l.phone}" target="_blank" style="color:var(--gold); text-decoration:none;">📱 ${l.phone}</a></td>
-              <td><span class="status-badge" style="background:rgba(217,160,91,0.2); color:var(--gold); border:1px solid var(--gold);">${l.type}</span></td>
-              <td><small>${l.created_at}</small></td>
+              <td>#${Number(l.id)}</td>
+              <td><strong>${esc(l.name)}</strong></td>
+              <td><a href="https://wa.me/57${digits(l.phone)}" target="_blank" rel="noopener" style="color:var(--gold); text-decoration:none;">📱 ${esc(l.phone)}</a></td>
+              <td><span class="status-badge" style="background:rgba(217,160,91,0.2); color:var(--gold); border:1px solid var(--gold);">${esc(l.type)}</span></td>
+              <td><small>${esc(l.created_at)}</small></td>
             </tr>
           `).join('');
         }

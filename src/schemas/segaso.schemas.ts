@@ -58,6 +58,31 @@ export const ActualizarEstadoSchema = z.object({
   status: EstadoPedidoSchema,
 });
 
+/**
+ * Entrada real del API público: el cliente solo elige producto y cantidad.
+ * El nombre y el precio se resuelven en el servidor contra el inventario.
+ */
+export const ItemSolicitadoSchema = z.object({
+  id: CodigoProductoSchema,
+  qty: z.number().int('La cantidad debe ser un número entero').positive('La cantidad mínima es 1 paquete').max(50, 'Máximo 50 paquetes por producto'),
+});
+
+export const PedidoEntradaSchema = CrearPedidoSchema.pick({
+  customer_name: true,
+  customer_phone: true,
+  address: true,
+  neighborhood: true,
+  payment_method: true,
+}).extend({
+  items: z.array(ItemSolicitadoSchema).min(1, 'El pedido debe contener al menos un producto').max(20, 'Máximo 20 productos por pedido'),
+});
+
+export const CrearLeadSchema = z.object({
+  name: z.string().trim().min(3, 'El nombre debe tener al menos 3 caracteres').max(100),
+  phone: z.string().trim().regex(REGEX_TEL_COLOMBIA, 'Número de celular inválido (debe ser línea móvil de 10 dígitos)'),
+  type: z.string().trim().min(3, 'El tipo de interés es obligatorio').max(60).default('curso'),
+});
+
 export const CotizacionCateringSchema = z.object({
   attendees: z.number().int().min(5, 'El servicio de Asados al Barril se atiende a partir de 5 personas'),
   include_chimichurri: z.boolean().default(true),

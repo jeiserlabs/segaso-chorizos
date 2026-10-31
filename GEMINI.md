@@ -142,7 +142,7 @@ npm test
 npm run test:e2e
 ```
 
-Estado: typecheck limpio, 13/13 pruebas de dominio, E2E de 4 fases y FSM inválida con HTTP 400.
+Estado: typecheck limpio, 23/23 pruebas (dominio + validación de pedidos), E2E de 5 fases y FSM inválida con HTTP 400.
 
 ---
 

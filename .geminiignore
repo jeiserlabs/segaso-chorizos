@@ -1,0 +1,44 @@
+# .geminiignore — Segaso Chorizos
+# Evita que Gemini CLI indexe dependencias, medios y secretos locales.
+
+node_modules/
+.git/
+.env
+.env.*
+*.db
+*.db-wal
+*.db-shm
+.engram/
+
+# Medios locales (GitHub solo texto/código)
+media/
+videos/
+img/
+*.mp4
+*.mov
+*.m4v
+*.webm
+*.avi
+*.part
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.heic
+*.avif
+*.gif
+*.ico
+*.mp3
+*.wav
+*.opus
+*.m4a
+
+# Entregables y temporales
+*.pdf
+*.zip
+*.tar.gz
+*.log
+*.bak
+test-results/
+playwright-report/
+docs/SUSTENTACION_2026/CAPTURAS/

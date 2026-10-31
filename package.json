@@ -12,7 +12,7 @@
   "main": "server.js",
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "node --no-warnings --test tests/segaso_domain.test.ts",
+    "test": "node --no-warnings --test tests/segaso_domain.test.ts tests/pedido_validation.test.ts",
     "test:e2e": "node --env-file=.env tests/e2e_segaso_playwright.js",
     "audit:page": "node scripts/audit_page.js",
     "verify": "npm run typecheck && npm test && npm run test:e2e && npm run audit:page",

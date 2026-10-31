@@ -4,6 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { verifyPassword, signJWT, verifyJWT, extractBearerToken } = require('./auth');
 const db = require('./db');
+const { ErrorDeValidacion, normalizarLead, normalizarPedido } = require('./src/domain/pedido.validation.ts');
 
 const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = __dirname;
@@ -38,6 +39,23 @@ function recordFailedLogin(ip) {
 
 function clearLoginAttempts(ip) {
   loginAttempts.delete(ip);
+}
+
+const publicHits = new Map(); // `${scope}:${ip}` -> { count, resetAt }
+
+function isPublicRateLimited(scope, ip, max, windowMs) {
+  const key = `${scope}:${ip}`;
+  const now = Date.now();
+  const entry = publicHits.get(key);
+  if (!entry || now >= entry.resetAt) {
+    publicHits.set(key, { count: 1, resetAt: now + windowMs });
+    if (publicHits.size > 500) {
+      for (const [k, v] of publicHits) if (now >= v.resetAt) publicHits.delete(k);
+    }
+    return false;
+  }
+  entry.count += 1;
+  return entry.count > max;
 }
 
 const MIME_TYPES = {
@@ -115,6 +133,19 @@ const server = http.createServer(async (req, res) => {
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
   res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+  res.setHeader('Content-Security-Policy', [
+    "default-src 'self'",
+    "img-src 'self' data:",
+    "media-src 'self'",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com",
+    "script-src 'self' 'unsafe-inline'",
+    "connect-src 'self'",
+    "frame-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "object-src 'none'",
+  ].join('; '));
 
   // -------------------------------------------------------------
   // 1. ENDPOINTS DE API (Autenticación & Datos)
@@ -154,48 +185,51 @@ const server = http.createServer(async (req, res) => {
 
       // POST /api/orders (Creación pública de pedido desde el carrito)
       if (pathname === '/api/orders' && method === 'POST') {
+        const ip = req.socket.remoteAddress || 'unknown';
+        if (isPublicRateLimited('orders', ip, 10, 60 * 1000)) {
+          return sendJson(res, 429, { success: false, error: 'Demasiados pedidos en poco tiempo. Intenta de nuevo en un minuto.' });
+        }
+
         const body = await readJsonBody(req);
 
-        // Normalizar items: resolver nombre y precio_cop desde inventario real
-        const invAll = db.getInventory();
-        const invMap = Object.fromEntries(invAll.map(p => [p.code, p]));
-
-        const normalizedItems = (body.items || []).map(it => {
-          const product = invMap[it.id] || {};
-          return {
-            id:        it.id,
-            name:      product.name || it.id,
-            qty:       Number(it.qty) || 1,
-            price_cop: product.price_cop || Math.round((Number(it.price) || 0) * 1000),
-          };
-        }).filter(it => it.id && it.qty > 0);
-
+        // Precio y total se resuelven contra el inventario real; el cliente no los impone.
+        const pedido = normalizarPedido(body, db.getInventory());
         const code = `SEG-${Date.now().toString().slice(-6)}`;
 
-        // Guardar pedido con formato normalizado y método de pago
         db.createOrder({
           code,
-          customer_name:   body.customer_name  || 'Cliente Segaso',
-          customer_phone:  body.customer_phone || '',
-          address:         body.address        || 'Recoge en sede',
-          neighborhood:    body.neighborhood   || 'Envigado',
-          items_json:      JSON.stringify(normalizedItems),
-          total_cop:       Number(body.total_cop) || 0,
-          payment_method:  body.payment_method || 'no especificado',
+          customer_name: pedido.customer_name,
+          customer_phone: pedido.customer_phone,
+          address: pedido.address,
+          neighborhood: pedido.neighborhood,
+          items_json: JSON.stringify(pedido.items),
+          subtotal_cop: pedido.subtotal_cop,
+          discount_cop: pedido.discount_cop,
+          total_cop: pedido.total_cop,
+          payment_method: pedido.payment_method,
         });
 
-        // Descontar stock de SQLite por cada ítem del pedido
-        for (const item of normalizedItems) {
+        for (const item of pedido.items) {
           db.decrementStock(item.id, item.qty);
         }
 
-        return sendJson(res, 201, { success: true, code });
+        return sendJson(res, 201, {
+          success: true,
+          code,
+          subtotal_cop: pedido.subtotal_cop,
+          discount_cop: pedido.discount_cop,
+          total_cop: pedido.total_cop,
+        });
       }
 
       // POST /api/leads (Captura de interesados para academia / cursos)
       if (pathname === '/api/leads' && method === 'POST') {
+        const ip = req.socket.remoteAddress || 'unknown';
+        if (isPublicRateLimited('leads', ip, 5, 60 * 1000)) {
+          return sendJson(res, 429, { success: false, error: 'Demasiados registros en poco tiempo. Intenta de nuevo en un minuto.' });
+        }
         const body = await readJsonBody(req);
-        db.createLead(body);
+        db.createLead(normalizarLead(body));
         return sendJson(res, 201, { success: true, message: 'Interesado registrado' });
       }
 
@@ -240,8 +274,12 @@ const server = http.createServer(async (req, res) => {
         if (pathname.startsWith('/api/admin/inventory/') && method === 'PATCH') {
           const code = pathname.split('/').pop();
           const { stock } = await readJsonBody(req);
-          db.updateStock(code, Number(stock));
-          return sendJson(res, 200, { success: true, code, stock });
+          const stockValue = Number(stock);
+          if (!Number.isInteger(stockValue) || stockValue < 0) {
+            return sendJson(res, 400, { success: false, error: 'El stock debe ser un entero mayor o igual a 0' });
+          }
+          db.updateStock(code, stockValue);
+          return sendJson(res, 200, { success: true, code, stock: stockValue });
         }
 
         if (pathname === '/api/admin/leads' && method === 'GET') {
@@ -251,8 +289,14 @@ const server = http.createServer(async (req, res) => {
 
       return sendJson(res, 404, { success: false, error: 'Endpoint no encontrado' });
     } catch (apiErr) {
+      if (apiErr instanceof ErrorDeValidacion) {
+        return sendJson(res, apiErr.statusCode, { success: false, error: apiErr.message });
+      }
+      if (apiErr instanceof SyntaxError) {
+        return sendJson(res, 400, { success: false, error: 'JSON inválido en el cuerpo de la solicitud' });
+      }
       console.error('Error en API:', apiErr);
-      return sendJson(res, 500, { success: false, error: apiErr.message });
+      return sendJson(res, 500, { success: false, error: 'Error interno del servidor' });
     }
   }
 

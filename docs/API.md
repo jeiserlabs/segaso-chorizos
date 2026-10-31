@@ -54,24 +54,31 @@ Público. Crea el pedido y descuenta stock.
   "customer_phone": "3001234567",
   "address": "Calle 00 # 00-00",
   "neighborhood": "Envigado",
-  "payment_method": "Transferencia",
+  "payment_method": "Transferencia Nequi/Bancolombia",
   "items": [
     { "id": "caserito", "qty": 2 }
-  ],
-  "total_cop": 39800
+  ]
 }
 ```
+
+El cliente solo envía producto y cantidad. `name`, `price_cop`, `subtotal_cop`, el descuento del 10% y el total se calculan en el servidor contra `inventory`; cualquier precio o total enviado por el cliente se ignora.
 
 Respuesta `201`:
 
 ```json
 {
   "success": true,
-  "code": "SEG-123456"
+  "code": "SEG-123456",
+  "subtotal_cop": 39800,
+  "discount_cop": 3980,
+  "total_cop": 35820
 }
 ```
 
-El servidor normaliza nombre y precio contra `inventory`; no confía en el precio del cliente.
+Errores:
+
+- `400` si el producto no existe, la cantidad no es entera, supera 50, excede el stock real o un campo no cumple el contrato Zod.
+- `429` si se superan 10 pedidos por minuto desde la misma IP.
 
 ### `GET /api/admin/orders`
 
@@ -158,9 +165,11 @@ Público. Registra un interesado de academia o catering.
 {
   "name": "Cliente de prueba",
   "phone": "3001234567",
-  "type": "catering"
+  "type": "Taller Charcutería"
 }
 ```
+
+`name` exige 3–100 caracteres, `phone` debe ser celular colombiano de 10 dígitos y `type` 3–60 caracteres (`curso` por defecto). Errores `400` por contrato y `429` tras 5 registros por minuto desde la misma IP.
 
 ### `GET /api/admin/leads`
 
@@ -186,7 +195,7 @@ Códigos usados:
 | `400` | Datos inválidos o transición FSM inválida. |
 | `401` | Token faltante, inválido o expirado. |
 | `404` | Endpoint o pedido no encontrado. |
-| `429` | Rate limit de login. |
+| `429` | Rate limit de login, pedidos o leads. |
 | `500` | Error interno. |
 
 ---

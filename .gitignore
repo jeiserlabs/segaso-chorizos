@@ -56,3 +56,6 @@ docs/SUSTENTACION_2026/CAPTURAS/
 # Pruebas
 test-results/
 playwright-report/
+
+# Intermedios del generador de guías PDF
+scripts/html/

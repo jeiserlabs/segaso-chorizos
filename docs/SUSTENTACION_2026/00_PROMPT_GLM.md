@@ -28,14 +28,14 @@ DATOS QUE DEBES USAR (NO INVENTES NADA)
 - Equipo: Angelina Rojas (mercadeo, identidad y vitrina, semana 1), Brayan Álvarez (tecnología líder y back office, semana 2), Edison Galván (auxiliar de tecnología y WhatsApp, semana 3), María Vahos Villa (control y verificación de datos, semana 4), Isabel Rey (departamento de control, semana 4).
 - Problema: pedidos por WhatsApp en conversaciones dispersas; 15 a 20 minutos por cliente; inventario en libreta; 29.2K seguidores en TikTok sin un canal propio de compra.
 - Solución: vitrina web con 9 productos, carrito, cupón SEGASO10 (10% en la primera compra), mensaje estructurado a WhatsApp y back office para Harold.
-- Tecnología: Node.js nativo (sin Express), SQLite en modo WAL con better-sqlite3, autenticación con scrypt y JWT HS256, contratos Zod v4 y TypeScript, pruebas de dominio 13/13 y E2E de 4 fases (catálogo, carrito, backoffice y consola). 0 errores críticos de consola en el E2E.
+- Tecnología: Node.js nativo (sin Express), SQLite en modo WAL con better-sqlite3, autenticación con scrypt y JWT HS256, contratos Zod v4 y TypeScript, pruebas de dominio 23/23 y E2E de 5 fases (catálogo, carrito, backoffice, calidad de página y consola). 0 errores críticos de consola en el E2E.
 - Costos: 0 COP de licencias. Referencia de mercado: Shopify y Wix cuestan entre 75k y 120k COP al mes, más comisiones. El hardware y el internet ya existen en la empresa.
 - DOFA resumida: fortalezas = producto artesanal sin harinas ni extensores, reconocimiento Antójate de Antioquia, 29.2K en TikTok; debilidades = equipo de 4 personas, procesos poco eficaces, 0 COP de capital de trabajo; oportunidades = canal HORECA, asados al barril, ventas digitales; amenazas = competencia industrial, costo de la carne, INVIMA e imitación.
 - EFI: 2.49 sobre 4.00. Lectura: posición interna neutra; producto y marca fuertes, procesos y liquidez débiles.
 - EFE: 2.70 sobre 4.00. Lectura: posición externa favorable; la demanda HORECA y el canal digital superan la competencia y los costos.
 - PESTEL: enfocar SOLO la variable tecnológica: digitalización de canales, automatización de pedidos y stock, marketing georreferenciado y riesgos de internet/energía/seguridad.
 - Objetivo general (cita literal, no modificar): “Establecer un sistema de seguimiento a los clientes mediante una estructura informática, que permita almacenar la información de una manera ágil para la empresa Segaso Chorizo S.A.S.”
-- Resultados que puedes mostrar: catálogo 9/9, carrito con 2 unidades y 10% de descuento, pedido creado en SQLite, inventario 9/9, 13/13 pruebas de dominio, E2E de 4 fases, 0 errores críticos de consola.
+- Resultados que puedes mostrar: catálogo 9/9, carrito con 2 unidades y 10% de descuento, pedido creado en SQLite, inventario 9/9, 23/23 pruebas de dominio, E2E de 5 fases, 0 errores críticos de consola.
 - Estimaciones: el tiempo de respuesta de 15–20 minutos a menos de 30 segundos es una estimación; el ahorro de tiempo también. Marca estas cifras con “(estimado)”. No inventes ventas, clientes, porcentajes de crecimiento ni ROI.
 
 PROHIBIDO
@@ -124,7 +124,7 @@ ESTRUCTURA EXACTA (15 DIAPOSITIVAS)
     Título: “El backoffice es el cerebro operativo”.
     Tres viñetas: “Node.js nativo + SQLite WAL: sin frameworks pesados, 0 COP de licencias”; “JWT HS256 + scrypt: el panel de Harold queda protegido”; “FSM de pedidos, KPIs e inventario en tiempo real”.
     Diagrama simple de 3 cajas: “Navegador → Node.js → SQLite”, con “JWT” sobre la flecha.
-    Métrica: “13/13 pruebas de dominio · E2E 4 fases”.
+    Métrica: “23/23 pruebas de dominio · E2E 5 fases”.
 
 11. Edison.
     Etiqueta: “Semana 3 · Auxiliar de tecnología, WhatsApp”.
@@ -143,7 +143,7 @@ ESTRUCTURA EXACTA (15 DIAPOSITIVAS)
 13. Isabel.
     Etiqueta: “Semana 4 · Departamento de control”.
     Título: “La calidad se prueba, no se promete”.
-    Tres viñetas: “E2E de 4 fases: catálogo, carrito, backoffice y consola”; “Inventario 9/9 y stock descontado en el flujo”; “Rótulo 450 g, 60 días congelado, lote/vencimiento y cadena de frío”.
+    Tres viñetas: “E2E de 5 fases: catálogo, carrito, backoffice, calidad de página y consola”; “Inventario 9/9 y stock descontado en el flujo”; “Rótulo 450 g, 60 días congelado, lote/vencimiento y cadena de frío”.
     Métricas: “0 errores críticos en consola · 9/9 inventario”.
     Sin foto.
 

@@ -70,7 +70,7 @@ npm run verify
 Debe terminar en verde y cumplir:
 
 - `typecheck`: 0 errores.
-- Unitarias: 13/13.
+- Unitarias: 23/23.
 - E2E: 5 fases, 0 errores de consola.
 - Gate de página: 0 imágenes rotas, 0 respuestas ≥400, H1 = 1, 0 campos sin etiqueta, 0 taps <44 px, 0 overflow.
 - JSON-LD: `FoodEstablishment` con 9 ofertas.
@@ -127,7 +127,7 @@ Debe terminar en verde y cumplir:
 
 **Evidencia:**
 
-- `npm run verify` en verde (unitarias 13/13, E2E 5 fases, audit desktop/móvil).
+- `npm run verify` en verde (unitarias 23/23, E2E 5 fases, audit desktop/móvil).
 - axe-core WCAG 2.1 AA: **0 violaciones**.
 - Galería: 5 imágenes con ratio 0.8; 0 controles anidados; 0 taps <44 px.
 - Peso: 1.29 MB.

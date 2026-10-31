@@ -2,8 +2,8 @@
 
 > **Rol:** Auxiliar de tecnología, servicio de WhatsApp.
 > **Semana:** 3.
-> **Diapositiva propia:** 11. **También apoyas:** la demo (14).
-> **Tiempo:** 40 s en tu diapositiva.
+> **Bloque propia:** 11. **También apoyas:** la demo (14).
+> **Tiempo:** 40 s en tu bloque.
 
 ---
 

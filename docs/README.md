@@ -2,6 +2,9 @@
 
 Índice de la documentación técnica, académica y de contenido del proyecto.
 
+> **SSOT de rutas, repos, Drive y timeline:** [`../SSOT_Y_TIMELINE.md`](../SSOT_Y_TIMELINE.md).
+> **Formato:** el guion tiene 15 bloques orales; el pitch HTML es un pitch comercial de 10 diapositivas.
+
 ## Técnica
 
 | Documento | Contenido |
@@ -25,9 +28,22 @@
 | [SUSTENTACION_2026/05_GUIA_MARIA.md](SUSTENTACION_2026/05_GUIA_MARIA.md) | Guía de María. |
 | [SUSTENTACION_2026/06_GUIA_ISABEL.md](SUSTENTACION_2026/06_GUIA_ISABEL.md) | Guía de Isabel. |
 | [SUSTENTACION_2026/07_DEMO_MVP.md](SUSTENTACION_2026/07_DEMO_MVP.md) | Demo paso a paso y plan B. |
-| [SUSTENTACION_2026/08_CRONOGRAMA_Y_ROLES.md](SUSTENTACION_2026/08_CRONOGRAMA_Y_ROLES.md) | Roles, semanas y mapa de diapositivas. |
+| [SUSTENTACION_2026/08_CRONOGRAMA_Y_ROLES.md](SUSTENTACION_2026/08_CRONOGRAMA_Y_ROLES.md) | Roles, semanas y mapa de bloques del guion. |
 | [SUSTENTACION_2026/09_ANEXO_MATRICES_EFI_EFE.md](SUSTENTACION_2026/09_ANEXO_MATRICES_EFI_EFE.md) | Tablas y cálculos EFI/EFE. |
 | [SUSTENTACION_2026/00_PROMPT_GLM.md](SUSTENTACION_2026/00_PROMPT_GLM.md) | Prompt maestro para GLM/z.ai. |
+
+## Guías actualizadas del equipo (octubre 2026)
+
+| Documento | Contenido |
+|---|---|
+| [guias_actualizadas/00_GUIA_MAESTRA_SUSTENTACION.md](guias_actualizadas/00_GUIA_MAESTRA_SUSTENTACION.md) | Guion de 15 bloques, tiempos y respuestas. |
+| [guias_actualizadas/01_GUIA_ANGELINA_ROJAS.md](guias_actualizadas/01_GUIA_ANGELINA_ROJAS.md) | Guía de Angelina. |
+| [guias_actualizadas/02_GUIA_BRAYAN_ALVAREZ.md](guias_actualizadas/02_GUIA_BRAYAN_ALVAREZ.md) | Guía de Brayan. |
+| [guias_actualizadas/03_GUIA_EDISON_GALVAN.md](guias_actualizadas/03_GUIA_EDISON_GALVAN.md) | Guía de Edison. |
+| [guias_actualizadas/04_GUIA_MARIA_VAHOS.md](guias_actualizadas/04_GUIA_MARIA_VAHOS.md) | Guía de María. |
+| [guias_actualizadas/05_GUIA_ISABEL_REY.md](guias_actualizadas/05_GUIA_ISABEL_REY.md) | Guía de Isabel. |
+
+Estas son las guías fuente que alimentan los PDFs 01–06 del paquete de Drive. Los PDFs se regeneran; no se editan a mano.
 
 ## Redes y contenido
 

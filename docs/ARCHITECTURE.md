@@ -197,8 +197,8 @@ El dominio vive en `src/domain/pedido.fsm.ts`. El endpoint `PATCH /api/admin/ord
 
 ## 8. Pruebas
 
-- **Dominio:** 13/13 (`npm test`), incluye contratos Zod, FSM, catering, LTV y totales.
-- **E2E:** 4 fases (`npm run test:e2e`): catálogo 9/9, carrito con 2 unidades y 10%, pedido en SQLite, login JWT, KPIs, FSM, inventario 9/9 y consola limpia.
+- **Dominio:** 23/23 (`npm test`), incluye contratos Zod, FSM, catering, LTV y totales.
+- **E2E:** 5 fases (`npm run test:e2e`): catálogo 9/9, carrito con 2 unidades y 10%, pedido en SQLite, login JWT, KPIs, FSM, gate de calidad de página, inventario 9/9 y consola limpia.
 - **Typecheck:** `npm run typecheck` sin errores.
 
 ---

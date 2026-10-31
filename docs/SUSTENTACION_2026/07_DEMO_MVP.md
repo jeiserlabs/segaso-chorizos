@@ -68,7 +68,7 @@ Abre:
 Credenciales del backoffice:
 
 - Correo: `harold@segasochorizos.com`
-- Contraseña: el valor de `ADMIN_SEED_PASSWORD` en `.env` (no la escribas en la diapositiva)
+- Contraseña: el valor de `ADMIN_SEED_PASSWORD` en `.env` (no la escribas en el bloque)
 
 Si el puerto 3000 está ocupado, cambia `PORT` en `.env` o cierra el otro servidor. No mates procesos a ciegas.
 

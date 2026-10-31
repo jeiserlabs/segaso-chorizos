@@ -6,6 +6,21 @@ El proyecto combina una vitrina B2C, un carrito que genera un pedido estructurad
 
 ---
 
+## 0. Dónde se trabaja (SSOT)
+
+| Qué | Dónde |
+|---|---|
+| Código y documentos | `C:\PROYECTOS\Mis_Proyectos\Segaso` |
+| Repositorio | https://github.com/jeiserlabs/segaso-chorizos |
+| PDFs, presentación, fotos, video y ZIP | https://drive.google.com/drive/folders/1X1AMmMNQegvkJc3yDEgMCye039Eogx2Y |
+| Mapa de rutas y timeline | [`SSOT_Y_TIMELINE.md`](SSOT_Y_TIMELINE.md) |
+
+**No trabajar en** `Asistente_Personal/projects/segaso-app`: es una copia histórica. **No crear copias de estudio en el Escritorio.**
+
+> **Formato de la sustentación:** el guion oral tiene **15 bloques**; el pitch HTML es un **pitch comercial de 10 diapositivas**. No son lo mismo. Ver `docs/guias_actualizadas/` y `SSOT_Y_TIMELINE.md`.
+
+---
+
 ## 1. Estado del proyecto
 
 | Elemento | Estado |

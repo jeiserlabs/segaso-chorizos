@@ -2,8 +2,8 @@
 
 > **Rol:** Mercadeo, identidad y vitrina.
 > **Semana:** 1 (1-sep).
-> **Diapositiva propia:** 9. **También presentas:** 1, 2, 3, 4 y 15.
-> **Tiempo:** 40 s en tu diapositiva; 65 s en las comunes.
+> **Bloque propia:** 9. **También presentas:** 1, 2, 3, 4 y 15.
+> **Tiempo:** 40 s en tu bloque; 65 s en las comunes.
 
 ---
 

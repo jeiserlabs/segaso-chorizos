@@ -56,17 +56,17 @@
 >
 > La conclusión: el proyecto ataca la debilidad interna —procesos manuales— con una herramienta digital de costo 0.”
 
-Las tablas completas están en `09_ANEXO_MATRICES_EFI_EFE.md`. En la diapositiva solo van los resultados.
+Las tablas completas están en `09_ANEXO_MATRICES_EFI_EFE.md`. En el bloque solo van los resultados.
 
 ---
 
-## 6. Resumen de cada estudiante (para la diapositiva y la transición)
+## 6. Resumen de cada estudiante (para el bloque y la transición)
 
 ### Angelina — Mercadeo, identidad y vitrina (semana 1)
 > “Ordené el catálogo de 9 referencias con precios oficiales y 450 g netos, y construí la vitrina responsive con fotos reales, carrito y conexión a WhatsApp. El cliente arma el pedido antes de escribir.”
 
 ### Brayan — Tecnología líder, backoffice (semana 2)
-> “Construí el backoffice con Node.js nativo, SQLite WAL, JWT y scrypt. El panel muestra KPIs, pedidos e inventario, y la FSM ordena el ciclo del pedido. Son 13/13 pruebas de dominio y un E2E de 4 fases.”
+> “Construí el backoffice con Node.js nativo, SQLite WAL, JWT y scrypt. El panel muestra KPIs, pedidos e inventario, y la FSM ordena el ciclo del pedido. Son 23/23 pruebas de dominio y un E2E de 5 fases.”
 
 ### Edison — Auxiliar de tecnología, WhatsApp (semana 3)
 > “Diseñé el mensaje estructurado de WhatsApp con código, detalle, descuento y total. El pedido llega completo y Harold no tiene que perseguir datos. El cupón SEGASO10 aplica 10%.”
@@ -75,7 +75,7 @@ Las tablas completas están en `09_ANEXO_MATRICES_EFI_EFE.md`. En la diapositiva
 > “Comparé el costo con Shopify y Wix: 75k–120k COP/mes frente a 0 COP del MVP. Definí los KPIs y verifiqué el objetivo general. El ahorro de tiempo es una estimación; las licencias son 0.”
 
 ### Isabel — Departamento de control (semana 4)
-> “Ejecuté el E2E de 4 fases: catálogo 9/9, carrito, backoffice, inventario 9/9 y consola limpia. Validé datos obligatorios, stock y cadena de frío. En el flujo E2E no hubo errores críticos.”
+> “Ejecuté el E2E de 5 fases: catálogo 9/9, carrito, backoffice, gate de calidad de página, inventario 9/9 y consola limpia. Validé datos obligatorios, stock y cadena de frío. En el flujo E2E no hubo errores críticos.”
 
 ---
 
@@ -110,7 +110,7 @@ El paso a paso detallado está en `07_DEMO_MVP.md`.
 | ¿Es un bot automático? | Edison | No; la página tiene un asesor determinista y WhatsApp es un traspaso humano. |
 | ¿Cómo calculan el flete? | Edison | Se captura la ciudad y se confirma por WhatsApp; la automatización es el siguiente paso. |
 | ¿Cómo midieron el ahorro o el ROI? | María | Precios de referencia + análisis del proceso; el 0 COP de licencias es real, el tiempo es estimación. |
-| ¿Qué pruebas hicieron? | Isabel | 13/13 dominio + E2E de 4 fases; 0 errores críticos en consola. |
+| ¿Qué pruebas hicieron? | Isabel | 23/23 dominio + E2E de 5 fases; 0 errores críticos en consola. |
 | ¿Cómo garantizan la cadena de frío? | Isabel | Sellado al vacío, 60 días congelado, lote/vencimiento y gel refrigerante. |
 | ¿Cómo escalaría? | Brayan / María | Servidor con HTTPS y respaldos; SQLite a PostgreSQL si crece el volumen. |
 | ¿Por qué 450 g? | Angelina | Es el peso neto del rótulo real: 450 g / 5 unidades. |
@@ -127,7 +127,7 @@ El paso a paso detallado está en `07_DEMO_MVP.md`.
 - No decir **100% carne magra**: el rótulo incluye tocino; digan **sin harinas ni extensores**.
 - No decir **bot 24/7**, **nube** o **microservicios**.
 - No decir **“0% de errores”** como si fuera una medición de todos los pedidos reales; digan **“0 errores críticos en el E2E”**.
-- No leer las diapositivas: cada uno cuenta su parte con sus palabras.
+- No leer los bloques: cada uno cuenta su parte con sus palabras.
 - El objetivo general se lee literal; no se parafrasea.
 
 ---

@@ -48,7 +48,7 @@
 - [x] **T4:** Generar `media/social/manifest.json` y `docs/social/{REDES_SEGASO,MEDIA_MANIFEST,TIKTOK_INVENTORY}.md`.
 - [x] **T5:** Crear `docs/promo/{README_PROMO,PROMPT_GEMINI_VIDEO,STORYBOARD_30S,VOICEOVER_30S.srt}`.
 - [x] **T6:** Profesionalizar repo: README, arquitectura, API, docs index, `.gitattributes`, `.gitignore`, logo SVG, rutas relativas y fallback de imágenes legacy.
-- [x] **T7:** Verificar: typecheck OK; 13/13 tests; E2E de 4 fases; FSM inválida 400; base restaurada con 3 pedidos reales.
+- [x] **T7:** Verificar: typecheck OK; 23/23 tests; E2E de 5 fases; FSM inválida 400; base restaurada con 3 pedidos reales.
 - [x] **T8:** Commit `5d9c4b4` y push a `main`; paquete `Desktop/Segaso/PROMO_VIDEO` (47 MB, 31 archivos) y biblioteca completa `Desktop/Segaso/BIBLIOTECA_MEDIA` (242 MB).
 
 ---
@@ -59,7 +59,7 @@
 - Manifiesto con IDs, URLs, títulos, duración, views, archivos y keyframes.
 - Prompt de análisis, prompts por escena para Veo, voz en off, SRT y negative prompt.
 - Repo en GitHub con README, arquitectura, API y docs de redes/promo.
-- Tests: `npm run typecheck`, `npm test` (13/13) y `npm run test:e2e` (4 fases).
+- Tests: `npm run typecheck`, `npm test` (23/23) y `npm run test:e2e` (5 fases).
 - Sin binarios, `.env`, bases ni secretos en Git.
 - Base `segaso.db` restaurada con 3 pedidos reales.
 

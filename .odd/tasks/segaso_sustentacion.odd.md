@@ -57,7 +57,7 @@
 - [x] **T5:** Escribir `00_PROMPT_GLM.md`, `01_GUIA_MAESTRA.md`, 5 guías individuales, `07_DEMO_MVP.md` y `08_CRONOGRAMA_Y_ROLES.md`.
 - [x] **T6:** Ajustar `index.html`: galería real, portadas, stats 29.2K/189.5K/150, fallback de video, 450 g.
 - [x] **T7:** Alinear `PROYECTO_SEGASO_CHORIZOS_ENTREGABLE.md` a JWT/scrypt/SQLite, equipo de 5 y 450 g.
-- [x] **T8:** Verificar typecheck, 13/13 tests, E2E 4 fases, demo local y consola limpia.
+- [x] **T8:** Verificar typecheck, 23/23 tests, E2E 5 fases, demo local y consola limpia.
 - [x] **T9:** Empaquetar ZIP local en Desktop/Segaso y dejar backup.
 
 ---
@@ -65,8 +65,8 @@
 ## 5. Acceptance Criteria & Oráculo Determinista
 
 - `npm run typecheck` → Exit 0.
-- `npm test` → 13/13 PASS.
-- `npm run test:e2e` → 4 fases, 0 errores críticos de consola.
+- `npm test` → 23/23 PASS.
+- `npm run test:e2e` → 5 fases, 0 errores críticos de consola.
 - `index.html` muestra las 5 fotos reales y las 4 portadas; ninguna ruta `videos/` rota.
 - El documento y las guías no presentan PIN 1234, localStorage ni 500 g como arquitectura o dato vigente.
 - EFI/EFE: tablas con pesos que suman 100%, cálculos verificables y lectura de resultados.
@@ -95,5 +95,5 @@
 - **2026-10-29:** Página ajustada: galería “Confianza y trazabilidad” con 5 fotos, stats 29.2K/189.5K/150, fallback de video, teléfono de 10 dígitos, código de pedido unificado con SQLite y claims alineados al rótulo.
 - **2026-10-29:** Documento académico alineado: objetivo literal, JWT/scrypt/SQLite, equipo de 5, EFI/EFE y 450 g. Se eliminó la guía oral con PIN 1234.
 - **2026-10-29:** Backoffice endurecido: el endpoint PATCH valida la FSM y responde 400 ante saltos inválidos; el panel muestra el error. E2E actualizado a confirmado → preparando.
-- **2026-10-29:** Verificación: `npm run typecheck` OK; 13/13 tests; E2E 4 fases OK; FSM inválida 400; capturas reales en `docs/SUSTENTACION_2026/CAPTURAS/`. Base `segaso.db` restaurada a sus 3 pedidos reales y stock original.
+- **2026-10-29:** Verificación: `npm run typecheck` OK; 23/23 tests; E2E 5 fases OK; FSM inválida 400; capturas reales en `docs/SUSTENTACION_2026/CAPTURAS/`. Base `segaso.db` restaurada a sus 3 pedidos reales y stock original.
 - **2026-10-29:** Paquete final en `C:\Users\dev\Desktop\Segaso`: 10 documentos, 5 fotos, 4 portadas, 7 capturas, LEEME y ZIP de 12 MB (27 archivos). Prompt GLM listo para z.ai; guías por expositor y demo runbook incluidos.

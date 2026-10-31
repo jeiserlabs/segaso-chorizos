@@ -46,7 +46,7 @@
 - [x] Tarea 3: Servidor HTTP nativo con rate limiting (5 intentos / 5 min) y endpoints REST (`server.js`).
 - [x] Tarea 4: Vitrina B2C con UI moderna, Bento grid, Lightbox, Carrito y Descuento WhatsApp (`index.html`).
 - [x] Tarea 5: Back Office gerencial para Harold con KPIs, FSM y control de stock (`admin.html`).
-- [x] Tarea 6: Contratos Zod v4 y lógica de dominio con tests unitarios (`tests/segaso_domain.test.ts` 13/13 PASS).
+- [x] Tarea 6: Contratos Zod v4 y lógica de dominio con tests unitarios (`tests/segaso_domain.test.ts` 23/23 PASS).
 - [x] Tarea 7: Fix de contraseña seed (`[seed temporal rotada 28-oct-2026]`) y suite E2E Playwright completa (`tests/e2e_segaso_playwright.js` 100% PASS).
 - [x] Tarea 8: Script de arranque sin configuración previa (`Iniciar Segaso.bat`).
 
@@ -54,7 +54,7 @@
 
 ## 5. Acceptance Criteria & Oráculo Determinista
 - Typecheck: `npm run typecheck` $\rightarrow$ Exit 0 (0 errores de tipos).
-- Tests de Dominio: `npm test` $\rightarrow$ 13/13 PASS.
+- Tests de Dominio: `npm test` $\rightarrow$ 23/23 PASS.
 - E2E Playwright: `npm run test:e2e` $\rightarrow$ "¡AUDITORÍA PLAYWRIGHT 100% EXITOSA! MVP Funcional y Estable".
 - Calidad: 0 errores de consola en browser (Storefront y Back Office).
 
@@ -66,5 +66,5 @@
 ---
 
 ## 7. Progreso y Evidencia In-Place
-- **2026-10-23:** Deep loop audit completado. Bug de seed resuelto. Suite E2E Playwright ejecutada con éxito en 4 fases (Catálogo, Carrito, Back Office y Consola).
-- **2026-10-28:** Re-verificación completa: typecheck 0 errores, 13/13 unit, E2E 4 fases 100% (catálogo 9/9, carrito, backoffice, consola limpia). Se limpiaron 5 pedidos de prueba de la SQLite; quedan 3 pedidos reales. Pendiente: repo público `segaso-chorizos` desactualizado.
+- **2026-10-23:** Deep loop audit completado. Bug de seed resuelto. Suite E2E Playwright ejecutada con éxito en 5 fases (Catálogo, Carrito, Back Office, Calidad de Página y Consola).
+- **2026-10-28:** Re-verificación completa: typecheck 0 errores, 23/23 unit, E2E 5 fases 100% (catálogo 9/9, carrito, backoffice, calidad de página, consola limpia). Se limpiaron 5 pedidos de prueba de la SQLite; quedan 3 pedidos reales. Pendiente: repo público `segaso-chorizos` desactualizado.

@@ -2,8 +2,8 @@
 
 > **Rol:** Departamento de control.
 > **Semana:** 4 (14-nov).
-> **Diapositiva propia:** 13.
-> **Tiempo:** 30 s en tu diapositiva.
+> **Bloque propia:** 13.
+> **Tiempo:** 30 s en tu bloque.
 
 ---
 
@@ -15,7 +15,7 @@
 
 ## 2. Los 3 puntos que debes decir
 
-1. **Pruebas E2E:** se validaron 4 fases: catálogo 9/9, carrito con 2 unidades y 10% de descuento, backoffice con login/KPIs/FSM/inventario 9/9, y consola sin errores críticos.
+1. **Pruebas E2E:** se validaron 5 fases: catálogo 9/9, carrito con 2 unidades y 10% de descuento, backoffice con login/KPIs/FSM/inventario 9/9, gate de calidad de página y consola sin errores críticos.
 2. **Datos:** el formulario exige nombre, teléfono y dirección; el pedido descuenta stock y queda con un código en SQLite. La validación busca que no se venda un producto agotado.
 3. **Calidad:** rótulo de 450 g netos, 60 días en congelación, lote y vencimiento, y gel refrigerante para domicilios largos. El control es del flujo, no una auditoría externa.
 
@@ -23,7 +23,7 @@
 
 ## 3. Guion de 90 segundos
 
-> “Mi parte fue el control de calidad y la verificación de datos. Ejecutamos una prueba E2E de cuatro fases: primero el catálogo, con las 9 referencias; segundo el carrito, con 2 unidades, el descuento del 10% y la creación del pedido; tercero el backoffice, con el login de Harold, los KPIs, el cambio de estado y el inventario 9/9; cuarto la consola, que quedó sin errores críticos.
+> “Mi parte fue el control de calidad y la verificación de datos. Ejecutamos una prueba E2E de cinco fases: primero el catálogo, con las 9 referencias; segundo el carrito, con 2 unidades, el descuento del 10% y la creación del pedido; tercero el backoffice, con el login de Harold, los KPIs, el cambio de estado y el inventario 9/9; cuarto el gate de calidad de página, con 0 imágenes rotas, un solo H1 y 8/8 rutas HTTP; quinto la consola, que quedó sin errores críticos.
 >
 > En los datos, el formulario exige nombre, teléfono y dirección; el pedido descuenta stock y queda con un código en SQLite. La idea es que no se venda un producto agotado y que el pedido llegue completo.
 >
@@ -36,14 +36,14 @@
 - El inventario 9/9 en el backoffice.
 - Un pedido con su código y su estado.
 - La consola del navegador sin errores críticos.
-- Si tienes el reporte de la prueba, muestra el mensaje de las 4 fases.
+- Si tienes el reporte de la prueba, muestra el mensaje de las 5 fases.
 
 ---
 
 ## 5. Preguntas probables
 
 1. **¿Qué pruebas hicieron?**  
-   13 pruebas de dominio (FSM, totales, contratos) y una prueba E2E de 4 fases: catálogo, carrito, backoffice y consola.
+   23 pruebas de dominio (FSM, totales, contratos) y una prueba E2E de 5 fases: catálogo, carrito, backoffice, calidad de página y consola.
 
 2. **¿Cómo validan el stock?**  
    Cada pedido descuenta las unidades en SQLite; el backoffice muestra el inventario. En la prueba E2E el inventario quedó 9/9 después del flujo. No es una auditoría de todos los pedidos reales.
@@ -76,7 +76,7 @@
 
 | Dato | Valor |
 |---|---|
-| Pruebas de dominio | 13/13 |
+| Pruebas de dominio | 23/23 |
 | Fases E2E | 4 (catálogo, carrito, backoffice, consola) |
 | Catálogo validado | 9/9 |
 | Inventario E2E | 9/9 |

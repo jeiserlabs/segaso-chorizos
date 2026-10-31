@@ -2,8 +2,8 @@
 
 > **Rol:** Control y verificación de datos / ROI.
 > **Semana:** 4 (14-nov).
-> **Diapositiva propia:** 12. **También presentas:** 5 (DOFA), 6 (EFI/EFE) y 7 (PESTEL).
-> **Tiempo:** 30 s en tu diapositiva; 90 s en las comunes.
+> **Bloque propia:** 12. **También presentas:** 5 (DOFA), 6 (EFI/EFE) y 7 (PESTEL).
+> **Tiempo:** 30 s en tu bloque; 90 s en las comunes.
 
 ---
 
@@ -33,15 +33,15 @@
 
 ---
 
-## 4. La diapositiva 6: EFI/EFE en 30 segundos
+## 4. El bloque 6: EFI/EFE en 30 segundos
 
 > “La EFI quedó en 2.49: la empresa tiene producto y marca fuertes, pero procesos y liquidez débiles. La EFE quedó en 2.70: el entorno es favorable por la demanda de restaurantes, el canal digital y los asados a domicilio. El proyecto convierte la debilidad interna —procesos manuales— en una ventaja digital con costo 0.”
 
-Las tablas completas están en `09_ANEXO_MATRICES_EFI_EFE.md`; no las pongas en la diapositiva.
+Las tablas completas están en `09_ANEXO_MATRICES_EFI_EFE.md`; no las pongas en el bloque.
 
 ---
 
-## 5. La diapositiva 5: DOFA resumida
+## 5. El bloque 5: DOFA resumida
 
 - **Fortalezas:** producto artesanal sin harinas ni extensores; reconocimiento Antójate de Antioquia; 29.2K seguidores en TikTok.
 - **Debilidades:** equipo de 4 personas; procesos poco eficaces; 0 COP de capital de trabajo.
@@ -51,7 +51,7 @@ Las tablas completas están en `09_ANEXO_MATRICES_EFI_EFE.md`; no las pongas en 
 
 ---
 
-## 6. La diapositiva 7: PESTEL tecnológica
+## 6. El bloque 7: PESTEL tecnológica
 
 - Digitalización de canales: TikTok e Instagram aterrizan en la vitrina.
 - Automatización de pedidos y backoffice: menos trabajo manual.
@@ -99,8 +99,8 @@ Las tablas completas están en `09_ANEXO_MATRICES_EFI_EFE.md`; no las pongas en 
 | Referencia Shopify/Wix | 75k–120k COP/mes |
 | EFI | 2.49 (neutra) |
 | EFE | 2.70 (favorable) |
-| Pruebas | 13/13 dominio + E2E 4 fases |
-| Objetivo general | Cita literal de la diapositiva 4 |
+| Pruebas | 23/23 dominio + E2E 5 fases |
+| Objetivo general | Cita literal de el bloque 4 |
 
 ---
 

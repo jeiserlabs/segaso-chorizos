@@ -10,8 +10,11 @@ echo ============================================================
 echo.
 
 if not exist .env (
-    echo [CONFIG] Inicializando archivo .env local desde plantilla...
-    copy .env.example .env >nul 2>&1
+    echo [ERROR] Falta .env.
+    echo Copia .env.example a .env y define JWT_SECRET y ADMIN_SEED_PASSWORD.
+    echo Sin esas variables el servidor no arranca: es seguridad fail-closed.
+    pause
+    exit /b 1
 )
 
 node -v >nul 2>&1

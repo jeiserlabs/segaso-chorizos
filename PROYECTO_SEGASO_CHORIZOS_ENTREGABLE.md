@@ -19,7 +19,7 @@
 
 Segaso Chorizos es una microempresa agroindustrial familiar de tradición fundada en el municipio de Envigado, Antioquia. Su actividad económica se enfoca en la elaboración y comercialización de charcutería porcina artesanal gourmet de calidad superior: chorizos de carne de cerdo seleccionada, sin adición de harinas, almidones, féculas ni extensores de soya, sellados al vacío en empaque grado alimenticio con 60 días de vida útil en congelación.
 
-Pese a contar con un producto validado de alta aceptación en el mercado y un reconocimiento formal por la Gobernación de Antioquia (*Antójate de Antioquia*), la empresa operaba hasta la fecha en un modelo analógico con alta fricción:
+Pese a contar con un producto validado de alta aceptación en el mercado y un habilitación formal en la convocatoria de la Gobernación de Antioquia (*Antójate de Antioquia, Renglón 1288*), la empresa operaba hasta la fecha en un modelo analógico con alta fricción:
 * Cero portal web propio.
 * Pedidos gestionados manualmente vía chats desorganizados de WhatsApp personal.
 * Cero trazabilidad de inventario y pedidos en curso (despachados vs pendientes).
@@ -121,7 +121,7 @@ Las tablas completas, con pesos, calificaciones y cálculos, están en `docs/SUS
 * **Independencia Operativa:** La vitrina y el backoffice se sirven desde Node.js local (`http://localhost:3000`). El backoffice requiere el servidor para la API y SQLite; la vitrina puede abrirse en modo estático solo para consulta.
 * **Persistencia:** SQLite en modo WAL con `better-sqlite3` para pedidos, inventario, usuarios y leads. El carrito de la vitrina usa `localStorage` como caché y para el modo offline; la fuente de verdad del backoffice es SQLite.
 * **Seguridad Back Office:** Ruta `/chorizos-segaso/admin` protegida con login de correo y contraseña, hash scrypt, JWT HS256, `timingSafeEqual` y límite de 5 intentos por 5 minutos. Si falta `JWT_SECRET`, el servidor falla.
-* **Pruebas:** 13/13 pruebas de dominio y E2E de 4 fases (catálogo, carrito, backoffice y consola), con 0 errores críticos de consola.
+* **Pruebas:** 23/23 pruebas de dominio y E2E de 5 fases (catálogo, carrito, backoffice, calidad de página y consola), con 0 errores críticos de consola.
 * **Enrutamiento de Pedidos:** Generador automático de mensajes estructurados hacia la API de WhatsApp de Harold (`300 236 7180`), con desglose de ítems, cantidades, dirección y método de pago.
 
 ---

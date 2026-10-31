@@ -15,13 +15,13 @@
 | María Vahos Villa | Control y verificación de datos | Semana 4 (14-nov) |
 | Isabel Rey | Departamento de control | Semana 4 (14-nov) |
 
-**Nota de lectura:** en la foto, la celda de tiempo de María e Isabel parece compartida; se asume que ambas cierran en la semana 4 / 14-nov. Si Isabel tiene otra fecha, se corrige aquí y en las diapositivas.
+**Nota de lectura:** en la foto, la celda de tiempo de María e Isabel parece compartida; se asume que ambas cierran en la semana 4 / 14-nov. Si Isabel tiene otra fecha, se corrige aquí y en los bloques.
 
 ---
 
 ## 2. Rol de cada uno en la sustentación
 
-| Persona | Rol oficial | Diapositiva propia | También presenta |
+| Persona | Rol oficial | Bloque propia | También presenta |
 |---|---|---|---|
 | Angelina | Mercadeo, identidad y vitrina | 9 | 1, 2, 3, 4, 15 |
 | Brayan | Tecnología líder, back office | 10 | 8, 14 (demo) |
@@ -33,9 +33,9 @@ Si el profesor pide que cada uno hable solo de su parte, los bloques comunes 1�
 
 ---
 
-## 3. Mapa de 15 diapositivas
+## 3. Mapa de 15 bloques
 
-| # | Diapositiva | Quién | Tiempo |
+| # | Bloque | Quién | Tiempo |
 |---|---|---|---|
 | 1 | Portada: Segaso Chorizos + equipo + CESDE + 14-nov-2026 | Angelina | 10 s |
 | 2 | La empresa real: Envigado, NIT, Antójate de Antioquia, 29.2K TikTok | Angelina | 20 s |

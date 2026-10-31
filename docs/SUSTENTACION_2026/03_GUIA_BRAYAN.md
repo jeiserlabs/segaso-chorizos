@@ -2,8 +2,8 @@
 
 > **Rol:** Tecnología líder, creación del back office.
 > **Semana:** 2.
-> **Diapositiva propia:** 10. **También presentas:** 8 y la demo (14).
-> **Tiempo:** 60 s en tu diapositiva; 20 s en la 8; 120 s en la demo.
+> **Bloque propia:** 10. **También presentas:** 8 y la demo (14).
+> **Tiempo:** 60 s en tu bloque; 20 s en la 8; 120 s en la demo.
 
 ---
 
@@ -17,7 +17,7 @@
 
 1. **Arquitectura:** Node.js nativo, sin frameworks pesados; rutas HTTP, archivos estáticos y límite de intentos de login.
 2. **Datos y seguridad:** SQLite en modo WAL con `better-sqlite3`; contraseña con scrypt; sesión con JWT HS256; endpoints `/api/admin/*` protegidos.
-3. **Operación:** pedidos con máquina de estados, KPIs y control de inventario; 13/13 pruebas de dominio y E2E de 4 fases.
+3. **Operación:** pedidos con máquina de estados, KPIs y control de inventario; 23/23 pruebas de dominio y E2E de 5 fases.
 
 ---
 
@@ -27,7 +27,7 @@
 >
 > El servidor recibe el login, valida la contraseña con scrypt y firma un token JWT HS256. Los endpoints de administración exigen ese token; si no está, responden 401. Los pedidos y el inventario viven en SQLite con modo WAL, usando consultas parametrizadas.
 >
-> El panel de Harold muestra los KPIs, la cola de pedidos y el inventario. Cada pedido avanza por una máquina de estados: pendiente, confirmado, preparando, camino y entregado, con cancelado como salida. Las pruebas de dominio son 13/13 y el E2E cubre 4 fases: catálogo, carrito, backoffice y consola.
+> El panel de Harold muestra los KPIs, la cola de pedidos y el inventario. Cada pedido avanza por una máquina de estados: pendiente, confirmado, preparando, camino y entregado, con cancelado como salida. Las pruebas de dominio son 23/23 y el E2E cubre 5 fases: catálogo, carrito, backoffice, calidad de página y consola.
 >
 > El resultado es un backoffice local, seguro y con datos reales, sin pagar licencias.”
 
@@ -109,7 +109,7 @@ Si no hay tablero, dibuja tres cajas: **Navegador → Node.js → SQLite**, y es
 | Límite de login | 5 intentos / 5 minutos |
 | Rutas admin | `/api/admin/kpis`, `/orders`, `/inventory` |
 | Estados | pendiente → confirmado → preparando → camino → entregado (o cancelado) |
-| Pruebas | 13/13 dominio + E2E 4 fases |
+| Pruebas | 23/23 dominio + E2E 5 fases |
 | Consola | 0 errores críticos en E2E |
 
 ---

@@ -2,7 +2,11 @@
 
 > SSOT: Segaso Chorizos de Tradición (Envigado).
 > Proyecto académico y comercial: plataforma B2C y back office de Harold García.
-> Repositorio: `jeiserlabs/segaso-chorizos` (copia local en `projects/segaso-app/`).
+> Repositorio: `jeiserlabs/segaso-chorizos`
+> Copia local canónica: `C:\PROYECTOS\Mis_Proyectos\Segaso`
+> Drive: https://drive.google.com/drive/folders/1X1AMmMNQegvkJc3yDEgMCye039Eogx2Y
+> SSOT de rutas y timeline: `SSOT_Y_TIMELINE.md`
+> **No trabajar en `projects/segaso-app`:** es una copia histórica dentro de LifeOS. La copia canónica es la de arriba.
 
 ---
 

@@ -1,7 +1,9 @@
 # GEMINI.md — Segaso Chorizos
 
 Repositorio: `jeiserlabs/segaso-chorizos`
-Copia local: `projects/segaso-app/`
+Copia local canónica: `C:\PROYECTOS\Mis_Proyectos\Segaso`
+Drive: https://drive.google.com/drive/folders/1X1AMmMNQegvkJc3yDEgMCye039Eogx2Y
+SSOT de rutas y timeline: `SSOT_Y_TIMELINE.md`
 Proyecto CESDE 2026: plataforma web y back office para Segaso Chorizos de Tradición (Envigado).
 
 ---

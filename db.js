@@ -3,7 +3,12 @@ const Database = require('better-sqlite3');
 const path = require('node:path');
 const { hashPassword } = require('./auth');
 
-const DB_PATH = path.join(__dirname, 'segaso.db');
+// `SEGASO_DB_PATH` permite apuntar el módulo a una base desechable en los tests:
+// sin ese override, una prueba de KPIs leería y mutaría `segaso.db`, que es la
+// única copia de los pedidos reales de la tienda.
+const DB_PATH = process.env.SEGASO_DB_PATH
+  ? path.resolve(process.env.SEGASO_DB_PATH)
+  : path.join(__dirname, 'segaso.db');
 const db = new Database(DB_PATH);
 
 // Configuración WAL para alto rendimiento y lecturas concurrentes
@@ -43,7 +48,8 @@ db.exec(`
     discount_cop INTEGER NOT NULL DEFAULT 0,
     total_cop INTEGER NOT NULL,
     payment_method TEXT DEFAULT 'no especificado',
-    status TEXT NOT NULL DEFAULT 'pendiente', -- pendiente | preparando | camino | entregado | cancelado
+    status TEXT NOT NULL DEFAULT 'pendiente', -- pendiente | confirmado | preparando | camino | entregado | cancelado
+    es_demo INTEGER NOT NULL DEFAULT 0,       -- 1 = pedido sembrado para la demo; nunca cuenta como venta real
     created_at TEXT DEFAULT CURRENT_TIMESTAMP,
     updated_at TEXT
   );
@@ -66,6 +72,7 @@ const migrations = [
   "ALTER TABLE orders ADD COLUMN updated_at TEXT",
   "ALTER TABLE orders ADD COLUMN subtotal_cop INTEGER NOT NULL DEFAULT 0",
   "ALTER TABLE orders ADD COLUMN discount_cop INTEGER NOT NULL DEFAULT 0",
+  "ALTER TABLE orders ADD COLUMN es_demo INTEGER NOT NULL DEFAULT 0",
 ];
 for (const sql of migrations) {
   try { db.exec(sql); } catch (_) { /* columna ya existe */ }
@@ -122,8 +129,8 @@ if (db.prepare('SELECT COUNT(*) as n FROM inventory').get().n === 0) {
 if (db.prepare('SELECT COUNT(*) as n FROM orders').get().n === 0) {
   const ins = db.prepare(`
     INSERT INTO orders (code, customer_name, customer_phone, address, neighborhood,
-                        items_json, total_cop, payment_method, status)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        items_json, total_cop, payment_method, status, es_demo)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
   `);
   ins.run('SEG-1001', 'Carlos Mario Restrepo', '3124567890',
     'Cra 43A # 34-12 Apto 402', 'Envigado (Jardines)',
@@ -143,6 +150,14 @@ if (db.prepare('SELECT COUNT(*) as n FROM orders').get().n === 0) {
     JSON.stringify([{ id: 'parrillero', name: 'Chorizo Parrillero Especial (x5)', qty: 3, price_cop: 23800 }]),
     71400, 'Transferencia Nequi/Bancolombia', 'entregado');
 }
+
+// Los tres códigos anteriores ya estaban sembrados en bases viejas, cuando el
+// esquema no tenía `es_demo`: sin este backfill el panel seguiría mostrando
+// 71.4k COP de una venta que nunca ocurrió. Idempotente y limitado a los códigos
+// del seed (el generador real emite `SEG-` + 6 dígitos del reloj, nunca 4).
+db.prepare(
+  "UPDATE orders SET es_demo = 1 WHERE code IN ('SEG-1001', 'SEG-1002', 'SEG-1003') AND es_demo = 0"
+).run();
 
 // ------------------------------------------------------------------
 // OPERACIONES ATÓMICAS
@@ -271,21 +286,24 @@ module.exports = {
       .run(lead.name, lead.phone, lead.type || 'curso'),
 
   // KPIs con filtros temporales
+  // `es_demo = 0` en cada agregado: el seed de la demo (SEG-1001..1003) tiene nombres,
+  // celulares y una venta de 71.4k COP inventados. Mezclarlos con ventas reales haría
+  // que el panel muestre plata que no entró, que es justo lo que el guion prohíbe.
   getKPIs: () => {
     const allTime = db.prepare(
-      "SELECT COALESCE(SUM(total_cop), 0) as total, COUNT(*) as count FROM orders WHERE status = 'entregado'"
+      "SELECT COALESCE(SUM(total_cop), 0) as total, COUNT(*) as count FROM orders WHERE status = 'entregado' AND es_demo = 0"
     ).get();
 
     const today = db.prepare(
-      "SELECT COALESCE(SUM(total_cop), 0) as total, COUNT(*) as count FROM orders WHERE status = 'entregado' AND date(created_at) = date('now', 'localtime')"
+      "SELECT COALESCE(SUM(total_cop), 0) as total, COUNT(*) as count FROM orders WHERE status = 'entregado' AND es_demo = 0 AND date(created_at) = date('now', 'localtime')"
     ).get();
 
     const month = db.prepare(
-      "SELECT COALESCE(SUM(total_cop), 0) as total, COUNT(*) as count FROM orders WHERE status = 'entregado' AND strftime('%Y-%m', created_at) = strftime('%Y-%m', 'now', 'localtime')"
+      "SELECT COALESCE(SUM(total_cop), 0) as total, COUNT(*) as count FROM orders WHERE status = 'entregado' AND es_demo = 0 AND strftime('%Y-%m', created_at) = strftime('%Y-%m', 'now', 'localtime')"
     ).get();
 
     const active = db.prepare(
-      "SELECT COUNT(*) as count FROM orders WHERE status IN ('pendiente', 'preparando', 'camino')"
+      "SELECT COUNT(*) as count FROM orders WHERE status IN ('pendiente', 'preparando', 'camino') AND es_demo = 0"
     ).get();
 
     const lowStock = db.prepare(
@@ -293,12 +311,16 @@ module.exports = {
     ).get();
 
     const canceled = db.prepare(
-      "SELECT COUNT(*) as count FROM orders WHERE status = 'cancelado'"
+      "SELECT COUNT(*) as count FROM orders WHERE status = 'cancelado' AND es_demo = 0"
+    ).get();
+
+    const demo = db.prepare(
+      'SELECT COUNT(*) as count FROM orders WHERE es_demo = 1'
     ).get();
 
     // Los dos KPIs que el guion de sustentación promete y el panel no calculaba.
     const clientesUnicos = db.prepare(
-      'SELECT COUNT(DISTINCT customer_phone) as count FROM orders'
+      'SELECT COUNT(DISTINCT customer_phone) as count FROM orders WHERE es_demo = 0'
     ).get().count;
 
     // "Producto más vendido" vive dentro de items_json (texto), no en una tabla
@@ -306,7 +328,7 @@ module.exports = {
     // esto debería ser una tabla order_items; para el volumen actual es suficiente y
     // no abre una migración antes de la defensa.
     const unidadesPorProducto = new Map();
-    for (const fila of db.prepare("SELECT items_json FROM orders WHERE status = 'entregado'").all()) {
+    for (const fila of db.prepare("SELECT items_json FROM orders WHERE status = 'entregado' AND es_demo = 0").all()) {
       let items = [];
       try { items = JSON.parse(fila.items_json) || []; } catch { continue; }
       for (const item of items) {
@@ -336,6 +358,8 @@ module.exports = {
       // Alertas
       lowStockAlerts: lowStock.count,
       canceledOrders: canceled.count,
+      // Datos de demostración excluidos de todo lo anterior (visibilidad, no silencio)
+      demoOrders:     demo.count,
       // Promesa del guion 07_DEMO_MVP: clientes únicos y producto más vendido
       uniqueCustomers: clientesUnicos,
       topProduct: topProducto ? { name: topProducto, units: topUnidades } : null,

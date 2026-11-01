@@ -456,7 +456,9 @@
         const data = await res.json();
         const tbody = document.getElementById('ordersTableBody');
         if (data.success && data.orders) {
-          document.getElementById('ordersBadge').textContent = data.orders.length;
+          const demoN = data.orders.filter((o) => Number(o.es_demo) === 1).length;
+          document.getElementById('ordersBadge').textContent =
+            `${data.orders.length}${demoN > 0 ? ` · ${demoN} de demostración (no cuentan como venta)` : ''}`;
           tbody.innerHTML = data.orders.map(o => {
             // Compatible con ambos formatos de items_json
             let items = [];
@@ -468,7 +470,7 @@
               : '—';
             return `
               <tr>
-                <td><strong>${esc(o.code)}</strong><br><small style="color:var(--cream-muted)">${esc(new Date(o.created_at).toLocaleDateString('es-CO'))}</small></td>
+                <td><strong>${esc(o.code)}</strong>${Number(o.es_demo) === 1 ? ' <span class="status-badge" style="background:rgba(120,120,128,.2);color:#9CA3AF;border:1px solid #6B7280;">DEMO</span>' : ''}<br><small style="color:var(--cream-muted)">${esc(new Date(o.created_at).toLocaleDateString('es-CO'))}</small></td>
                 <td>${esc(o.customer_name)}</td>
                 <td><a href="https://wa.me/57${digits(o.customer_phone)}" target="_blank" rel="noopener" style="color:var(--gold); text-decoration:none;">📱 ${esc(o.customer_phone)}</a></td>
                 <td>${esc(o.address)}<br><small style="color:var(--cream-muted)">${esc(o.neighborhood)}</small></td>

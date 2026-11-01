@@ -85,6 +85,7 @@ Las tablas completas están en `09_ANEXO_MATRICES_EFI_EFE.md`. En el bloque solo
 2. **Carrito:** agrega 2 Caserito Paisa, muestra el total 39.8k COP y aplica SEGASO10.
 3. **Pedido:** llena nombre, teléfono, dirección y ciudad; genera el mensaje de WhatsApp y muéstralo sin enviarlo.
 4. **Backoffice:** abre `/chorizos-segaso/admin`, inicia sesión, muestra KPIs, un pedido, el cambio de estado y el inventario 9/9.
+   - Los tres pedidos que trae la base al sembrarla están marcados `DEMO` y **no suman** en los KPIs. Por eso, antes de hacer el pedido en vivo del paso 3, las ventas dicen 0 COP. Es el punto fuerte, no un fallo: si preguntan por las cifras, la respuesta es que el panel separa datos de demostración de ventas reales y que el pedido que ustedes acaban de crear es el primero que aparece en la facturación.
 5. **Cierre de demo:** “Todo esto corre en local, con 0 COP de licencias y datos en SQLite.”
 
 El paso a paso detallado está en `07_DEMO_MVP.md`.

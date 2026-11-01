@@ -153,6 +153,13 @@ Respuesta `200`:
 
 Requiere JWT. Devuelve métricas de ventas, pedidos, ticket promedio, clientes y stock bajo.
 
+Los pedidos del seed de demostración (`SEG-1001`, `SEG-1002`, `SEG-1003`) llevan
+`es_demo = 1` y quedan excluidos de **todos** los agregados: `salesDelivered`,
+`salesCount`, `avgTicket`, `todaySales`, `monthSales`, `activeOrders`,
+`canceledOrders`, `uniqueCustomers` y `topProduct` solo cuentan ventas reales.
+`demoOrders` informa cuántos hay excluidos, para que la exclusión sea visible y no
+un silencio. El panel los muestra etiquetados `DEMO` en la tabla de pedidos.
+
 ---
 
 ## 5. Leads

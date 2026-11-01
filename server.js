@@ -2,7 +2,7 @@
 const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
-const { verifyPassword, signJWT, verifyJWT, extractBearerToken } = require('./auth');
+const { verifyPassword, hashPassword, signJWT, verifyJWT, extractBearerToken } = require('./auth');
 const db = require('./db');
 const { ErrorDeValidacion, normalizarLead, normalizarPedido } = require('./src/domain/pedido.validation.ts');
 
@@ -194,23 +194,28 @@ const server = http.createServer(async (req, res) => {
 
         // Precio y total se resuelven contra el inventario real; el cliente no los impone.
         const pedido = normalizarPedido(body, db.getInventory());
-        const code = `SEG-${Date.now().toString().slice(-6)}`;
+        const code = db.generarCodigoPedido();
 
-        db.createOrder({
-          code,
-          customer_name: pedido.customer_name,
-          customer_phone: pedido.customer_phone,
-          address: pedido.address,
-          neighborhood: pedido.neighborhood,
-          items_json: JSON.stringify(pedido.items),
-          subtotal_cop: pedido.subtotal_cop,
-          discount_cop: pedido.discount_cop,
-          total_cop: pedido.total_cop,
-          payment_method: pedido.payment_method,
-        });
-
-        for (const item of pedido.items) {
-          db.decrementStock(item.id, item.qty);
+        try {
+          // Pedido + descuento de stock en una sola transacción: si un paquete no
+          // alcanza, no queda pedido fantasma ni sobreventa silenciosa.
+          db.crearPedidoAtomico({
+            code,
+            customer_name: pedido.customer_name,
+            customer_phone: pedido.customer_phone,
+            address: pedido.address,
+            neighborhood: pedido.neighborhood,
+            items_json: JSON.stringify(pedido.items),
+            subtotal_cop: pedido.subtotal_cop,
+            discount_cop: pedido.discount_cop,
+            total_cop: pedido.total_cop,
+            payment_method: pedido.payment_method,
+          }, pedido.items);
+        } catch (err) {
+          if (err && err.code === 'STOCK_INSUFICIENTE') {
+            return sendJson(res, 409, { success: false, error: `Se acabó el stock de ${err.producto}. Vuelve a armar el pedido.` });
+          }
+          throw err;
         }
 
         return sendJson(res, 201, {
@@ -242,6 +247,34 @@ const server = http.createServer(async (req, res) => {
       if (pathname.startsWith('/api/admin/')) {
         const authUser = requireAuth(req, res);
         if (!authUser) return; // Ya respondió 401
+
+        // El token se firma con `role`, pero hasta ahora ninguna ruta lo miraba:
+        // cualquier JWT válido (aunque alguien emitiera uno con otro rol) pasaba por
+        // admin. Hoy solo `/api/auth/login` emite tokens de admin_users, así que no
+        // era explotable; se cierra igual porque la autorización no puede depender
+        // de que no exista otra fuente de tokens.
+        if (authUser.role !== 'admin') {
+          return sendJson(res, 403, { success: false, error: 'Token sin privilegios de administración.' });
+        }
+
+        // Cambio de contraseña: el README y el seed prometen que la clave inicial de
+        // .env se puede reemplazar desde el panel. Sin este endpoint la promesa era
+        // falsa y la contraseña del seed quedaba permanente.
+        if (pathname === '/api/admin/password' && method === 'POST') {
+          const cuerpo = await readJsonBody(req);
+          const actual = typeof cuerpo.actual === 'string' ? cuerpo.actual : '';
+          const nueva = typeof cuerpo.nueva === 'string' ? cuerpo.nueva : '';
+          if (nueva.length < 10) {
+            return sendJson(res, 400, { success: false, error: 'La nueva contraseña debe tener al menos 10 caracteres.' });
+          }
+          const usuario = db.getUserByEmail(authUser.email);
+          // Se exige la contraseña actual: un token robado no debe bastar para rotar la clave.
+          if (!usuario || !verifyPassword(actual, usuario.password_hash)) {
+            return sendJson(res, 403, { success: false, error: 'La contraseña actual no es correcta.' });
+          }
+          db.setPasswordHash(usuario.email, hashPassword(nueva));
+          return sendJson(res, 200, { success: true, message: 'Contraseña actualizada.' });
+        }
 
         if (pathname === '/api/admin/kpis' && method === 'GET') {
           return sendJson(res, 200, { success: true, kpis: db.getKPIs() });

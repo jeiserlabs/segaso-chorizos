@@ -57,6 +57,22 @@ describe('normalizarPedido: el servidor manda en precio y total', () => {
     assert.equal(pedido.items.length, 2);
   });
 
+  test('el 10% de bienvenida es estructural: no lo negocia el cliente ni el campo del cupón', () => {
+    // Regla de negocio declarada en `pedido.validation.ts` y en README: la bienvenida
+    // aplica a TODO pedido. El defecto real que se cerró el 01-nov-2026 no estaba acá
+    // (el servidor siempre descontó bien), sino en la vitrina: si el cliente borraba o
+    // escribía mal el código, el mensaje de WhatsApp cotizaba el precio completo mientras
+    // la base archivaba el precio con descuento. Ahora la UI toma los montos del servidor.
+    const pedido = normalizarPedido(
+      { ...PEDIDO_BASE, items: [{ id: 'caserito', qty: 2 }] },
+      INVENTARIO,
+    );
+
+    assert.equal(pedido.subtotal_cop, 39800);
+    assert.equal(pedido.discount_cop, 3980);
+    assert.equal(pedido.total_cop, 35820);
+  });
+
   test('rechaza una cantidad mayor al stock real del inventario', () => {
     assert.throws(
       () => normalizarPedido(

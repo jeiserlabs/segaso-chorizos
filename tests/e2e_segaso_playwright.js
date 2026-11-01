@@ -20,6 +20,47 @@ if (!process.env.JWT_SECRET) {
 }
 
 const { chromium } = require('playwright');
+
+const CLIENTE_DE_PRUEBA = 'Cliente Verificación Playwright';
+
+/**
+ * El E2E corre contra la base REAL (segaso.db), no contra un entorno aislado. Sin esta
+ * limpieza, cada corrida deja un pedido fantasma en el panel de Harold y descuenta
+ * paquetes que nadie compró: se detectó porque el histórico acumulaba pedidos de
+ * "Cliente Verificación Playwright" y el inventario bajaba solo.
+ * Debe correr DESPUÉS de cerrar el servidor para no pelear el lock de escritura de WAL.
+ */
+function limpiarPedidoDePrueba() {
+  let db;
+  try {
+    db = require('better-sqlite3')(path.join(__dirname, '../segaso.db'));
+  } catch (err) {
+    console.warn(`  ⚠ No se pudo abrir segaso.db para la limpieza: ${err.message}`);
+    return;
+  }
+  try {
+    const fila = db.prepare('SELECT id, items_json FROM orders WHERE customer_name = ?').get(CLIENTE_DE_PRUEBA);
+    if (!fila) {
+      console.log('  ✓ Sin residuos de prueba en la base');
+      return;
+    }
+    let items = [];
+    try { items = JSON.parse(fila.items_json) || []; } catch (_) { items = []; }
+    db.transaction(() => {
+      for (const item of items) {
+        if (item && item.id && Number.isFinite(item.qty)) {
+          db.prepare('UPDATE inventory SET stock = stock + ? WHERE code = ?').run(item.qty, item.id);
+        }
+      }
+      db.prepare('DELETE FROM orders WHERE id = ?').run(fila.id);
+    })();
+    console.log(`  ✓ Pedido de prueba eliminado y stock devuelto (${items.map((i) => `${i.id}+${i.qty}`).join(', ') || 'sin items'})`);
+  } catch (err) {
+    console.warn(`  ⚠ Limpieza de prueba falló: ${err.message}`);
+  } finally {
+    db.close();
+  }
+}
 const server = require('../server.js');
 const { collectPageQuality, assertPageQuality, checkHttpSurface } = require('./page_quality.js');
 
@@ -128,7 +169,7 @@ async function runE2E() {
     console.log('  ✓ Descuento automático WhatsApp verificado en total del carrito (-10% OFF)');
 
     // Llenar formulario de checkout
-    await page.fill('#custName', 'Cliente Verificación Playwright');
+    await page.fill('#custName', CLIENTE_DE_PRUEBA);
     await page.fill('#custPhone', '3124567890');
     await page.fill('#custAddress', 'Calle 38 Sur # 43A - 15');
     await page.selectOption('#custCity', 'Envigado');
@@ -247,7 +288,10 @@ async function runE2E() {
     throw err;
   } finally {
     await browser.close();
-    server.close();
+    // Se espera a que el servidor suelte la base antes de limpiar, o el write
+    // competiría con el lock de SQLite en modo WAL.
+    await new Promise((resolver) => server.close(resolver));
+    limpiarPedidoDePrueba();
   }
 }
 

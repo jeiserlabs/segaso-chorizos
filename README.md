@@ -105,7 +105,7 @@ El gate `npm run verify` incluye `npm run audit:page`, que mide peso, imágenes 
 
 - Tienda: `http://localhost:3000`
 - Back office: `http://localhost:3000/chorizos-segaso/admin`
-- Credenciales: `harold@segasochorizos.com` + `ADMIN_SEED_PASSWORD` de `.env`.
+- Credenciales: `harold@segasochorizos.com` + `ADMIN_SEED_PASSWORD` de `.env`. Para reemplazar esa semilla se usa `POST /api/admin/password` (pide la contraseña actual y exige mínimo 10 caracteres); no hay que volver a tocar `.env`.
 
 ### Contenido local de TikTok
 
@@ -152,15 +152,28 @@ Nunca subir `.env` al repositorio. El contrato público es `.env.example`.
 |---|---|---|---|
 | `POST` | `/api/auth/login` | No | Login; devuelve JWT. |
 | `GET` | `/api/auth/me` | JWT | Verificar sesión. |
-| `POST` | `/api/orders` | No | Crear pedido público y descontar stock. |
+| `POST` | `/api/orders` | No | Crear pedido público y descontar stock (transacción atómica; `409` si un referencia se agota). |
 | `POST` | `/api/leads` | No | Registrar interesado. |
 | `GET` | `/api/inventory` | No | Stock público por referencia. |
-| `GET` | `/api/admin/kpis` | JWT | KPIs del negocio. |
-| `GET` | `/api/admin/orders` | JWT | Pedidos. |
-| `PATCH` | `/api/admin/orders/:id` | JWT | Cambiar estado con validación FSM. |
-| `GET` | `/api/admin/inventory` | JWT | Inventario completo. |
-| `PATCH` | `/api/admin/inventory/:code` | JWT | Actualizar stock. |
-| `GET` | `/api/admin/leads` | JWT | Leads de academia y catering. |
+| `GET` | `/api/admin/kpis` | JWT admin | KPIs del negocio, incluidos `uniqueCustomers` y `topProduct`. |
+| `GET` | `/api/admin/orders` | JWT admin | Pedidos. |
+| `PATCH` | `/api/admin/orders/:id` | JWT admin | Cambiar estado con validación FSM. |
+| `GET` | `/api/admin/inventory` | JWT admin | Inventario completo. |
+| `PATCH` | `/api/admin/inventory/:code` | JWT admin | Actualizar stock. |
+| `GET` | `/api/admin/leads` | JWT admin | Leads de academia y catering. |
+| `POST` | `/api/admin/password` | JWT admin | Cambiar la contraseña exigiendo la actual. Reemplaza la semilla de `.env`. |
+
+> Todas las rutas `/api/admin/*` verifican además `role === 'admin'` en el JWT (desde el
+> 01-nov-2026). Antes bastaba un token firmado válido; hoy solo `/api/auth/login` emite
+> tokens de `admin_users`, pero la autorización no puede depender de que no exista otra
+> fuente de tokens.
+
+> **Regla del descuento:** el 10 % de bienvenida aplica a **todo** pedido y lo fija el
+> servidor (`DESCUENTO_BIENVENIDA_PCT`), nunca el cliente. La vitrina toma los montos de
+> la respuesta del servidor para armar el mensaje de WhatsApp, así que lo que se cotiza
+> y lo que se archiva son el mismo número. Para quitar el descuento general se cambia
+> esa constante y se convierte en cupón real (el campo ya existe en la UI); es decisión
+> de negocio de Harold, no un bug.
 
 El detalle y ejemplos están en [`docs/API.md`](docs/API.md).
 

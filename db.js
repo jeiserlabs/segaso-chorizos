@@ -145,14 +145,84 @@ if (db.prepare('SELECT COUNT(*) as n FROM orders').get().n === 0) {
 }
 
 // ------------------------------------------------------------------
+// OPERACIONES ATÓMICAS
+// ------------------------------------------------------------------
+const stmtInsertOrder = db.prepare(`
+  INSERT INTO orders
+    (code, customer_name, customer_phone, address, neighborhood,
+     items_json, subtotal_cop, discount_cop, total_cop, payment_method, status)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pendiente')
+`);
+
+// El `AND stock >= ?` es la parte que antes no existía: con `MAX(0, stock - qty)`
+// dos pedidos concurrentes podían llevarse el mismo paquete y el stock quedaba en 0
+// sin ningún error (sobreventa silenciosa). Ahora la actualización simply no ocurre
+// si no alcanza, y `changes` lo delata.
+const stmtConsumeStock = db.prepare(
+  'UPDATE inventory SET stock = stock - ?, updated_at = CURRENT_TIMESTAMP WHERE code = ? AND stock >= ?'
+);
+
+const stmtOrderCodeExists = db.prepare('SELECT 1 FROM orders WHERE code = ?');
+
+class StockInsuficiente extends Error {
+  constructor(code) {
+    super(`Stock insuficiente para ${code}`);
+    this.name = 'StockInsuficiente';
+    this.code = 'STOCK_INSUFICIENTE';
+    this.producto = code;
+  }
+}
+
+/**
+ * Inserta el pedido y descuenta el stock en UNA transacción.
+ * Fail-closed: si algún paquete no alcanza, se revierte todo y no queda pedido fantasma.
+ * `db.transaction` de better-sqlite3 es síncrona y atómica en SQLite.
+ */
+function crearPedidoAtomico(order, items) {
+  const correr = db.transaction(() => {
+    for (const item of items) {
+      const info = stmtConsumeStock.run(item.qty, item.id, item.qty);
+      if (info.changes !== 1) throw new StockInsuficiente(item.id);
+    }
+    return stmtInsertOrder.run(
+      order.code, order.customer_name, order.customer_phone,
+      order.address, order.neighborhood,
+      order.items_json, order.subtotal_cop, order.discount_cop, order.total_cop,
+      order.payment_method || 'no especificado'
+    ).lastInsertRowid;
+  });
+  return correr();
+}
+
+/** Código de pedido único: `SEG-<6 dígitos del reloj>` colisiona si llegan dos en el
+ *  mismo milisegundo y el INSERT reventaba contra el UNIQUE (500 en vivo). */
+function generarCodigoPedido() {
+  for (let intento = 0; intento < 12; intento++) {
+    const base = Date.now().toString().slice(-6);
+    const candidato = intento === 0 ? `SEG-${base}` : `SEG-${base}-${intento}`;
+    if (!stmtOrderCodeExists.get(candidato)) return candidato;
+  }
+  return `SEG-${Date.now().toString().slice(-9)}`;
+}
+
+// ------------------------------------------------------------------
 // API DE DATOS
 // ------------------------------------------------------------------
 module.exports = {
   db,
+  StockInsuficiente,
+  crearPedidoAtomico,
+  generarCodigoPedido,
 
   // Autenticación
   getUserByEmail: (email) =>
     db.prepare('SELECT * FROM admin_users WHERE email = ?').get(email),
+
+  // Cambio de contraseña del panel (el seed de .env ya no es permanente)
+  setPasswordHash: (email, hash) =>
+    db.prepare(
+      'UPDATE admin_users SET password_hash = ? WHERE email = ?'
+    ).run(hash, email).changes === 1,
 
   // Inventario (admin)
   getInventory: () =>
@@ -179,12 +249,7 @@ module.exports = {
     db.prepare('SELECT * FROM orders ORDER BY id DESC').all(),
 
   createOrder: (order) =>
-    db.prepare(`
-      INSERT INTO orders
-        (code, customer_name, customer_phone, address, neighborhood,
-         items_json, subtotal_cop, discount_cop, total_cop, payment_method, status)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pendiente')
-    `).run(
+    stmtInsertOrder.run(
       order.code, order.customer_name, order.customer_phone,
       order.address, order.neighborhood,
       order.items_json, order.subtotal_cop, order.discount_cop, order.total_cop,
@@ -231,6 +296,30 @@ module.exports = {
       "SELECT COUNT(*) as count FROM orders WHERE status = 'cancelado'"
     ).get();
 
+    // Los dos KPIs que el guion de sustentación promete y el panel no calculaba.
+    const clientesUnicos = db.prepare(
+      'SELECT COUNT(DISTINCT customer_phone) as count FROM orders'
+    ).get().count;
+
+    // "Producto más vendido" vive dentro de items_json (texto), no en una tabla
+    // normalizada: se agrega en JS sobre el histórico entregado. Con miles de pedidos
+    // esto debería ser una tabla order_items; para el volumen actual es suficiente y
+    // no abre una migración antes de la defensa.
+    const unidadesPorProducto = new Map();
+    for (const fila of db.prepare("SELECT items_json FROM orders WHERE status = 'entregado'").all()) {
+      let items = [];
+      try { items = JSON.parse(fila.items_json) || []; } catch { continue; }
+      for (const item of items) {
+        const nombre = item && item.name ? item.name : (item && item.id) || '—';
+        const qty = Number.isFinite(item && item.qty) ? item.qty : 0;
+        unidadesPorProducto.set(nombre, (unidadesPorProducto.get(nombre) || 0) + qty);
+      }
+    }
+    let topProducto = null, topUnidades = 0;
+    for (const [nombre, unidades] of unidadesPorProducto) {
+      if (unidades > topUnidades) { topProducto = nombre; topUnidades = unidades; }
+    }
+
     return {
       // Histórico total
       salesDelivered: allTime.total,
@@ -247,6 +336,9 @@ module.exports = {
       // Alertas
       lowStockAlerts: lowStock.count,
       canceledOrders: canceled.count,
+      // Promesa del guion 07_DEMO_MVP: clientes únicos y producto más vendido
+      uniqueCustomers: clientesUnicos,
+      topProduct: topProducto ? { name: topProducto, units: topUnidades } : null,
     };
   },
 };

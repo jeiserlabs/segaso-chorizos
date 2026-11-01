@@ -493,6 +493,16 @@ const PRODUCTS = [
         try {
           const data = await response.json();
           if (data.success && data.code) orderId = data.code;
+          if (data.success && Number.isFinite(data.total_cop)) {
+            // El servidor es la fuente de verdad del dinero. Sus montos (COP enteros)
+            // reemplazan el cálculo local (k COP con decimales), que podía divergir de
+            // lo registrado cuando el cupón se editaba en el cliente: el mensaje de
+            // WhatsApp cotía un valor distinto del que quedaba en la base.
+            total = data.subtotal_cop / 1000;
+            discount = data.discount_cop / 1000;
+            finalTotal = data.total_cop / 1000;
+            appliedDiscountPct = total > 0 ? Math.round((discount / total) * 100) : 0;
+          }
         } catch (_) {}
       }
 

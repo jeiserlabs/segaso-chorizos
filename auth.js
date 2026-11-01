@@ -3,7 +3,7 @@ const crypto = require('node:crypto');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
-  throw new Error('[auth] JWT_SECRET no definido. Agrega JWT_SECRET=<secret> en projects/segaso-app/.env');
+  throw new Error('[auth] JWT_SECRET no definido. Agrega JWT_SECRET=<secret> en el .env de la raiz de este proyecto.');
 }
 
 /**

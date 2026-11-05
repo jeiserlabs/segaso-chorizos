@@ -1,0 +1,54 @@
+:root {
+  --primary: #A61828;
+  --primary-hover: #8C1320;
+  --primary-glow: rgba(166, 24, 40, 0.4);
+  --cream: #F3ECDA;
+  --cream-muted: #D8CEB8;
+  --cream-subtle: rgba(243, 236, 218, 0.08);
+  --bg-deep: #120C0E;
+  --bg-surface: #1B1215;
+  --bg-card: #23171B;
+  --bg-card-hover: #2D1D22;
+  --surface-deep: #0E080A;
+  --surface-base: #191013;
+  --surface-raised: #1C1216;
+  --surface-elevated: #25161B;
+  --surface-overlay: #140E10;
+  --surface-drawer: #181013;
+  --surface-input: #110B0D;
+  --surface-footer: #0D080A;
+  --surface-toast: #1F1518;
+  --border-subtle: rgba(243, 236, 218, 0.12);
+  --border-strong: rgba(166, 24, 40, 0.5);
+  --gold: #E5A93C;
+  --gold-deep: #B47818;
+  --primary-deep: #630C16;
+  --primary-soft: #FFA3AD;
+  --success: #10B981;
+  --success-soft: #6EE7B7;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+  --danger-soft: #FCA5A5;
+  --brand-tiktok: #FE2C55;
+  --brand-tiktok-soft: #FF6685;
+  --brand-instagram: #DD2A7B;
+  --instagram-gradient: linear-gradient(45deg, #F58529, var(--brand-instagram), #8134AF, #515BD4);
+  --hero-accent: #FF6B7A;
+  --text-white: #FFFFFF;
+  --text-main: #F3ECDA;
+  --text-muted: #A39699;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; }
+body { background-color: var(--bg-deep); color: var(--text-main); min-height: 100vh; overflow-x: hidden; line-height: 1.5; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+.badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.badge-primary { background: var(--primary-glow); color: var(--primary-soft); border: 1px solid var(--primary); }
+.badge-gold { background: rgba(229, 169, 60, 0.15); color: var(--gold); border: 1px solid rgba(229, 169, 60, 0.4); }
+.badge-success { background: rgba(16, 185, 129, 0.15); color: var(--success-soft); border: 1px solid rgba(16, 185, 129, 0.4); }
+.badge-danger { background: rgba(239, 68, 68, 0.15); color: var(--danger-soft); border: 1px solid rgba(239, 68, 68, 0.4); }
+.badge-tiktok { background: rgba(254, 44, 85, 0.18); color: var(--brand-tiktok-soft); border: 1px solid rgba(254, 44, 85, 0.4); }

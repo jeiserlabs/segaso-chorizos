@@ -1,0 +1,77 @@
+/* Header & Navbar Pública */
+header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(18, 12, 14, 0.94);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: all 0.3s;
+}
+.nav-inner {
+  display: flex; justify-content: space-between; align-items: center; height: 76px; gap: 16px;
+}
+.brand-group {
+  display: flex; align-items: center; gap: 14px; text-decoration: none; color: inherit; cursor: pointer;
+}
+.brand-logo-img {
+  height: 54px; width: auto; object-fit: contain; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.6));
+}
+.brand-text .brand-name {
+  display: block; font-size: 20px; font-weight: 800; letter-spacing: -0.5px; color: var(--cream); line-height: 1.1;
+}
+.brand-text .brand-tagline {
+  font-size: 11px; font-weight: 500; color: var(--gold); letter-spacing: 0.8px; text-transform: uppercase;
+}
+.nav-links { display: flex; align-items: center; gap: 22px; list-style: none; }
+.nav-links a {
+  color: var(--text-muted); text-decoration: none; font-size: 13.5px; font-weight: 600; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--cream); }
+
+.nav-actions { display: flex; align-items: center; gap: 12px; }
+.cart-btn {
+  background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--cream);
+  padding: 9px 18px; border-radius: var(--radius-sm); font-size: 13.5px; font-weight: 700;
+  cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s;
+}
+.cart-btn:hover { border-color: var(--primary); background: var(--bg-card); transform: translateY(-1px); }
+.cart-count {
+  background: var(--primary); color: #fff; font-size: 11px; font-weight: 800;
+  padding: 2px 7px; border-radius: 12px; min-width: 18px; text-align: center;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.cart-count.badge-pop {
+  animation: badgePop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.view-content { display: none; }
+.view-content.active { display: block; animation: fadeIn 0.3s ease-out; }
+
+/* Hamburger Menu & Mobile Nav */
+.hamburger-btn {
+  display: none; background: var(--bg-surface); border: 1px solid var(--border-subtle);
+  color: var(--cream); padding: 8px 12px; border-radius: var(--radius-sm); font-size: 18px;
+  cursor: pointer; transition: all 0.2s; line-height: 1;
+}
+.hamburger-btn:hover { border-color: var(--primary); }
+
+.mobile-nav {
+  display: none; position: fixed; top: 76px; left: 0; right: 0; z-index: 99;
+  background: rgba(18, 12, 14, 0.98); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 16px 20px 20px; flex-direction: column; gap: 4px;
+  animation: slideDown 0.2s ease-out;
+}
+.mobile-nav.open { display: flex; }
+.mobile-nav a {
+  color: var(--cream-muted); text-decoration: none; font-size: 15px; font-weight: 600;
+  padding: 11px 14px; border-radius: var(--radius-sm); transition: all 0.15s;
+  border: 1px solid transparent;
+}
+.mobile-nav a:hover { color: var(--cream); background: var(--bg-surface); border-color: var(--border-subtle); }
+
+.mobile-nav-backdrop {
+  display: none; position: fixed; inset: 76px 0 0; z-index: 98;
+  background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(2px);
+}
+.mobile-nav-backdrop.open { display: block; }
+body.menu-open { overflow: hidden; }

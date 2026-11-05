@@ -1,0 +1,95 @@
+/* Catálogo */
+.catalog-section { padding: 54px 0 64px; }
+.filter-tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 32px; flex-wrap: wrap; }
+.filter-btn {
+  background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-muted);
+  padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+}
+.filter-btn.active, .filter-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 24px; }
+.product-card {
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease; position: relative;
+}
+/* React Bits: Spotlight Card Effect */
+.product-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(350px circle at var(--mouse-x, -999px) var(--mouse-y, -999px), rgba(229, 169, 60, 0.18), transparent 45%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+.product-card:hover::before {
+  opacity: 1;
+}
+.product-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(229, 169, 60, 0.45);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55), 0 0 20px rgba(166, 24, 40, 0.25);
+}
+.product-card.out-of-stock { opacity: 0.6; filter: grayscale(0.8); }
+
+.prod-visual {
+  height: 170px; background: linear-gradient(135deg, rgba(166,24,40,0.35), rgba(35,23,27,0.9));
+  position: relative; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--border-subtle);
+  overflow: hidden; cursor: pointer;
+}
+.prod-real-img {
+  width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.product-card:hover .prod-real-img { transform: scale(1.08); }
+.prod-placeholder-icon { font-size: 46px; }
+.prod-badge-pos { position: absolute; top: 12px; right: 12px; z-index: 2; }
+.prod-zoom-hint {
+  position: absolute; bottom: 8px; right: 8px; background: rgba(14, 8, 10, 0.85);
+  backdrop-filter: blur(8px); border: 1px solid rgba(229,169,60,0.35); border-radius: 6px;
+  padding: 3px 8px; font-size: 11px; font-weight: 600; color: var(--gold);
+  opacity: 0; transform: translateY(4px); transition: all 0.25s ease; pointer-events: none; z-index: 2;
+}
+.product-card:hover .prod-zoom-hint {
+  opacity: 1; transform: translateY(0);
+}
+
+.prod-body { padding: 18px 20px 14px; flex: 1; }
+.prod-name { font-size: 18px; font-weight: 700; color: var(--text-white); margin-bottom: 4px; }
+.prod-pack { font-size: 11.5px; color: var(--gold); font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+.prod-desc { font-size: 13px; color: var(--cream-muted); line-height: 1.45; margin-bottom: 14px; }
+
+.prod-footer {
+  padding: 14px 20px; background: rgba(0,0,0,0.25); border-top: 1px solid var(--border-subtle);
+  display: flex; justify-content: space-between; align-items: center; gap: 10px;
+}
+.prod-price { font-size: 20px; font-weight: 800; color: var(--cream); }
+.prod-price small { font-size: 11px; font-weight: 600; color: var(--text-muted); }
+
+.qty-selector { display: flex; align-items: center; gap: 6px; }
+.qty-btn {
+  width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border-subtle);
+  background: var(--bg-surface); color: var(--cream); font-weight: 700; cursor: pointer;
+}
+.qty-btn:hover { background: var(--primary); color: #fff; }
+.qty-val { font-size: 13px; font-weight: 700; width: 22px; text-align: center; }
+
+.add-to-cart-btn {
+  background: linear-gradient(135deg, var(--primary) 0%, #8C1320 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff; padding: 9px 16px;
+  border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(166, 24, 40, 0.3);
+}
+.add-to-cart-btn:hover {
+  background: linear-gradient(135deg, #BF1E30 0%, var(--primary) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(166, 24, 40, 0.45);
+}
+.add-to-cart-btn:active {
+  transform: scale(0.95);
+}

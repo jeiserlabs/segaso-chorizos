@@ -1,0 +1,92 @@
+/* ==========================================================
+   HERO & SECCIONES PÚBLICAS
+   ========================================================== */
+.hero {
+  padding: 64px 0 48px; text-align: center; position: relative; overflow: hidden;
+  background: radial-gradient(circle at 50% 20%, rgba(166, 24, 40, 0.25) 0%, transparent 65%);
+}
+.hero-badge-wrap { margin-bottom: 18px; }
+.hero-title {
+  font-size: 46px; font-weight: 800; letter-spacing: -1.2px; line-height: 1.15;
+  color: var(--text-white); max-width: 840px; margin: 0 auto 18px;
+}
+.hero-title span {
+  background: linear-gradient(135deg, var(--hero-accent), var(--gold));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero-subtitle {
+  font-size: 16px; color: var(--cream-muted); max-width: 660px; margin: 0 auto 32px; font-weight: 400;
+}
+.hero-metrics {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px; max-width: 900px; margin: 0 auto 36px;
+}
+.metric-card {
+  background: var(--cream-subtle); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md); padding: 16px; text-align: center;
+  backdrop-filter: blur(8px);
+}
+.metric-val { font-size: 24px; font-weight: 800; color: var(--gold); }
+.metric-lbl { font-size: 12px; color: var(--cream-muted); font-weight: 600; margin-top: 2px; }
+
+.hero-ctas { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+.btn-primary {
+  background: var(--primary); color: #fff; padding: 13px 26px; border-radius: var(--radius-sm);
+  border: 1px solid rgba(255,255,255,0.15); font-size: 14.5px; font-weight: 700; cursor: pointer;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s;
+  box-shadow: 0 6px 20px var(--primary-glow);
+}
+.btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); }
+.btn-gold {
+  background: linear-gradient(135deg, #E5A93C, var(--gold-deep)); color: #000; padding: 13px 26px;
+  border-radius: var(--radius-sm); border: none; font-size: 14.5px; font-weight: 800; cursor: pointer;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s;
+  box-shadow: 0 6px 20px rgba(229, 169, 60, 0.3);
+}
+.btn-gold:hover { filter: brightness(1.1); transform: translateY(-2px); }
+.btn-outline {
+  background: transparent; color: var(--cream); padding: 13px 26px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle); font-size: 14.5px; font-weight: 600; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; text-decoration: none;
+}
+.btn-outline:hover { background: var(--bg-surface); border-color: var(--cream); }
+
+.social-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 44px; background: var(--bg-surface); color: var(--cream);
+  border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);
+  font-weight: 700; text-decoration: none; line-height: 1.3; transition: all 0.2s;
+}
+.social-btn:hover { background: var(--bg-card); border-color: var(--gold); color: var(--cream); transform: translateY(-2px); }
+.social-btn--tiktok { border-color: rgba(254, 44, 85, 0.45); }
+.social-btn--instagram { border-color: rgba(221, 42, 123, 0.45); }
+.social-btn--lg { padding: 13px 26px; font-size: 14.5px; }
+.social-btn--sm { padding: 10px 16px; font-size: 12.5px; border-radius: 20px; }
+.social-mark {
+  width: 24px; height: 24px; border-radius: 8px; flex: 0 0 auto;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.social-mark--tiktok { background: rgba(254, 44, 85, 0.16); color: var(--brand-tiktok); }
+.social-mark--instagram { background: var(--instagram-gradient); color: #fff; }
+.social-mark svg { width: 15px; height: 15px; }
+
+.section-header { text-align: center; margin-bottom: 36px; }
+.section-title { font-size: 30px; font-weight: 800; letter-spacing: -0.6px; color: var(--text-white); }
+.section-desc { font-size: 14.5px; color: var(--cream-muted); margin-top: 6px; }
+
+/* Bento Features */
+.bento-section { padding: 54px 0; }
+.bento-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.bento-card {
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md); padding: 24px; transition: all 0.25s;
+}
+.bento-card:hover { transform: translateY(-3px); border-color: var(--border-strong); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+.bento-icon {
+  width: 48px; height: 48px; border-radius: 14px;
+  background: rgba(229, 169, 60, 0.1); border: 1px solid rgba(229, 169, 60, 0.28);
+  display: flex; align-items: center; justify-content: center; color: var(--gold); margin-bottom: 14px;
+}
+.bento-icon svg { width: 24px; height: 24px; }
+.bento-card h3 { font-size: 17px; font-weight: 700; color: var(--cream); margin-bottom: 6px; }
+.bento-card p { font-size: 13px; color: var(--cream-muted); line-height: 1.5; }

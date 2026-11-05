@@ -1,0 +1,90 @@
+/* ==========================================================
+   ASADOS AL BARRIL (CATERING GOURMET) & CURSOS
+   ========================================================== */
+.barril-section {
+  padding: 64px 0; background: linear-gradient(180deg, rgba(27,18,21,0.7) 0%, rgba(18,12,14,0.9) 100%);
+  border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);
+}
+.barril-hero-box {
+  background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: var(--radius-lg);
+  padding: 36px; margin-bottom: 32px; display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 32px;
+  align-items: center; box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+}
+.barril-info h3 { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 12px; }
+.barril-info p { font-size: 14.5px; color: var(--cream-muted); line-height: 1.6; margin-bottom: 20px; }
+.barril-features { display: flex; flex-direction: column; gap: 10px; margin-bottom: 26px; }
+.barril-feat-item { display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: var(--cream); font-weight: 600; }
+.barril-feat-item span { color: var(--gold); }
+
+/* Bento Gallery para Asados al Barril */
+.barril-bento-gallery {
+  display: flex; flex-direction: column; gap: 12px;
+}
+.barril-bento-main {
+  height: 200px; border-radius: var(--radius-md); overflow: hidden; position: relative;
+  border: 1px solid var(--border-strong); cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+}
+.barril-bento-main img, .barril-bento-subcard img {
+  width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;
+}
+.barril-bento-main:hover img, .barril-bento-subcard:hover img {
+  transform: scale(1.06);
+}
+.barril-bento-sub {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+.barril-bento-subcard {
+  height: 110px; border-radius: var(--radius-md); overflow: hidden; position: relative;
+  border: 1px solid var(--border-subtle); cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+}
+.bento-overlay {
+  position: absolute; inset: 0; background: linear-gradient(to top, rgba(14,8,10,0.92) 0%, rgba(14,8,10,0.2) 60%, transparent 100%);
+  display: flex; flex-direction: column; justify-content: flex-end; padding: 10px 12px;
+}
+.bento-overlay h4 { font-size: 14px; font-weight: 700; color: #fff; margin-top: 3px; }
+.bento-overlay p { font-size: 11.5px; font-weight: 600; color: var(--cream); margin-top: 2px; }
+
+/* Planes de Catering */
+.barril-cards-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;
+}
+.barril-plan-card {
+  background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);
+  overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.barril-plan-card:hover {
+  transform: translateY(-6px); border-color: var(--gold); box-shadow: 0 16px 36px rgba(0,0,0,0.6);
+}
+.barril-plan-img-wrap {
+  height: 140px; position: relative; overflow: hidden; border-bottom: 1px solid var(--border-subtle);
+}
+.barril-plan-img {
+  width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;
+}
+.barril-plan-card:hover .barril-plan-img {
+  transform: scale(1.06);
+}
+.barril-plan-body {
+  padding: 20px 22px 14px; flex: 1;
+}
+.barril-plan-card .btn-outline, .barril-plan-card .btn-primary {
+  margin: 0 22px 20px 22px;
+}
+.barril-plan-title { font-size: 17px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+.barril-plan-tag { font-size: 11.5px; color: var(--gold); font-weight: 700; text-transform: uppercase; margin-bottom: 10px; }
+.barril-plan-desc { font-size: 13px; color: var(--cream-muted); line-height: 1.5; margin-bottom: 16px; }
+
+/* Cursos y Talleres */
+.courses-section {
+  padding: 60px 0; background: rgba(0,0,0,0.25); border-top: 1px solid var(--border-subtle);
+}
+.course-card {
+  background: linear-gradient(135deg, var(--surface-raised) 0%, var(--surface-elevated) 100%);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-lg); padding: 36px;
+  display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 32px; align-items: center;
+}
+.course-waitlist-box {
+  background: rgba(0,0,0,0.4); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);
+  padding: 24px;
+}

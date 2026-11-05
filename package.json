@@ -13,8 +13,8 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "node --no-warnings --test tests/segaso_domain.test.ts tests/pedido_validation.test.ts tests/demo_vs_real_data.test.js",
-    "test:e2e": "node --env-file=.env tests/e2e_segaso_playwright.js",
-    "audit:page": "node scripts/audit_page.js",
+    "test:e2e": "node --no-warnings=MODULE_TYPELESS_PACKAGE_JSON --env-file=.env tests/e2e_segaso_playwright.js",
+    "audit:page": "node --no-warnings=MODULE_TYPELESS_PACKAGE_JSON scripts/audit_page.js",
     "verify": "npm run typecheck && npm test && npm run test:e2e && npm run audit:page",
     "start": "node --env-file=.env server.js",
     "dev": "node --env-file=.env --watch server.js",

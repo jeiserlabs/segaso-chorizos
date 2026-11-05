@@ -1,0 +1,68 @@
+/* -------------------------------------------------------------
+   CSS SCROLL-DRIVEN ANIMATIONS (BASELINE 2026 / 0 JS)
+   ------------------------------------------------------------- */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3.5px;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--gold) 100%);
+  transform-origin: 0% 50%;
+  z-index: 1000;
+  pointer-events: none;
+}
+@supports (animation-timeline: scroll()) {
+  .scroll-progress-bar {
+    animation: segasoScrollProgress linear;
+    animation-timeline: scroll();
+  }
+  @keyframes segasoScrollProgress {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .product-card, .barril-hero-box {
+    animation: segasoCardReveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 25%;
+  }
+  @keyframes segasoCardReveal {
+    from {
+      opacity: 0.5;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* Lightbox Modal Animation */
+@keyframes zoomInModal {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+.lightbox-box {
+  animation: zoomInModal 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Skeleton Loaders */
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-card-hover) 50%, var(--bg-card) 75%);
+  background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 4px;
+}
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes toastUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+@keyframes badgePop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}

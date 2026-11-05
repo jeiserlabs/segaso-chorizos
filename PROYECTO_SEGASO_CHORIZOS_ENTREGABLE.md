@@ -137,7 +137,7 @@ Las tablas completas, con pesos, calificaciones y cálculos, están en `docs/SUS
 
 ## 8. IMPACTO FINANCIERO Y RESULTADOS ESPERADOS
 
-1. **Ahorro en Costos de Desarrollo:** $0 COP en pagos de licencias SaaS (Shopify, Wix) y $0 en tokens de inteligencia artificial externa gracias al Asesor Virtual determinista.
+1. **Ahorro en Costos de Desarrollo:** \$0 COP en pagos de licencias SaaS (Shopify, Wix) y $0 en tokens de inteligencia artificial externa gracias al Asesor Virtual determinista.
 2. **Incremento en Tasa de Conversión:** Reducción estimada del 60% en el tiempo de cierre de un pedido, ya que el cliente selecciona productos y cantidades de forma visual antes de contactar a Harold.
 3. **Control de Mermas e Inventario:** Harold puede actualizar el stock en tiempo real desde el Back Office, evitando prometer referencias agotadas.
 

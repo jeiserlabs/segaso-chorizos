@@ -249,6 +249,11 @@ const PRODUCTS = [
             ${getCardActionHtml(p, isOutOfStock, currentQty)}
           </div>
         `;
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          card.style.setProperty('--mouse-x', (e.clientX - rect.left) + 'px');
+          card.style.setProperty('--mouse-y', (e.clientY - rect.top) + 'px');
+        });
         container.appendChild(card);
       });
     }
@@ -290,7 +295,13 @@ const PRODUCTS = [
 
     function updateCartBadge() {
       const totalUnits = Object.values(cart).reduce((a, b) => a + b, 0);
-      document.getElementById('cartCount').textContent = totalUnits;
+      const el = document.getElementById('cartCount');
+      if (el) {
+        el.textContent = totalUnits;
+        el.classList.remove('badge-pop');
+        void el.offsetWidth;
+        el.classList.add('badge-pop');
+      }
       if (typeof saveCart === 'function') saveCart();
     }
 

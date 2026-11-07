@@ -7,10 +7,10 @@ const SOURCE_DIR = 'C:/PROYECTOS/Mis_Proyectos/Asistente_Personal/projects/segas
 const OUT_DIR = path.resolve(__dirname, '../videos');
 
 const VIDEOS = [
-  { num: 1, id: '7690072472544283924', crf: 28, aac: '64k' },
-  { num: 2, id: '7678100505100356884', crf: 28, aac: '64k' },
-  { num: 3, id: '7674733063032540437', crf: 30, aac: '64k' },
-  { num: 4, id: '7671306377410678036', crf: 32, aac: '48k' }
+  { num: 1, id: '7690072472544283924', crf: 31, aac: '48k' },
+  { num: 2, id: '7678100505100356884', crf: 31, aac: '48k' },
+  { num: 3, id: '7674733063032540437', crf: 32, aac: '48k' },
+  { num: 4, id: '7671306377410678036', crf: 34, aac: '40k' }
 ];
 
 if (!fs.existsSync(OUT_DIR)) {

@@ -90,6 +90,7 @@ function seedInitialDemoOrders() {
 }
 
 export async function syncInventoryFromServer(onUpdateCallback) {
+  if (typeof window !== 'undefined' && window.location.protocol === 'file:') return;
   try {
     const res = await fetch('/api/inventory');
     if (!res.ok) return;

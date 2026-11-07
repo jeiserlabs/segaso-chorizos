@@ -31,7 +31,11 @@ media/
 *.png
 *.jpg
 *.jpeg
-*.webp
+!img/products/*.webp
+!assets/img/barrel/*.webp
+!assets/img/gallery/*.webp
+!assets/img/thumbs/*.webp
+!logo_segaso.svg
 *.heic
 *.avif
 *.gif

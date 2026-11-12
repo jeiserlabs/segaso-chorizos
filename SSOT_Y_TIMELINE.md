@@ -52,6 +52,7 @@ Un cambio no está terminado hasta que está en GitHub (texto/código) y en Driv
 | 2026-10-29 | Paquete de 32 PDFs y video promocional de 30 s. | Drive `02_GUIAS_PDF/` y `06_VIDEO/` |
 | 2026-10-30 | Guías actualizadas de los 5 integrantes. | `docs/guias_actualizadas/` |
 | 2026-10-31 | Auditoría end-to-end: 23/23 unitarias, E2E 5 fases, PDFs regenerados, Drive creado y copia local unificada. | Este documento |
+| 2026-11-12 | Reproductor oficial de TikTok embebido: el sitio público reproduce los 4 videos de `@segaso.chorizos` sin subir binarios a Git. | `.odd/tasks/segaso_mvp_core.odd.md` |
 | **2026-11-14** | **Sustentación CESDE.** | — |
 | Después del 14-nov | Publicar la app (si el equipo lo decide), separar `segaso.db` de producción y ampliar pruebas. | Pendiente |
 

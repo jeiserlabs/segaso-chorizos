@@ -10,6 +10,34 @@ const TIKTOK_VIDEOS_MAP = {
   '7671306377410678036': { num: 4, title: 'Harold y Giseth: Historia de Segaso Chorizos' }
 };
 
+// Reproductor oficial de TikTok: el video lo sirve TikTok desde la cuenta de Segaso.
+const TIKTOK_PLAYER = 'https://www.tiktok.com/player/v1/';
+const TIKTOK_PLAYER_QUERY = '?autoplay=1&muted=1&loop=0&rel=0&music_info=0&description=0';
+
+function tiktokEmbedMarkup(videoId) {
+  return `<iframe
+    src="${TIKTOK_PLAYER}${videoId}${TIKTOK_PLAYER_QUERY}"
+    title="Video oficial de Segaso Chorizos en TikTok"
+    style="width: 100%; height: 100%; border: 0; display: block; background: #000;"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen></iframe>`;
+}
+
+function tiktokLinkFallbackMarkup(videoId) {
+  return `<div style="padding: 28px; text-align: center; color: var(--cream-muted); font-size: 13px; line-height: 1.6;">
+    El video no se pudo cargar en este equipo.<br>
+    <a href="https://www.tiktok.com/@segaso.chorizos/video/${videoId}" target="_blank" rel="noopener" style="color: var(--gold); font-weight: 700;">Verlo en TikTok</a>
+  </div>`;
+}
+
+function localVideoMarkup(info) {
+  return `<video id="activeTikTokPlayer" controls autoplay playsinline poster="assets/img/thumbs/thumb_${info.num}.webp" style="width: 100%; height: 100%; background: #000; object-fit: contain;">
+      <source src="videos/video_${info.num}.mp4" type="video/mp4">
+      Tu navegador no soporta reproducción de video HTML5.
+    </video>`;
+}
+
 export function setModalOpen(modal, isOpen) {
   if (!modal) return;
   const wasOpen = modal.classList.contains('open');
@@ -100,18 +128,36 @@ export function playTikTokVideo(videoId, title) {
   titleEl.textContent = title || info.title;
   directLink.href = `https://www.tiktok.com/@segaso.chorizos/video/${videoId}`;
 
-  container.innerHTML = `
-    <video id="activeTikTokPlayer" controls autoplay playsinline poster="assets/img/thumbs/thumb_${info.num}.webp" style="width: 100%; max-height: 480px; border-radius: 8px; background: #000; outline: none; object-fit: contain;">
-      <source src="videos/video_${info.num}.mp4" type="video/mp4">
-      Tu navegador no soporta reproducción de video HTML5.
-    </video>
-  `;
+  // Cadena de 3 capas: si está en local/offline usa MP4; en GitHub Pages/Web incrusta directo el player oficial de TikTok.
+  const isLocalEnv = typeof window !== 'undefined' && (
+    window.location.protocol === 'file:' ||
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1'
+  );
 
-  const source = container.querySelector('source');
-  if (source) {
-    source.addEventListener('error', () => {
-      container.innerHTML = `<div style="padding: 28px; text-align: center; color: var(--cream-muted); font-size: 13px;">El video local no está disponible en este equipo.<br><a href="https://www.tiktok.com/@segaso.chorizos/video/${videoId}" target="_blank" rel="noopener" style="color: var(--gold); font-weight: 700;">Verlo en TikTok</a></div>`;
-    }, { once: true });
+  if (isLocalEnv) {
+    container.innerHTML = localVideoMarkup(info);
+    const source = container.querySelector('source');
+    if (source) {
+      source.addEventListener('error', () => {
+        container.innerHTML = tiktokEmbedMarkup(videoId);
+        const frame = container.querySelector('iframe');
+        if (frame) {
+          frame.addEventListener('error', () => {
+            container.innerHTML = tiktokLinkFallbackMarkup(videoId);
+          }, { once: true });
+        }
+      }, { once: true });
+    }
+  } else {
+    // En despliegue público (GitHub Pages): embeber directo el reproductor oficial de TikTok ($0 almacenamiento)
+    container.innerHTML = tiktokEmbedMarkup(videoId);
+    const frame = container.querySelector('iframe');
+    if (frame) {
+      frame.addEventListener('error', () => {
+        container.innerHTML = tiktokLinkFallbackMarkup(videoId);
+      }, { once: true });
+    }
   }
 
   setModalOpen(modal, true);

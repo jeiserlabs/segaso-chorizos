@@ -22,7 +22,7 @@ const server = http.createServer(async (req, res) => {
     "font-src 'self' https://fonts.gstatic.com",
     "script-src 'self' 'unsafe-inline'",
     "connect-src 'self'",
-    "frame-src 'none'",
+    "frame-src https://www.tiktok.com",
     "base-uri 'self'",
     "form-action 'self'",
     "object-src 'none'",

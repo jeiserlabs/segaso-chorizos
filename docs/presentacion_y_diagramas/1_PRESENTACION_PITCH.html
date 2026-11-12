@@ -715,6 +715,48 @@
       </div>
     </div>
 
+    <!-- SLIDE 11: DEMO EN VIVO Y ACCESO WEB CON QR -->
+    <div class="slide" data-index="11">
+      <div class="slide-header">
+        <span class="slide-tag">Demo en Vivo · GitHub Pages</span>
+        <h2 class="slide-title">Prueba la Vitrina Web en Tiempo Real</h2>
+        <p class="slide-desc">Escanea el código QR desde tu celular para interactuar con la tienda en vivo y realizar pedidos de prueba.</p>
+      </div>
+      <div class="bento-grid grid-2" style="margin-top: 14px; align-items: stretch;">
+        <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; background: radial-gradient(circle at center, rgba(229,169,60,0.08) 0%, rgba(20,14,16,0.95) 70%); border: 1px solid rgba(229,169,60,0.35);">
+          <div style="background: #ffffff; padding: 12px; border-radius: 16px; box-shadow: 0 12px 36px rgba(0,0,0,0.7); display: inline-block;">
+            <img src="qr_segaso_web.svg" alt="QR Tienda Web Segaso" style="width: 200px; height: 200px; display: block; border-radius: 8px;">
+          </div>
+          <div style="margin-top: 14px; font-weight: 700; color: #fff; font-size: 15px;">
+            https://jeiserlabs.github.io/segaso-chorizos/
+          </div>
+          <span class="pill pill-amber" style="margin-top: 10px; font-size: 12px; padding: 6px 14px;">
+            ⚡ 100% Operativa en Móviles · $0 Costo CDN
+          </span>
+        </div>
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-around; padding: 22px;">
+          <div>
+            <div class="card-title" style="color: #fb923c; font-size: 15px;">🛒 Flujo E-Commerce Completo</div>
+            <p class="card-text" style="font-size: 13px; margin-top: 4px;">
+              Catálogo de 9 referencias artesanales con fotos gourmet, lightbox interactivo y selector de cantidades por paquete.
+            </p>
+          </div>
+          <div style="margin-top: 12px;">
+            <div class="card-title" style="color: #fb923c; font-size: 15px;">💬 Carrito & Descuento WhatsApp</div>
+            <p class="card-text" style="font-size: 13px; margin-top: 4px;">
+              Aplicación automática del 10% OFF de bienvenida en el total del pedido con despacho inmediato al WhatsApp Business oficial.
+            </p>
+          </div>
+          <div style="margin-top: 12px;">
+            <div class="card-title" style="color: #fb923c; font-size: 15px;">📱 Videos de TikTok Embebidos</div>
+            <p class="card-text" style="font-size: 13px; margin-top: 4px;">
+              Reproducción oficial en streaming directo desde la cuenta oficial <b>@segaso.chorizos</b> sin sobrecargar el repositorio.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </main>
 
   <!-- Bottom Navigation -->
@@ -725,13 +767,13 @@
         <div class="progress-fill" id="progressFill"></div>
       </div>
     </div>
-    <span class="slide-counter" id="slideCounter">1 / 10</span>
+    <span class="slide-counter" id="slideCounter">1 / 11</span>
     <button class="nav-btn" id="btnNext">Siguiente →</button>
   </footer>
 
   <script>
     let currentSlide = 1;
-    const totalSlides = 10;
+    const totalSlides = 11;
     const slides = document.querySelectorAll('.slide');
     const counter = document.getElementById('slideCounter');
     const progressFill = document.getElementById('progressFill');

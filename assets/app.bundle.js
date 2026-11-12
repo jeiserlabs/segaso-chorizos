@@ -221,6 +221,29 @@
     "7674733063032540437": { num: 3, title: "Receta de domingo con chorizos Segaso" },
     "7671306377410678036": { num: 4, title: "Harold y Giseth: Historia de Segaso Chorizos" }
   };
+  var TIKTOK_PLAYER = "https://www.tiktok.com/player/v1/";
+  var TIKTOK_PLAYER_QUERY = "?autoplay=1&muted=1&loop=0&rel=0&music_info=0&description=0";
+  function tiktokEmbedMarkup(videoId) {
+    return `<iframe
+    src="${TIKTOK_PLAYER}${videoId}${TIKTOK_PLAYER_QUERY}"
+    title="Video oficial de Segaso Chorizos en TikTok"
+    style="width: 100%; height: 100%; border: 0; display: block; background: #000;"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen></iframe>`;
+  }
+  function tiktokLinkFallbackMarkup(videoId) {
+    return `<div style="padding: 28px; text-align: center; color: var(--cream-muted); font-size: 13px; line-height: 1.6;">
+    El video no se pudo cargar en este equipo.<br>
+    <a href="https://www.tiktok.com/@segaso.chorizos/video/${videoId}" target="_blank" rel="noopener" style="color: var(--gold); font-weight: 700;">Verlo en TikTok</a>
+  </div>`;
+  }
+  function localVideoMarkup(info) {
+    return `<video id="activeTikTokPlayer" controls autoplay playsinline poster="assets/img/thumbs/thumb_${info.num}.webp" style="width: 100%; height: 100%; background: #000; object-fit: contain;">
+      <source src="videos/video_${info.num}.mp4" type="video/mp4">
+      Tu navegador no soporta reproducci\xF3n de video HTML5.
+    </video>`;
+  }
   function setModalOpen(modal, isOpen) {
     if (!modal) return;
     const wasOpen = modal.classList.contains("open");
@@ -299,17 +322,29 @@
     const info = TIKTOK_VIDEOS_MAP[videoId] || { num: 1, title };
     titleEl.textContent = title || info.title;
     directLink.href = `https://www.tiktok.com/@segaso.chorizos/video/${videoId}`;
-    container.innerHTML = `
-    <video id="activeTikTokPlayer" controls autoplay playsinline poster="assets/img/thumbs/thumb_${info.num}.webp" style="width: 100%; max-height: 480px; border-radius: 8px; background: #000; outline: none; object-fit: contain;">
-      <source src="videos/video_${info.num}.mp4" type="video/mp4">
-      Tu navegador no soporta reproducci\xF3n de video HTML5.
-    </video>
-  `;
-    const source = container.querySelector("source");
-    if (source) {
-      source.addEventListener("error", () => {
-        container.innerHTML = `<div style="padding: 28px; text-align: center; color: var(--cream-muted); font-size: 13px;">El video local no est\xE1 disponible en este equipo.<br><a href="https://www.tiktok.com/@segaso.chorizos/video/${videoId}" target="_blank" rel="noopener" style="color: var(--gold); font-weight: 700;">Verlo en TikTok</a></div>`;
-      }, { once: true });
+    const isLocalEnv = typeof window !== "undefined" && (window.location.protocol === "file:" || window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
+    if (isLocalEnv) {
+      container.innerHTML = localVideoMarkup(info);
+      const source = container.querySelector("source");
+      if (source) {
+        source.addEventListener("error", () => {
+          container.innerHTML = tiktokEmbedMarkup(videoId);
+          const frame = container.querySelector("iframe");
+          if (frame) {
+            frame.addEventListener("error", () => {
+              container.innerHTML = tiktokLinkFallbackMarkup(videoId);
+            }, { once: true });
+          }
+        }, { once: true });
+      }
+    } else {
+      container.innerHTML = tiktokEmbedMarkup(videoId);
+      const frame = container.querySelector("iframe");
+      if (frame) {
+        frame.addEventListener("error", () => {
+          container.innerHTML = tiktokLinkFallbackMarkup(videoId);
+        }, { once: true });
+      }
     }
     setModalOpen(modal, true);
   }

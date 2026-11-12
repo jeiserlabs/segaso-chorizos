@@ -6,12 +6,8 @@ let esbuild;
 try {
   esbuild = require('esbuild');
 } catch (_) {
-  try {
-    esbuild = require('C:/PROYECTOS/Mis_Proyectos/Asistente_Personal/node_modules/esbuild');
-  } catch (err) {
-    console.error('No se pudo cargar esbuild:', err.message);
-    process.exit(1);
-  }
+  console.error('Falta esbuild (dependencia de build). Ejecuta: npm install');
+  process.exit(1);
 }
 
 const ROOT = path.resolve(__dirname, '..');

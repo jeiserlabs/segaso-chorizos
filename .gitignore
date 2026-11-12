@@ -63,3 +63,5 @@ playwright-report/
 
 # Intermedios del generador de guías PDF
 scripts/html/
+
+scratch/
